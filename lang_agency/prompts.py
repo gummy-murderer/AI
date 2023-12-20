@@ -23,8 +23,8 @@ from langchain.prompts.prompt import PromptTemplate
 # specifier_chain_prompt = PromptTemplate(template=template, input_variables=["input"])
 
 # general_conversation_chain
-conversation_chain_prefix = """
-시놉시스
+synopsis = """
+시놉시스 :
 AI 와 함께하는 마피아
 
 낮과 밤에 따른 각자의 역할에 따른 시간 분배
@@ -57,8 +57,16 @@ AI 와 함께하는 마피아
 - **게임 진행**: 탐정은 낮 동안 마을을 돌아다니며 주민들과 대화를 나누고, 증거를 수집합니다. 각 주민은 자신만의 이야기와 알리바이를 가지고 있으며, 탐정은 이 중에서 거짓말과 진실을 가려내야 합니다.
 - **밤 시간**: 밤이 되면 범인은 또 다른 주민을 살해합니다. 이로 인해 다음 날의 조사는 더 어려워지며, 새로운 증거와 정보가 등장합니다.
 - **결말**: 탐정은 모든 증거와 대화를 통해 범인을 추리해야 합니다. 범인을 정확히 지목하면 게임에서 승리하며, 그렇지 않으면 게임 오버입니다.
+"""
 
+intro_chain_prefix = """
 1. 해당 시놉시스를 이용해서 마을의 촌장이 탐정에게 처음 상황을 설명하듯이 답변을 반말로 생성해야 함.
+2. 답변의 길이는 5문장은 넘지 말아야 함.
+"""
+
+scenario_chain_prefix = """
+1. 해당 시놉시스를 이용해서 밤마다 진행되는 스토리를 만들어야 함.
+2. 
 """
 
 conversation_chain_suffix = """
@@ -66,5 +74,11 @@ Human: {input}
 AI Assistant:
 """
 
-template = conversation_chain_prefix + conversation_chain_suffix
-conversation_chain_prompt = PromptTemplate(template=template, input_variables=["input"])
+intro_template = synopsis + intro_chain_prefix + conversation_chain_suffix
+intro_prompt = PromptTemplate(template=intro_template, input_variables=["input"])
+
+scenario_template = synopsis + scenario_chain_prefix + conversation_chain_suffix
+scenario_prompt = PromptTemplate(template=scenario_template, input_variables=["input"])
+
+# template = synopsis + conversation_chain_prefix + conversation_chain_suffix
+# conversation_chain_prompt = PromptTemplate(template=template, input_variables=["input"])

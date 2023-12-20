@@ -27,12 +27,18 @@ agent_chain = initialize_agent(
     # prompt="",
     max_iterations=10,
     # max_execution_time=5,
-    verbose=True,
+    verbose=False,
     handle_parsing_errors=True,
     # return_intermediate_steps=True,
     early_stopping_method="generate",
 )
 
-def chatbot(inputs: str) -> str:
-    answer = agent_chain.run(input=inputs)
-    return chains.conversation_chain.predict(input=answer)
+def intro(inputs: str) -> str:
+    return chains.intro_chain.predict(input=inputs)
+
+def scenario(inputs: str) -> str:
+    return chains.scenario_chain.predict(input=inputs)
+
+# def chatbot(inputs: str) -> str:
+#     answer = agent_chain.run(input=inputs)
+#     return chains.conversation_chain.predict(input=answer)

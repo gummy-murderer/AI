@@ -18,6 +18,7 @@ async def hello():
 @router.post("/conversation", tags=["conversation_with_user"])
 async def chat(chatbot_schema: ChatbotSchema):
     print(f"input : {chatbot_schema.content}")
+    
     while True:
         try:
             answer = chatbot.chatbot(
@@ -38,44 +39,41 @@ async def chat(chatbot_schema: ChatbotSchema):
     return final_response
 
 
-# @router.post("/conversation", tags=["conversation"])
-# async def chat(chatbot_schema: ChatbotSchema):
-#     day_of_the_week = {0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}
-#     current_time = f" current_time: {datetime.now()} {day_of_the_week[datetime.now().weekday()]}"
-#     chatbot_name = "까망"
+@router.post("/intro", tags=["conversation_with_user"])
+async def chat(chatbot_schema: ChatbotSchema):
+    print(f"input : {chatbot_schema.content}")
     
-#     answer = ""
-#     if chatbot_name in chatbot_schema.content:
-        
-#         while True:
-#             try:
-#                 answer = chatbot.chatbot(
-#                     chatbot_schema.content \
-#                     + current_time \
-#                     + f" current_user: {chatbot_schema.user_id}" \
-#                     + f" chatbot_name: {chatbot_name}"
-#                 )
-#                 break
-#             except IndexError as e:
-#                 print("#"*10 + "I got IndexError...Try again!" + "#"*10)
-#     else:
-#         memory.memory.chat_memory.add_user_message(chatbot_schema.content)
+    while True:
+        try:
+            answer = chatbot.intro(
+                chatbot_schema.content
+            )
+            break
+        except IndexError as e:
+            print("#"*10 + "I got IndexError...Try again!" + "#"*10)
 
-#     print(memory.memory)
-#     print("#"*10 + answer + "#"*10)
-#     final_response = {
-#         "island_id": chatbot_schema.island_id,
-#         "answer": answer, 
-#         "task": "", 
-#         "data": {
-#             "year": None, 
-#             "month": None, 
-#             "date": None, 
-#             "hour": None, 
-#             "minute": None, 
-#             "content": None,
-#         }
-#     }
-#     if answer == "":
-#         final_response["task"] = "대기"
-#     return final_response
+    final_response = {
+        "answer": answer, 
+    }
+    print(f"answer : {answer}")
+    return final_response
+
+
+@router.post("/scenario", tags=["conversation_with_user"])
+async def chat(chatbot_schema: ChatbotSchema):
+    print(f"input : {chatbot_schema.content}")
+    
+    while True:
+        try:
+            answer = chatbot.scenario(
+                chatbot_schema.content
+            )
+            break
+        except IndexError as e:
+            print("#"*10 + "I got IndexError...Try again!" + "#"*10)
+
+    final_response = {
+        "answer": answer, 
+    }
+    print(f"answer : {answer}")
+    return final_response

@@ -21,8 +21,20 @@ llm = ChatOpenAI(model="gpt-4-1106-preview", openai_api_key=OPENAI_API_KEY)
 #     verbose=False,
 # )
 
-conversation_chain = LLMChain(
-    prompt=prompts.conversation_chain_prompt,
+intro_chain = LLMChain(
+    prompt=prompts.intro_prompt,
     llm=llm,
     verbose=False,
 )
+
+scenario_chain = LLMChain(
+    prompt=prompts.scenario_prompt,
+    llm=llm,
+    verbose=False,
+)
+
+# conversation_chain = LLMChain(
+#     prompt=prompts.conversation_chain_prompt,
+#     llm=llm,
+#     verbose=False,
+# )
