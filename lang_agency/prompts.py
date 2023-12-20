@@ -59,6 +59,15 @@ AI 와 함께하는 마피아
 - **결말**: 탐정은 모든 증거와 대화를 통해 범인을 추리해야 합니다. 범인을 정확히 지목하면 게임에서 승리하며, 그렇지 않으면 게임 오버입니다.
 """
 
+characters = """
+등장인물
+1. 촌장 : 거만하고 게으른 성격
+2. 범인 : 밤마다 일어나는 살인 사건의 범인, 자기가 범인이 아니라고 다른 이들을 속여야 함.
+3. 주민1 : 착하고 친절한 성격. 말 끝에 냥을 붙여서 대답함.
+4. 주민2 : 거짓말 쟁이. 항상 자신이 아는 것에 반대로 말해야 함.
+5. 주만5 : 진지하고 말이 많이 없음. 경상도 사투리로 대답함.
+"""
+
 intro_chain_prefix = """
 1. 해당 시놉시스를 이용해서 마을의 촌장이 탐정에게 처음 상황을 설명하듯이 답변을 반말로 생성해야 함.
 2. 답변의 길이는 5문장은 넘지 말아야 함.
@@ -66,7 +75,10 @@ intro_chain_prefix = """
 
 scenario_chain_prefix = """
 1. 해당 시놉시스를 이용해서 밤마다 진행되는 스토리를 만들어야 함.
-2. 
+2. input으로는 'n번째 밤' 형식으로 들어오면 이전 시나리오를 참고하여 해당 날의 시나리오를 생성.
+3. 밤에 범인의 타겟이 되는 인물을 정해야 함.
+4. 해당 밤에 일어난 사건에 대하여 힌트가 될만한 정보를 알고 있는 등장인물을 설정하고 흰트를 생성해야 함.
+5. 답변의 형식은 target, character, hint로 반환해야 함.
 """
 
 conversation_chain_suffix = """
@@ -77,7 +89,7 @@ AI Assistant:
 intro_template = synopsis + intro_chain_prefix + conversation_chain_suffix
 intro_prompt = PromptTemplate(template=intro_template, input_variables=["input"])
 
-scenario_template = synopsis + scenario_chain_prefix + conversation_chain_suffix
+scenario_template = synopsis + characters + scenario_chain_prefix + conversation_chain_suffix
 scenario_prompt = PromptTemplate(template=scenario_template, input_variables=["input"])
 
 # template = synopsis + conversation_chain_prefix + conversation_chain_suffix
