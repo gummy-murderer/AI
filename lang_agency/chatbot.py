@@ -36,8 +36,17 @@ agent_chain = initialize_agent(
 def intro(inputs: str) -> str:
     return chains.intro_chain.predict(input=inputs)
 
+
 def scenario(inputs: str) -> str:
     return chains.scenario_chain.predict(input=inputs)
+
+
+def conversation_with_user(inputs: str) -> str:
+    return chains.conversation_with_user_chain.predict(input=inputs)
+
+
+def conversation_between_npc(inputs: str) -> str:
+    return chains.conversation_between_npc_chain.predict(input=inputs)
 
 # def chatbot(inputs: str) -> str:
 #     answer = agent_chain.run(input=inputs)

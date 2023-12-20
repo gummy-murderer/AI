@@ -1,28 +1,6 @@
 from langchain.prompts.prompt import PromptTemplate
 
 
-# specifier_chain
-# specifier_chain_prefix = """
-# 1. 사용자의 입력과 current_time을 분석하여 일정의 구성 요소를 추정합니다.
-# 2. 일정의 구성 요소에는 "schedule_management_type", "schedule_content", "members", "year", "month", "date", "hour", "minute"가 포함되어야 합니다.
-# 3. "year", "month", "date", "hour", "minute"의 값은 숫자입니다.
-# 4. 'members'의 값은 일정에 참여하는 개인의 이름을 담은 배열이며, 현재 대화 상에서 사용자의 이름이 기본적으로 포함됩니다. 챗봇의 이름은 포함되지 않습니다.
-# 5. 일정 관리의 유형은 "create", "retrieve,", "update", 또는 "delete" 중 하나입니다.
-# 6. 출력 형식은 "schedule_management_type", "schedule_content", "members", "year", "month", "date", "hour", "minute", "next_action"을 포함한 JSON 형식의 문자열입니다.
-# 7. 사용자의 입력에서 추정할 수 없는 요소가 있다면 해당 요소의 값은 null이 됩니다.
-# 8. 일정 구성 요소 중 null인 요소가 없다면 "next_action"은 "schedule_management"이 됩니다.
-# 9. 일정 구성 요소 중 null인 요소가 있거나 "현재 시간"에서 추정된 요소가 있다면 "next_action"은 "general_conversation"이 됩니다.
-# """
-
-# specifier_chain_suffix = """
-# Human: {input}
-# AI Assistant:
-# """
-
-# template = specifier_chain_prefix + specifier_chain_suffix
-# specifier_chain_prompt = PromptTemplate(template=template, input_variables=["input"])
-
-# general_conversation_chain
 synopsis = """
 시놉시스 :
 AI 와 함께하는 마피아
@@ -65,7 +43,8 @@ characters = """
 2. 범인 : 밤마다 일어나는 살인 사건의 범인, 자기가 범인이 아니라고 다른 이들을 속여야 함.
 3. 주민1 : 착하고 친절한 성격. 말 끝에 냥을 붙여서 대답함.
 4. 주민2 : 거짓말 쟁이. 항상 자신이 아는 것에 반대로 말해야 함.
-5. 주만5 : 진지하고 말이 많이 없음. 경상도 사투리로 대답함.
+5. 주민5 : 진지하고 말이 많이 없음. 경상도 사투리로 대답함.
+6. 플래이어 : 플래이어는 탐정 역할로 이 마을에 벌어진 살인사건을 조사하는 중임.
 """
 
 intro_chain_prefix = """
@@ -81,6 +60,18 @@ scenario_chain_prefix = """
 5. 답변의 형식은 target, character, hint로 반환해야 함.
 """
 
+conversation_with_user_chain_prefix = """
+1. 등장인물의 설명을 참고하여 npc_name에 들어있는 이름의 등장인물로 답해야함.
+2. 시놉시스와 시나리오를 참고하여 플래이어에게 대답해야함.
+"""
+
+conversation_between_npc_chain_prefix = """
+1. 등장인물 설정을 참고하여 npc_name_1과 npc_name_2사이의 대화를 생성하야 함.
+2. 플래이어와의 대화가 아니라 npc들 사이의 대화를 만들어야 함.
+3. 시놉시스와 시나리오를 참고하여야함.
+4. 대화는 3~4번 정도 주고 받고 답변의 형식은 npc_name_1 : , npc_name_2 : , ... 과 같은 형식이여야 함.
+"""
+
 conversation_chain_suffix = """
 Human: {input}
 AI Assistant:
@@ -91,6 +82,12 @@ intro_prompt = PromptTemplate(template=intro_template, input_variables=["input"]
 
 scenario_template = synopsis + characters + scenario_chain_prefix + conversation_chain_suffix
 scenario_prompt = PromptTemplate(template=scenario_template, input_variables=["input"])
+
+conversation_with_user_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_chain_suffix
+conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, input_variables=["input"])
+
+conversation_between_npc_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_chain_suffix
+conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, input_variables=["input"])
 
 # template = synopsis + conversation_chain_prefix + conversation_chain_suffix
 # conversation_chain_prompt = PromptTemplate(template=template, input_variables=["input"])

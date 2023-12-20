@@ -33,6 +33,18 @@ scenario_chain = LLMChain(
     verbose=False,
 )
 
+conversation_with_user_chain = LLMChain(
+    prompt=prompts.conversation_with_user_prompt,
+    llm=llm,
+    verbose=False,
+)
+
+conversation_between_npc_chain = LLMChain(
+    prompt=prompts.conversation_between_npc_prompt,
+    llm=llm,
+    verbose=False,
+)
+
 # conversation_chain = LLMChain(
 #     prompt=prompts.conversation_chain_prompt,
 #     llm=llm,
