@@ -5,7 +5,7 @@ import dotenv
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
 
-from lang_agency import prompts
+from lang_agency import prompts, memory
 
 dotenv_file = dotenv.find_dotenv(str(Path("./").absolute().joinpath(".env")))
 dotenv.load_dotenv(dotenv_file)
@@ -24,25 +24,27 @@ llm = ChatOpenAI(model="gpt-4-1106-preview", openai_api_key=OPENAI_API_KEY)
 intro_chain = LLMChain(
     prompt=prompts.intro_prompt,
     llm=llm,
-    verbose=False,
+    verbose=True,
 )
 
 scenario_chain = LLMChain(
     prompt=prompts.scenario_prompt,
     llm=llm,
-    verbose=False,
+    verbose=True,
 )
 
 conversation_with_user_chain = LLMChain(
     prompt=prompts.conversation_with_user_prompt,
     llm=llm,
-    verbose=False,
+    memory=memory.memory,
+    verbose=True,
 )
 
 conversation_between_npc_chain = LLMChain(
     prompt=prompts.conversation_between_npc_prompt,
     llm=llm,
-    verbose=False,
+    memory=memory.memory,
+    verbose=True,
 )
 
 # conversation_chain = LLMChain(
