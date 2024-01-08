@@ -3,9 +3,9 @@ import os
 
 import dotenv
 from langchain.chains import LLMChain
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
-from lang_agency import prompts, memory
+from LLMs.langchain import prompts, memory
 
 dotenv_file = dotenv.find_dotenv(str(Path("./").absolute().joinpath(".env")))
 dotenv.load_dotenv(dotenv_file)

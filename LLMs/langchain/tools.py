@@ -1,6 +1,6 @@
 from langchain.tools import Tool
 
-from lang_agency import chains
+from LLMs.langchain import chains
 # from lang_agency import chains, get_event_info
 
 

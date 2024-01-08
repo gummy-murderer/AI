@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from datetime import datetime
 
 from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchema, ConversationNPCSchema
-from lang_agency import chatbot
+from LLMs.langchain import chatbot
 # from lang_agency import chatbot, memory
 
 
