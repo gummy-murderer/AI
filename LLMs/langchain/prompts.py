@@ -61,7 +61,7 @@ scenario_chain_prefix = """
 """
 
 conversation_with_user_chain_prefix = """
-1. 등장인물의 설명을 참고하여 npc_name에 들어있는 이름의 등장인물로 답해야함.
+1. target_npc_info의 설명을 참고하여 이름에 들어있는 등장인물로 답해야함.
 2. 시놉시스와 시나리오를 참고하여 플래이어에게 대답해야함.
 """
 
@@ -88,7 +88,7 @@ intro_prompt = PromptTemplate(template=intro_template, input_variables=["input"]
 scenario_template = synopsis + characters + scenario_chain_prefix + conversation_chain_suffix
 scenario_prompt = PromptTemplate(template=scenario_template, input_variables=["input"])
 
-conversation_with_user_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_user_chain_suffix
+conversation_with_user_template = synopsis + conversation_with_user_chain_prefix + conversation_user_chain_suffix
 conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, input_variables=["input"])
 
 conversation_between_npc_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_chain_suffix
