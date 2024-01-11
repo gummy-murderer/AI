@@ -1,4 +1,6 @@
 from fastapi import APIRouter
+import json
+import pprint
 
 from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchema, ConversationNPCSchema
 from LLMs.langchain import chatbot, prompts
@@ -11,7 +13,9 @@ router = APIRouter(
 )
 
 
-@router.post("/intro_generator", tags=["conversation_with_user"])
+@router.post("/intro_generator", 
+             description="사용자 입력에 기반하여 소개 또는 시작 대화를 생성해 주는 API입니다.", 
+             tags=["generator"])
 async def intro_generator(generator_schema: GeneratorSchema):
     print(f"input : {generator_schema.content}")
     
@@ -31,7 +35,9 @@ async def intro_generator(generator_schema: GeneratorSchema):
     return final_response
 
 
-@router.post("/scenario_generator", tags=["conversation_with_user"])
+@router.post("/scenario_generator", 
+             description="사용자 입력을 바탕으로 상세한 대화 시나리오를 생성해 주는 API입니다.", 
+             tags=["generator"])
 async def scenario_generator(generator_schema: GeneratorSchema):
     print(f"input : {generator_schema.content}")
     
@@ -51,14 +57,22 @@ async def scenario_generator(generator_schema: GeneratorSchema):
     return final_response
 
 
-@router.post("/conversation_with_user", tags=["conversation_with_user"])
+@router.post("/conversation_with_user", 
+             description="npc와 user간의 대화를 위한 API입니다.", 
+             tags=["generator"])
 async def conversation_with_user(conversation_user_schema: ConversationUserSchema):
     print(f"input")
     print(f"sender : {conversation_user_schema.sender}")
     print(f"receiver : {conversation_user_schema.receiver}")
     print(f"chatContent : {conversation_user_schema.chatContent}")
     print(f"chatDay : {conversation_user_schema.chatDay}")
-    print(f"이전 대화 내용 넣어야 함")
+
+    chat_contents = conversation_user_schema.previousChatContents
+    start_index = max(len(chat_contents) - 5, 0)
+    previous_contents = ""
+    for content in chat_contents[start_index:]:
+        print(f"{content['sender']}: {content['chatContent']}")
+        previous_contents += f"{content['sender']}: {content['chatContent']}\n"
     
     info = get_npc_information(conversation_user_schema.receiver, random_=True)
     print(info)
@@ -66,21 +80,25 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
     while True:
         try:
             answer = chatbot.conversation_with_user(
-                f" user: {conversation_user_schema.chatContent}\n" \
-                + f" target_npc_info: ({info})" \
+                f" target_npc_info: ({info})" \
+                + f" {conversation_user_schema.chatContent}\n" \
+                + f" {conversation_user_schema.sender}: {conversation_user_schema.chatContent}\n" \
+                + f" {conversation_user_schema.receiver}: " \
             )
             break
         except IndexError as e:
             print("#"*10 + "I got IndexError...Try again!" + "#"*10)
 
     final_response = {
-        "answer": answer, 
+        "chatContent": answer, 
     }
-    print(f"answer : {answer}")
+    print(f"chatContent : {answer}")
     return final_response
 
 
-@router.post("/conversation_between_npcs", tags=["conversation_between_npcs"])
+@router.post("/conversation_between_npcs", 
+             description="npc와 npc간의 대화를 생성해 주는 API입니다.", 
+             tags=["generator"])
 async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchema):
     print(f"input")
     print(f"npc_name_1 : {conversation_npc_schema.npc_name_1}")
@@ -98,7 +116,7 @@ async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchem
             print("#"*10 + "I got IndexError...Try again!" + "#"*10)
 
     final_response = {
-        "answer": answer, 
+        "chatContent": answer, 
     }
-    print(f"answer : {answer}")
+    print(f"chatContent : {answer}")
     return final_response
