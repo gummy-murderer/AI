@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 
 from domain.chatbot import chatbot_router
+from domain.npc_management import npc_management_router
 
 description = """
 두근두근 놀러와요 마피아의 숲! 구미머더러! 지금 플레이하세요(찡긋)
@@ -16,10 +17,6 @@ description = """
 """
 
 tags_metadata = [
-    {
-        "name": "hello",
-        "description": "기본적인 연결 테스트를 위한 \"Hello, World!\" API입니다.",
-    },
     {
         "name": "conversation_with_user",
         "description": "npc와 user간의 대화를 위한 API입니다.",
@@ -42,6 +39,9 @@ app = FastAPI(
 )
 
 app.include_router(chatbot_router.router)
+
+app.include_router(npc_management_router.router)
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=7785, reload=True)
