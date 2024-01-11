@@ -5,8 +5,9 @@ import os
 from langchain_openai import ChatOpenAI
 import dotenv
 
-from LLMs.langchain import tools, memory, chains
+from LLMs.langchain import tools, memory, chains, prompts
 
+from langchain.prompts import PromptTemplate
 
 # llm
 dotenv_file = dotenv.find_dotenv(str(Path("./").absolute().joinpath(".env")))
@@ -45,8 +46,16 @@ def conversation_with_user(inputs: str) -> str:
     return chains.conversation_with_user_chain.predict(input=inputs)
 
 
-def conversation_between_npc(inputs: str) -> str:
-    return chains.conversation_between_npc_chain.predict(input=inputs)
+def conversation_between_npc(prompt_template: PromptTemplate, npc_name_1: str, npc_name_2: str) -> str:
+    # PromptTemplate 객체에서 실제 템플릿 문자열을 가져옴
+    prompt_str = prompt_template.template
+    
+    # 문자열에서 npc_name_1과 npc_name_2를 실제 NPC 이름으로 대체
+    updated_prompt = prompt_str.replace("npc_name_1", npc_name_1).replace("npc_name_2", npc_name_2)
+
+    # 대화 생성
+    response = chains.conversation_between_npc_chain.predict(input=updated_prompt)
+    return response
 
 # def chatbot(inputs: str) -> str:
 #     answer = agent_chain.run(input=inputs)
