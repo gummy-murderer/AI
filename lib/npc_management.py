@@ -58,7 +58,8 @@ def get_npc_information(npc_name, random_=False):
                 "npcPersonality": selected_personality[0], 
                 "npcFeature": selected_feature[0]}
         
-        name = npc["npcName"]
+        # name = npc["npcName"]
+        name = npc_name
         personality = personalities["npcPersonality"][npc["npcPersonality"]]["Description"]
         feature = features["npcFeature"][npc["npcFeature"]]["Description"]
         

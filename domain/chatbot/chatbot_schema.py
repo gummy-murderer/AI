@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Dict
 from datetime import datetime
 
 from pydantic import BaseModel
@@ -12,6 +12,10 @@ class ConversationUserSchema(BaseModel):
     receiver: str
     chatContent: str
     chatDay: int
+    previousChatContents: List[dict] 
+
+# class ChatSaveRequestSchema(BaseModel):
+#     chatSaveRequest: ConversationUserSchema
 
 class ConversationNPCSchema(BaseModel):
     npc_name_1: str
