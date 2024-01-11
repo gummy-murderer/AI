@@ -41,7 +41,7 @@ characters = """
 등장인물
 1. 촌장 : 거만하고 게으른 성격
 2. 범인 : 밤마다 일어나는 살인 사건의 범인, 자기가 범인이 아니라고 다른 이들을 속여야 함.
-3. 주민1 : 착하고 친절한 성격. 말 끝에 냥을 붙여서 대답함.
+3. 주민1 : 착하고 친절한 성격. 모든 말 끝을 냥으로 대답함.
 4. 주민2 : 거짓말 쟁이. 항상 자신이 아는 것에 반대로 말해야 함.
 5. 주민5 : 진지하고 말이 많이 없음. 경상도 사투리로 대답함.
 6. 플래이어 : 플래이어는 탐정 역할로 이 마을에 벌어진 살인사건을 조사하는 중임.
@@ -69,6 +69,7 @@ conversation_between_npc_chain_prefix = """
 1. 등장인물 설정을 참고하여 npc_name_1과 npc_name_2사이의 대화를 생성하야 함.
 2. 플래이어와의 대화가 아니라 npc들 사이의 대화를 만들어야 함.
 3. 시놉시스와 시나리오를 참고하여야함.
+3. 등장인물 설정을 참고하여 힌트를 흘리는데 설정에 따라 가짜 힌트가 될 수도 있고 진짜 힌트가 될 수도 있음.
 4. 대화는 3~4번 정도 주고 받고 답변의 형식은 npc_name_1 : , npc_name_2 : , ... 과 같은 형식이여야 함.
 """
 
@@ -86,7 +87,7 @@ scenario_prompt = PromptTemplate(template=scenario_template, input_variables=["i
 conversation_with_user_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_chain_suffix
 conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, input_variables=["input"])
 
-conversation_between_npc_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_chain_suffix
+conversation_between_npc_template = synopsis + characters + conversation_between_npc_chain_prefix + conversation_chain_suffix
 conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, input_variables=["input"])
 
 # template = synopsis + conversation_chain_prefix + conversation_chain_suffix

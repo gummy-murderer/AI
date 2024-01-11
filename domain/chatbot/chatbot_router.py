@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from datetime import datetime
 
 from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchema, ConversationNPCSchema
-from LLMs.langchain import chatbot
+from LLMs.langchain import chatbot, prompts
 # from lang_agency import chatbot, memory
 
 
@@ -78,7 +78,7 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
     return final_response
 
 
-@router.post("/conversation_between_npc", tags=["conversation_with_user"])
+@router.post("/conversation_between_npcs", tags=["conversation_between_npcs"])
 async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchema):
     print(f"input")
     print(f"npc_name_1 : {conversation_npc_schema.npc_name_1}")
@@ -87,8 +87,9 @@ async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchem
     while True:
         try:
             answer = chatbot.conversation_between_npc(
-                f" npc_name_1: {conversation_npc_schema.npc_name_1}" \
-                + f" npc_name_2: {conversation_npc_schema.npc_name_2}" \
+                prompts.conversation_between_npc_prompt,
+                conversation_npc_schema.npc_name_1,
+                conversation_npc_schema.npc_name_2
             )
             break
         except IndexError as e:
