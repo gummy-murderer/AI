@@ -71,8 +71,10 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
     start_index = max(len(chat_contents) - 5, 0)
     previous_contents = ""
     for content in chat_contents[start_index:]:
-        print(f"{content['sender']}: {content['chatContent']}")
+        # print(f"{content['sender']}: {content['chatContent']}")
         previous_contents += f"{content['sender']}: {content['chatContent']}\n"
+    print(f"previous_contents")
+    print(f"{previous_contents}")
     
     info = get_npc_information(conversation_user_schema.receiver, random_=True)
     print(info)
@@ -80,10 +82,11 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
     while True:
         try:
             answer = chatbot.conversation_with_user(
-                f" target_npc_info: ({info})" \
-                + f" {conversation_user_schema.chatContent}\n" \
-                + f" {conversation_user_schema.sender}: {conversation_user_schema.chatContent}\n" \
-                + f" {conversation_user_schema.receiver}: " \
+                f" target_npc_info: ({info})\n" \
+                + f"대화내용: \n" \
+                + f"{previous_contents}\n" \
+                + f"{conversation_user_schema.sender}: {conversation_user_schema.chatContent}\n" \
+                + f"{conversation_user_schema.receiver}: " \
             )
             break
         except IndexError as e:
