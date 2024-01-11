@@ -77,13 +77,18 @@ Human: {input}
 AI Assistant:
 """
 
+conversation_user_chain_suffix = """
+{input}
+AI Answer:
+"""
+
 intro_template = synopsis + intro_chain_prefix + conversation_chain_suffix
 intro_prompt = PromptTemplate(template=intro_template, input_variables=["input"])
 
 scenario_template = synopsis + characters + scenario_chain_prefix + conversation_chain_suffix
 scenario_prompt = PromptTemplate(template=scenario_template, input_variables=["input"])
 
-conversation_with_user_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_chain_suffix
+conversation_with_user_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_user_chain_suffix
 conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, input_variables=["input"])
 
 conversation_between_npc_template = synopsis + characters + conversation_with_user_chain_prefix + conversation_chain_suffix
