@@ -1,11 +1,10 @@
-from fastapi import APIRouter
-import json
-import pprint
+from fastapi import APIRouter, HTTPException
 
 from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchema, ConversationNPCSchema
 from LLMs.langchain import chatbot, prompts
-# from lang_agency import chatbot, memory
+
 from lib.npc_management import get_npc_information
+import lib.const as const
 
 
 router = APIRouter(
@@ -68,20 +67,21 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
     print(f"chatDay : {conversation_user_schema.chatDay}")
 
     chat_contents = conversation_user_schema.previousChatContents
-    start_index = max(len(chat_contents) - 5, 0)
+    start_index = max(len(chat_contents) - const.CONVERSATION_MEMORY, 0)
     previous_contents = ""
     for content in chat_contents[start_index:]:
-        # print(f"{content['sender']}: {content['chatContent']}")
         previous_contents += f"{content['sender']}: {content['chatContent']}\n"
     print(f"previous_contents")
     print(f"{previous_contents}")
     
-    info = get_npc_information(conversation_user_schema.receiver, random_=True)
+    info = get_npc_information(conversation_user_schema.receiver, random_=False)
+    if not info:
+        raise HTTPException(status_code=400, detail=f"{conversation_user_schema.receiver} is not in npc list!")
     print(info)
 
     while True:
         try:
-            answer = chatbot.conversation_with_user(
+            answer, tokens, execution_time = chatbot.conversation_with_user(
                 f" target_npc_info: ({info})\n" \
                 + f"대화내용: \n" \
                 + f"{previous_contents}\n" \
@@ -96,6 +96,8 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
         "chatContent": answer, 
     }
     print(f"chatContent : {answer}")
+    print(f"tokens : {tokens}")
+    print(f"execution_time : {execution_time}")
     return final_response
 
 
