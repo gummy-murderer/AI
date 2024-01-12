@@ -1,0 +1,172 @@
+{
+    "npcs": {
+        "Leo": {
+            "npcName": "레오",
+            "Personality": "용감함",
+            "PersonalityDescription": "용기 있게 행동함",
+            "Feature": "뮤지션",
+            "FeatureDescription": "노래를 부르듯이 대답함"
+        },
+        "Sophia": {
+            "npcName": "소피아",
+            "Personality": "지혜로움",
+            "PersonalityDescription": "깊은 통찰력과 현명한 판단을 가짐",
+            "Feature": "조용함",
+            "FeatureDescription": "대화보다는 관찰을 선호함"
+        },
+        "Marco": {
+            "npcName": "마르코",
+            "Personality": "신비로움",
+            "PersonalityDescription": "알 수 없는 매력과 비밀스러운 분위기를 가짐",
+            "Feature": "야행성",
+            "FeatureDescription": "밤에 활동하는 것을 선호함"
+        },
+        "Isabel": {
+            "npcName": "이사벨",
+            "Personality": "명랑함",
+            "PersonalityDescription": "밝고 긍정적인 에너지로 주변을 환하게 함",
+            "Feature": "냥체",
+            "FeatureDescription": "말 끝에 '냥'을 붙여서 대답함"
+        },
+        "Alex": {
+            "npcName": "알렉스",
+            "Personality": "모험적임",
+            "PersonalityDescription": "새로운 것을 경험하려는 강한 욕구를 가짐",
+            "Feature": "떠돌이",
+            "FeatureDescription": "여러 마을을 떠돌아 다니는 떠돌이임"
+        },
+        "Nicholas": {
+            "npcName": "니콜라스",
+            "Personality": "조용함",
+            "PersonalityDescription": "대화보다는 관찰을 선호하며 적은 말로 의사를 표현함",
+            "Feature": "고어체",
+            "FeatureDescription": "옛날 양식의 말투를 사용하여 대화함"
+        },
+        "Emily": {
+            "npcName": "에밀리",
+            "Personality": "친근함",
+            "PersonalityDescription": "다른 사람들과 쉽게 친해지며 상냥함",
+            "Feature": "냥체",
+            "FeatureDescription": "말 끝에 '냥'을 붙여서 대답함"
+        },
+        "Oliver": {
+            "npcName": "올리버",
+            "Personality": "교활함",
+            "PersonalityDescription": "기민하고 때로는 속임수를 쓰며 목적을 달성함",
+            "Feature": "야행성",
+            "FeatureDescription": "밤에 활동하는 것을 선호하며 낮에는 거의 보이지 않음"
+        },
+        "Vivian": {
+            "npcName": "비비안",
+            "Personality": "호기심 많음",
+            "PersonalityDescription": "새로운 지식과 경험에 대한 끊임없는 호기심을 가짐",
+            "Feature": "이야기꾼",
+            "FeatureDescription": "흥미로운 이야기와 전설을 전하며 사람들을 즐겁게 함"
+        },
+        "Theo": {
+            "npcName": "테오",
+            "Personality": "예술가형",
+            "PersonalityDescription": "창의적이고 감성적인 성격을 지니고 있음",
+            "Feature": "음악가",
+            "FeatureDescription": "다양한 악기를 연주하며 음악으로 감정을 표현함"
+        },
+        "Jasmine": {
+            "npcName": "자스민",
+            "Personality": "회의적",
+            "PersonalityDescription": "주변 사건에 대해 의심을 품으며 진실을 탐구함",
+            "Feature": "학자",
+            "FeatureDescription": "지식을 추구하고 책과 연구에 몰두함"
+        },
+        "Milo": {
+            "npcName": "마일로",
+            "Personality": "낙천적",
+            "PersonalityDescription": "항상 긍정적이며 희망을 잃지 않음",
+            "Feature": "탐험가",
+            "FeatureDescription": "새로운 장소와 문화를 탐험하는 것을 좋아함"
+        },
+        "Lena": {
+            "npcName": "레나",
+            "Personality": "관찰자",
+            "PersonalityDescription": "주변 환경과 사람들을 주의 깊게 관찰함",
+            "Feature": "자연주의자",
+            "FeatureDescription": "자연과 야생 동물에 대한 깊은 지식과 애정을 가짐"
+        },
+        "Layla": {
+            "npcName": "라일라",
+            "Personality": "상상력이 풍부함",
+            "PersonalityDescription": "창의적인 생각과 상상력으로 가득 참",
+            "Feature": "시적 말투",
+            "FeatureDescription": "마치 시를 읊듯이 운율과 리듬을 강조하여 말함"
+        },
+        "Ash": {
+            "npcName": "애쉬",
+            "Personality": "유머러스함",
+            "PersonalityDescription": "재치 있고 유머러스한 성격을 지님",
+            "Feature": "유머러스한 말투",
+            "FeatureDescription": "대화 중에 종종 재치 있는 농담을 섞어 말함"
+        },
+        "Sara": {
+            "npcName": "세라",
+            "Personality": "침착함",
+            "PersonalityDescription": "모든 상황에서 침착하고 차분함",
+            "Feature": "수수께끼 같은 말투",
+            "FeatureDescription": "말을 할 때 종종 수수께끼 같은 표현을 사용함"
+        },
+        "Jay": {
+            "npcName": "제이",
+            "Personality": "자유분방함",
+            "PersonalityDescription": "전통적인 규범이나 한계에 얽매이지 않음",
+            "Feature": "속담과 격언을 사용하는 말투",
+            "FeatureDescription": "대화 중에 속담이나 격언을 자주 인용하여 말함"
+        },
+        "Mia": {
+            "npcName": "미아",
+            "Personality": "호기심 많음",
+            "PersonalityDescription": "새로운 것을 배우고 경험하려는 강한 호기심을 가짐",
+            "Feature": "질문형 말투",
+            "FeatureDescription": "대화 중에 질문을 많이 하며 호기심을 표현함"
+        },
+        "Lucas": {
+            "npcName": "루카스",
+            "Personality": "냉정함",
+            "PersonalityDescription": "감정에 휘둘리지 않고 논리적으로 사고함",
+            "Feature": "전략가",
+            "FeatureDescription": "계획을 세우고 전략적으로 행동함"
+        },
+        "TaegunTV": {
+            "npcName": "태근티비",
+            "Personality": "창의적",
+            "PersonalityDescription": "새로운 아이디어와 접근 방식을 가지고 있음",
+            "Feature": "엉뚱함",
+            "FeatureDescription": "기발하고 예상치 못한 반응을 보임"
+        },
+        "Dongsik": {
+            "npcName": "박동식",
+            "Personality": "근면함",
+            "PersonalityDescription": "맡은 일에 대해 성실하고 꼼꼼하게 임함",
+            "Feature": "정원사",
+            "FeatureDescription": "정원 가꾸기에 열정을 가지고 있으며 식물에 대한 깊은 지식을 가짐"
+        },
+        "JjanJjanYoung": {
+            "npcName": "짠짠영",
+            "Personality": "기발함",
+            "PersonalityDescription": "독창적이고 창의적인 생각으로 눈길을 끔",
+            "Feature": "발명가",
+            "FeatureDescription": "새롭고 혁신적인 아이디어로 다양한 발명품을 만듦"
+        },
+        "KoongYa": {
+            "npcName": "김쿵야",
+            "Personality": "장난꾸러기",
+            "PersonalityDescription": "재미있고 유쾌한 성격으로 주변 사람들을 즐겁게 함",
+            "Feature": "마술사",
+            "FeatureDescription": "기발한 마술과 재치 있는 퍼포먼스로 사람들을 놀라게 함"
+        },
+        "Yoonju": {
+            "npcName": "박윤주",
+            "Personality": "세심함",
+            "PersonalityDescription": "작은 디테일에도 주의를 기울이며 모든 것을 꼼꼼하게 살피는 성격",
+            "Feature": "화가",
+            "FeatureDescription": "아름다운 그림을 그리며 섬세하고 표현력이 풍부함"
+        }
+    }
+}

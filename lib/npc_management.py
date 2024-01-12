@@ -7,11 +7,14 @@ from pathlib import Path
 current_file_path = Path(__file__).resolve()
 feature_file = current_file_path.parent.parent / Path("resources/data") / 'npcFeature.json'
 personality_file = current_file_path.parent.parent / Path("resources/data") / 'npcPersonality.json'
+npc_file = current_file_path.parent.parent / Path("resources/data") / 'npc.json'
 
 with open(str(feature_file), 'r', encoding='utf-8') as file:
     features = json.load(file)
 with open(str(personality_file), 'r', encoding='utf-8') as file:
     personalities = json.load(file)
+with open(str(npc_file), 'r', encoding='utf-8') as file:
+    characters = json.load(file)
 
 
 def make_ramdom_npc(npc_num):
@@ -46,7 +49,7 @@ def make_ramdom_npc(npc_num):
         return "success"
 
 
-def get_npc_information(npc_name, random_=False):
+def get_npc_information_old(npc_name, random_=False):
     if random_:
         personality_list = list(personalities["npcPersonality"].keys())
         feature_list = list(features["npcFeature"].keys())
@@ -58,15 +61,36 @@ def get_npc_information(npc_name, random_=False):
                 "npcPersonality": selected_personality[0], 
                 "npcFeature": selected_feature[0]}
         
-        # name = npc["npcName"]
         name = npc_name
         personality = personalities["npcPersonality"][npc["npcPersonality"]]["Description"]
         feature = features["npcFeature"][npc["npcFeature"]]["Description"]
         
         return f"이름: {name}\n성격: {personality}.\n특징: {feature}."
+    
 
+def get_npc_information(npc_name, random_=False):
+    if random_:
+        character_list = list(characters["npcs"].keys())
+        selected_character = random.sample(character_list, 1)[0]
+
+        name = characters["npcs"][selected_character]["npcName"]
+        personality = characters["npcs"][selected_character]["PersonalityDescription"]
+        feature = characters["npcs"][selected_character]["FeatureDescription"]
+
+        return f"이름: {name}\n성격: {personality}.\n특징: {feature}."
+    else:
+        if npc_name in list(characters["npcs"].keys()):
+            name = characters["npcs"][npc_name]["npcName"]
+            personality = characters["npcs"][npc_name]["PersonalityDescription"]
+            feature = characters["npcs"][npc_name]["FeatureDescription"]
+            
+            return f"이름: {name}\n성격: {personality}.\n특징: {feature}."
+        else:
+            return None
 
 
 if __name__ == "__main__":
-    get_npc_information(3, random_=True)
+    # get_npc_information(3, random_=True)
+    result = get_npc_information("KoongddYa", random_=False)
+    print(result)
     # make_ramdom_npc(3)
