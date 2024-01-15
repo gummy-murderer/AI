@@ -4,7 +4,7 @@ from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchem
 from LLMs.langchain import chatbot, prompts
 
 from lib.npc_management import get_npc_information
-import lib.const as const
+from lib.chat_management import previous_chat_contents
 
 
 router = APIRouter(
@@ -66,15 +66,11 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
     print(f"chatContent : {conversation_user_schema.chatContent}")
     print(f"chatDay : {conversation_user_schema.chatDay}")
 
-    chat_contents = conversation_user_schema.previousChatContents
-    start_index = max(len(chat_contents) - const.CONVERSATION_MEMORY, 0)
-    previous_contents = ""
-    for content in chat_contents[start_index:]:
-        previous_contents += f"{content['sender']}: {content['chatContent']}\n"
+    previous_contents = previous_chat_contents(conversation_user_schema.previousChatContents)
     print(f"previous_contents")
     print(f"{previous_contents}")
     
-    info = get_npc_information(conversation_user_schema.receiver, random_=False)
+    info, name = get_npc_information(conversation_user_schema.receiver, random_=False)
     if not info:
         raise HTTPException(status_code=400, detail=f"{conversation_user_schema.receiver} is not in npc list!")
     print(info)
@@ -86,7 +82,7 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
                 + f"대화내용: \n" \
                 + f"{previous_contents}\n" \
                 + f"{conversation_user_schema.sender}: {conversation_user_schema.chatContent}\n" \
-                + f"{conversation_user_schema.receiver}: " \
+                + f"{name}: " \
             )
             break
         except IndexError as e:
@@ -94,6 +90,7 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
 
     final_response = {
         "chatContent": answer, 
+        "totalTokens": tokens["Total_Tokens"]
     }
     print(f"chatContent : {answer}")
     print(f"tokens : {tokens}")
@@ -108,20 +105,38 @@ async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchem
     print(f"input")
     print(f"npc_name_1 : {conversation_npc_schema.npc_name_1}")
     print(f"npc_name_2 : {conversation_npc_schema.npc_name_2}")
+
+    npc_1, npc_name_1 = get_npc_information(conversation_npc_schema.npc_name_1, random_=False)
+    npc_2, npc_name_2 = get_npc_information(conversation_npc_schema.npc_name_2, random_=False)
+    if not npc_1:
+        raise HTTPException(status_code=400, detail=f"{conversation_npc_schema.npc_name_1} is not in npc list!")
+    if not npc_2:
+        raise HTTPException(status_code=400, detail=f"{conversation_npc_schema.npc_name_2} is not in npc list!")
     
     while True:
         try:
-            answer = chatbot.conversation_between_npc(
-                prompts.conversation_between_npc_prompt,
-                conversation_npc_schema.npc_name_1,
-                conversation_npc_schema.npc_name_2
+            answer, tokens, execution_time = chatbot.conversation_between_npc(
+                f" target_npc_1: ({npc_1})\n" \
+                + f" target_npc_2: ({npc_2})\n" \
+                + f"{npc_name_1}: " \
             )
-            break
+            answer_list = [i for i in answer.split("\n") if i]
+            validity_check = []
+            for answer_ in answer_list:
+                if npc_name_1 not in answer_.split(':') and npc_name_2 not in answer_.split(':'):
+                    validity_check.append(answer_)
+            if not validity_check:
+                break
+            else:
+                print("Invalid format, please try again")
         except IndexError as e:
             print("#"*10 + "I got IndexError...Try again!" + "#"*10)
 
     final_response = {
-        "chatContent": answer, 
+        "chatContent": answer_list, 
+        "totalTokens": tokens["Total_Tokens"]
     }
     print(f"chatContent : {answer}")
+    print(f"tokens : {tokens}")
+    print(f"execution_time : {execution_time}")
     return final_response

@@ -77,14 +77,14 @@ def get_npc_information(npc_name, random_=False):
         personality = characters["npcs"][selected_character]["PersonalityDescription"]
         feature = characters["npcs"][selected_character]["FeatureDescription"]
 
-        return f"이름: {name}\n성격: {personality}.\n특징: {feature}."
+        return f"이름: {name}\n성격: {personality}.\n특징: {feature}.", name
     else:
         if npc_name in list(characters["npcs"].keys()):
             name = characters["npcs"][npc_name]["npcName"]
             personality = characters["npcs"][npc_name]["PersonalityDescription"]
             feature = characters["npcs"][npc_name]["FeatureDescription"]
             
-            return f"이름: {name}\n성격: {personality}.\n특징: {feature}."
+            return f"이름: {name}\n성격: {personality}.\n특징: {feature}.", name
         else:
             return None
 

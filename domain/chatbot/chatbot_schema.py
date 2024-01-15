@@ -14,9 +14,6 @@ class ConversationUserSchema(BaseModel):
     chatDay: int
     previousChatContents: List[dict] 
 
-# class ChatSaveRequestSchema(BaseModel):
-#     chatSaveRequest: ConversationUserSchema
-
 class ConversationNPCSchema(BaseModel):
     npc_name_1: str
     npc_name_2: str

@@ -1,3 +1,3 @@
-# chatbot_router.py
+# chat_management.py
 
 CONVERSATION_MEMORY = 5
