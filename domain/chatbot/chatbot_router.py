@@ -140,3 +140,22 @@ async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchem
     print(f"tokens : {tokens}")
     print(f"execution_time : {execution_time}")
     return final_response
+
+@router.post("/generate_victim", tags=["generate_victim"])
+async def generate_victim(generator_schema: GeneratorSchema):
+    print(f"input : {generator_schema.content}")
+    
+    while True:
+        try:
+            answer = chatbot.generate_victim(
+                generator_schema.content
+            )
+            break
+        except IndexError as e:
+            print("#"*10 + "I got IndexError...Try again!" + "#"*10)
+
+    final_response = {
+        "answer": answer, 
+    }
+    print(f"answer : {answer}")
+    return final_response
