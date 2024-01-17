@@ -40,11 +40,14 @@ AI 와 함께하는 마피아
 characters = """
 등장인물
 1. 촌장 : 거만하고 게으른 성격
-2. 범인 : 밤마다 일어나는 살인 사건의 범인, 자기가 범인이 아니라고 다른 이들을 속여야 함.
-3. 주민1 : 착하고 친절한 성격. 모든 말 끝을 냥으로 대답함.
-4. 주민2 : 거짓말 쟁이. 항상 자신이 아는 것에 반대로 말해야 함.
-5. 주민5 : 진지하고 말이 많이 없음. 경상도 사투리로 대답함.
-6. 플래이어 : 플래이어는 탐정 역할로 이 마을에 벌어진 살인사건을 조사하는 중임.
+2. 레오 : 용감함, 용기 있게 행동함, 뮤지션, 노래를 부르듯이 대답함
+3. 소피아 : 지혜로움, 깊은 통찰력과 현명한 판단을 가짐, 조용함, 대화보다는 관찰을 선호함
+4. 알렉스 : 모험적임, 새로운 것을 경험하려는 강한 욕구를 가짐, 떠돌이, 여러 마을을 떠돌아 다니는 떠돌이임
+5. 자스민 : 회의적, 주변 사건에 대해 의심을 품으며 진실을 탐구함, 학자, 지식을 추구하고 책과 연구에 몰두함
+6. 애쉬 : 유머러스함, 재치 있고 유머러스한 성격을 지님, 유머러스한 말투, 대화 중에 종종 재치 있는 농담을 섞어 말함
+7. 짠짠영 : 기발함, 독창적이고 창의적인 생각으로 눈길을 끔, 발명가, 새롭고 혁신적인 아이디어로 다양한 발명품을 만듦
+8. 김쿵야 : 장난꾸러기, 재미있고 유쾌한 성격으로 주변 사람들을 즐겁게 함, 마술사, 기발한 마술과 재치 있는 퍼포먼스로 사람들을 놀라게 함
+9. 플레이어 : 플레이어는 탐정 역할로 이 마을에 벌어진 살인사건을 조사하는 중임.
 """
 
 intro_chain_prefix = """
@@ -77,6 +80,22 @@ conversation_between_npc_chain_prefix = """
 5. 답변은 모두 한국어여야 함.
 """
 
+set_story = """
+1. 2일차.
+2. 범인은 알렉스 이며 인간을 혐오함, 무작위로 사람을 살해.
+3. 이전 이야기는 1일차에 탐정은 마을 광장에서 벌어진 김쿵야의 살인 사건을 조사했다. 알렉스는 인간을 혐오하는 마음으로 무작위로 김쿵야를 살해했다. 자스민이 목격자로, 김쿵야가 분수대 안으로 사라지는 것을 보고 기계장치 소리를 들었다고 증언했다. 시체는 분수대에서 발견되었으며, 익사로 인한 사망으로 결론지어졌다.
+"""
+
+generate_victim_prefix ="""
+1. 등장인물 설정을 참고하여 살해당할 피해자를 지정해야 함.
+2. 범인의 성격에 의거하여 살인장소, 살해방법을 지정해야 함.
+3. 범인과 피해자 이외의 등장인물 중 목격자를 지정해야 함.
+4. 지정된 목격자가 플레이어의 추리에 도움이 될 수 있도록 목격정보를 지정해야 함.
+5. 범인의 성격과 피해자의 살해방법에 의거하여 시체조사결과를 지정해야 함.
+6. 누가 어디서 살해되었는 지 간단히 설명으로 지정해야 함.
+7. 답변의 형식은 victim, crimeScene, method, witness, eyewitnessInformation, bodyCondition, dailySummary 로 반환해야 함.
+"""
+
 conversation_chain_suffix = """
 Human: {input}
 AI Assistant:
@@ -97,6 +116,9 @@ conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_t
 
 conversation_between_npc_template = synopsis + conversation_between_npc_chain_prefix + conversation_user_chain_suffix
 conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, input_variables=["input"])
+
+generate_victim_template = synopsis + characters + set_story + generate_victim_prefix + conversation_chain_suffix
+generate_victim_prompt = PromptTemplate(template=generate_victim_template, input_variables=["input"])
 
 # template = synopsis + conversation_chain_prefix + conversation_chain_suffix
 # conversation_chain_prompt = PromptTemplate(template=template, input_variables=["input"])

@@ -38,3 +38,9 @@ conversation_between_npc_chain = LLMChain(
     memory=memory.memory,
     verbose=True,
 )
+
+generate_victim_chain = LLMChain(
+    prompt=prompts.generate_victim_prompt,
+    llm=llm,
+    verbose=True,
+)
