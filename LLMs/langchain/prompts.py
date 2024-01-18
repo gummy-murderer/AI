@@ -88,11 +88,12 @@ set_story = """
 
 generate_victim_prefix ="""
 1. 등장인물 설정을 참고하여 살해당할 피해자를 지정해야 함.
-2. 범인의 성격에 의거하여 살인장소, 살해방법을 지정해야 함.
-3. 범인과 피해자 이외의 등장인물 중 목격자를 지정해야 함.
+2. 살인자의 성격에 의거하여 살인장소, 살해방법을 지정해야 함.
+3. 살인자와 피해자 이외의 등장인물 중 목격자를 지정해야 함.
 4. 지정된 목격자가 플레이어의 추리에 도움이 될 수 있도록 목격정보를 지정해야 함.
-5. 범인의 성격과 피해자의 살해방법에 의거하여 시체조사결과를 지정해야 함.
-6. 누가 어디서 살해되었는 지 간단히 설명으로 지정해야 함.
+5. 살인자의 성격과 피해자의 살해방법에 의거하여 시체조사결과를 지정해야 함.
+6. dailySummary에는 누가 어디서 살해되었는 지 간단히 설명으로 지정해야 함. day정보가 들어가야 함. 해당 정보는 탐정에게 제공되는 것이 아니라 다음번 시나리오 생성을 위해 제공될 것임.
+7. previousStory를 참고하여 이후의 스토리를 만들어야하며 previousStory의 내용은 들어가면 안됨.
 7. 답변의 형식은 victim, crimeScene, method, witness, eyewitnessInformation, bodyCondition, dailySummary 로 반환해야 함.
 """
 
@@ -117,7 +118,7 @@ conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_t
 conversation_between_npc_template = synopsis + conversation_between_npc_chain_prefix + conversation_user_chain_suffix
 conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, input_variables=["input"])
 
-generate_victim_template = synopsis + characters + set_story + generate_victim_prefix + conversation_chain_suffix
+generate_victim_template = synopsis + generate_victim_prefix + conversation_user_chain_suffix
 generate_victim_prompt = PromptTemplate(template=generate_victim_template, input_variables=["input"])
 
 # template = synopsis + conversation_chain_prefix + conversation_chain_suffix
