@@ -18,5 +18,7 @@ class ConversationNPCSchema(BaseModel):
     npc_name_1: str
     npc_name_2: str
 
-class MakingNPCSchema(BaseModel):
-    npc_number: int
+class GenerateVictimSchema(BaseModel):
+    day: int
+    murderer: str
+    previousStory: Optional[str]

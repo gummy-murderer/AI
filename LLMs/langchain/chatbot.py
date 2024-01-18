@@ -34,4 +34,4 @@ def conversation_between_npc(inputs: str) -> str:
     return execute_conversation(chains.conversation_between_npc_chain, inputs)
 
 def generate_victim(inputs: str) -> str:
-    return chains.generate_victim_chain.predict(input=inputs)
+    return execute_conversation(chains.generate_victim_chain, inputs)

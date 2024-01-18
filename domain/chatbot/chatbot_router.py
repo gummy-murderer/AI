@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 
-from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchema, ConversationNPCSchema
-from LLMs.langchain import chatbot, prompts
+from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchema, ConversationNPCSchema, GenerateVictimSchema
+from domain.chatbot.chatbot_crud import get_all_npc_information, get_criminal_scenario
+from LLMs.langchain import chatbot
 
 from lib.npc_management import get_npc_information
 from lib.chat_management import previous_chat_contents
@@ -141,21 +142,35 @@ async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchem
     print(f"execution_time : {execution_time}")
     return final_response
 
+
 @router.post("/generate_victim", tags=["generate_victim"])
-async def generate_victim(generator_schema: GeneratorSchema):
-    print(f"input : {generator_schema.content}")
+async def generate_victim(generate_victim_schema: GenerateVictimSchema):
+    print(f"day : {generate_victim_schema.day}")
+    print(f"murderer : {generate_victim_schema.murderer}")
+    print(f"previousStory : {generate_victim_schema.previousStory}")
     
+    characters = get_all_npc_information(info_type='str')
+    criminal_scenario = get_criminal_scenario(generate_victim_schema.murderer)
+
     while True:
         try:
-            answer = chatbot.generate_victim(
-                generator_schema.content
+            answer, tokens, execution_time = chatbot.generate_victim(
+                f"{characters}\n" \
+                f"Input\n" \
+                + f"day: {generate_victim_schema.day}\n" \
+                + f"murderer: {criminal_scenario['npcName']}\n" \
+                + f"motivation: {criminal_scenario['Motivation']}\n" \
+                + f"procedure: {criminal_scenario['Procedure']}\n" \
+                + f"previousStory: {generate_victim_schema.previousStory}\n" \
             )
+            answer_dic = {i.split(':')[0]: i.split(':')[1] for i in answer.split('\n')}
             break
         except IndexError as e:
             print("#"*10 + "I got IndexError...Try again!" + "#"*10)
 
-    final_response = {
-        "answer": answer, 
-    }
     print(f"answer : {answer}")
+    final_response = {
+        "chatContent": answer_dic, 
+        "totalTokens": tokens["Total_Tokens"]
+    }
     return final_response
