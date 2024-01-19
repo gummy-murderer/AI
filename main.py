@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 import uvicorn
 
-from domain.chatbot import chatbot_router
-from domain.npc_management import npc_management_router
+from domain.user import user_router
+from domain.scenario import scenario_router
+
 
 description = """
 #### 두근두근 놀러와요 마피아의 숲! 구미머더러! 지금 플레이하세요(찡긋)
@@ -16,12 +17,12 @@ description = """
 
 tags_metadata = [
     {
-        "name": "generator",
-        "description": "사용자 입력에 기반하여 답변을 생성합니다."
+        "name": "scenario",
+        "description": "게임 진행을 위한 시나리오 등을 생성합니다."
     },
     {
-        "name": "management",
-        "description": "npc 생성 등 부가기능입니다."
+        "name": "user",
+        "description": "사용자와 상호작용 할 수 있도록 답변을 생성합니다."
     },
 ]
 
@@ -36,8 +37,8 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
-app.include_router(chatbot_router.router)
-# app.include_router(npc_management_router.router)
+app.include_router(user_router.router)
+app.include_router(scenario_router.router)
 
 
 if __name__ == "__main__":
