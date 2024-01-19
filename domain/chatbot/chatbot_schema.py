@@ -15,8 +15,10 @@ class ConversationUserSchema(BaseModel):
     previousChatContents: List[dict] 
 
 class ConversationNPCSchema(BaseModel):
-    npc_name_1: str
-    npc_name_2: str
+    sender: str
+    npcName1: str
+    npcName2: str
+    previousStory: Optional[str]
 
 class GenerateVictimSchema(BaseModel):
     day: int

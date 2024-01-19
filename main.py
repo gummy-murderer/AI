@@ -37,7 +37,7 @@ app = FastAPI(
 )
 
 app.include_router(chatbot_router.router)
-app.include_router(npc_management_router.router)
+# app.include_router(npc_management_router.router)
 
 
 if __name__ == "__main__":

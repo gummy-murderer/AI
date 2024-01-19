@@ -1,6 +1,4 @@
-from langchain_openai import ChatOpenAI
 from langchain_community.callbacks import get_openai_callback
-from langchain.prompts import PromptTemplate
 import time
 
 from LLMs.langchain import chains

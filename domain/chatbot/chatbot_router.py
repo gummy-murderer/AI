@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException
 
 from domain.chatbot.chatbot_schema import GeneratorSchema, ConversationUserSchema, ConversationNPCSchema, GenerateVictimSchema
-from domain.chatbot.chatbot_crud import get_all_npc_information, get_criminal_scenario
+from domain.chatbot.chatbot_crud import get_npc_information, get_all_npc_information, get_criminal_scenario
 from LLMs.langchain import chatbot
 
-from lib.npc_management import get_npc_information
 from lib.chat_management import previous_chat_contents
+from lib.response_format_check import conversation_with_user_format, conversation_between_npcs_format
 
 
 router = APIRouter(
@@ -76,6 +76,8 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
         raise HTTPException(status_code=400, detail=f"{conversation_user_schema.receiver} is not in npc list!")
     print(info)
 
+    retry_attempts = 0
+    MAX_RETRY_LIMIT = 3
     while True:
         try:
             answer, tokens, execution_time = chatbot.conversation_with_user(
@@ -85,9 +87,15 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
                 + f"{conversation_user_schema.sender}: {conversation_user_schema.chatContent}\n" \
                 + f"{name}: " \
             )
-            break
+            if conversation_with_user_format(answer):
+                break
         except IndexError as e:
             print("#"*10 + "I got IndexError...Try again!" + "#"*10)
+        retry_attempts += 1
+        print("Format is not correct, retrying...")
+        if retry_attempts >= MAX_RETRY_LIMIT:
+            print("Exceeded maximum attempt limit, terminating response generation.")
+            break
 
     final_response = {
         "chatContent": answer, 
@@ -104,15 +112,15 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
              tags=["generator"])
 async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchema):
     print(f"input")
-    print(f"npc_name_1 : {conversation_npc_schema.npc_name_1}")
-    print(f"npc_name_2 : {conversation_npc_schema.npc_name_2}")
+    print(f"npc_name_1 : {conversation_npc_schema.npcName1}")
+    print(f"npc_name_2 : {conversation_npc_schema.npcName2}")
 
-    npc_1, npc_name_1 = get_npc_information(conversation_npc_schema.npc_name_1, random_=False)
-    npc_2, npc_name_2 = get_npc_information(conversation_npc_schema.npc_name_2, random_=False)
+    npc_1, npc_name_1 = get_npc_information(conversation_npc_schema.npcName1, random_=False)
+    npc_2, npc_name_2 = get_npc_information(conversation_npc_schema.npcName2, random_=False)
     if not npc_1:
-        raise HTTPException(status_code=400, detail=f"{conversation_npc_schema.npc_name_1} is not in npc list!")
+        raise HTTPException(status_code=400, detail=f"{conversation_npc_schema.npcName1} is not in npc list!")
     if not npc_2:
-        raise HTTPException(status_code=400, detail=f"{conversation_npc_schema.npc_name_2} is not in npc list!")
+        raise HTTPException(status_code=400, detail=f"{conversation_npc_schema.npcName2} is not in npc list!")
     
     while True:
         try:
@@ -121,15 +129,8 @@ async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchem
                 + f" target_npc_2: ({npc_2})\n" \
                 + f"{npc_name_1}: " \
             )
-            answer_list = [i for i in answer.split("\n") if i]
-            validity_check = []
-            for answer_ in answer_list:
-                if npc_name_1 not in answer_.split(':') and npc_name_2 not in answer_.split(':'):
-                    validity_check.append(answer_)
-            if not validity_check:
-                break
-            else:
-                print("Invalid format, please try again")
+            answer_list = conversation_between_npcs_format(conversation_npc_schema.npcName1, conversation_npc_schema.npcName2, answer)
+            break
         except IndexError as e:
             print("#"*10 + "I got IndexError...Try again!" + "#"*10)
 
