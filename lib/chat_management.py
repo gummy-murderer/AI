@@ -6,6 +6,6 @@ def previous_chat_contents(chat_contents):
 
     previous_contents = ""
     for content in chat_contents[start_index:]:
-        previous_contents += f"{content['sender']}: {content['chatContent']}\n"
+        previous_contents += f"{content.sender}: {content.chatContent}\n"
 
     return previous_contents

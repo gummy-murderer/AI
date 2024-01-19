@@ -2,9 +2,6 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 
-class GeneratorSchema(BaseModel):
-    content: str
-
 class PreviousChatContent(BaseModel):
     sender: str
     receiver: str
@@ -24,10 +21,4 @@ class ConversationNPCSchema(BaseModel):
     npcName1: str
     npcName2: str
     chatDay: int
-    previousStory: Optional[str]
-
-class GenerateVictimSchema(BaseModel):
-    day: int
-    murderer: str
-    livingCharacters: List
     previousStory: Optional[str]
