@@ -44,7 +44,136 @@ characters = """
 """
 
 
+# places = """
+# {
+#     "places": [
+#         {
+#             "placeNameEn": "Misk_Shop",
+#             "placeNameKo": "잡화샵"
+#         },
+#         {
+#             "placeNameEn": "Pawn_Shop",
+#             "placeNameKo": "전당포"
+#         },
+#         {
+#             "placeNameEn": "Bank",
+#             "placeNameKo": "은행"
+#         },
+#         {
+#             "placeNameEn": "Beach",
+#             "placeNameKo": "해변"
+#         },
+#         {
+#             "placeNameEn": "UnderPig",
+#             "placeNameKo": "돼지 우리"
+#         },
+#         {
+#             "placeNameEn": "UnderBridge",
+#             "placeNameKo": "남쪽 다리"
+#         },
+#         {
+#             "placeNameEn": "LeftTree",
+#             "placeNameKo": "서쪽 마을 나무 밑"
+#         },
+#         {
+#             "placeNameEn": "LeftSea",
+#             "placeNameKo": "서쪽 바다"
+#         },
+#         {
+#             "placeNameEn": "LeftRock",
+#             "placeNameKo": "서쪽 바다의 거대한 돌"
+#         },
+#         {
+#             "placeNameEn": "Flower",
+#             "placeNameKo": "꽃 가게"
+#         },
+#         {
+#             "placeNameEn": "Convenience_Store",
+#             "placeNameKo": "편의점"
+#         },
+#         {
+#             "placeNameEn": "Hotel",
+#             "placeNameKo": "호텔"
+#         },
+#         {
+#             "placeNameEn": "Real_Estate_Agancy",
+#             "placeNameKo": "부동산"
+#         },
+#         {
+#             "placeNameEn": "Salon",
+#             "placeNameKo": "미용실"
+#         },
+#         {
+#             "placeNameEn": "Plice",
+#             "placeNameKo": "경찰서"
+#         },
+#         {
+#             "placeNameEn": "Cafe",
+#             "placeNameKo": "카페"
+#         },
+#         {
+#             "placeNameEn": "Train",
+#             "placeNameKo": "기차역"
+#         }
+#     ]
+# }
+# """
 
+places = """
+places
+
+placeNameEn: Misk_Shop,
+placeNameKo: 잡화샵
+
+placeNameEn: Pawn_Shop,
+placeNameKo: 전당포
+
+placeNameEn: Bank,
+placeNameKo: 은행
+
+placeNameEn: Beach,
+placeNameKo: 해변
+
+placeNameEn: UnderPig,
+placeNameKo: 돼지 우리
+
+placeNameEn: UnderBridge,
+placeNameKo: 남쪽 다리
+
+placeNameEn: LeftTree,
+placeNameKo: 서쪽 마을 나무 밑
+
+placeNameEn: LeftSea,
+placeNameKo: 서쪽 바다
+
+placeNameEn: LeftRock,
+placeNameKo: 서쪽 바다의 거대한 돌
+
+placeNameEn: Flower,
+placeNameKo: 꽃 가게
+
+placeNameEn: Convenience_Store,
+placeNameKo: 편의점
+
+placeNameEn: Hotel,
+placeNameKo: 호텔
+
+placeNameEn: Real_Estate_Agancy,
+placeNameKo: 부동산
+
+placeNameEn: Salon,
+placeNameKo: 미용실
+
+placeNameEn: Plice,
+placeNameKo: 경찰서
+
+placeNameEn: Cafe,
+placeNameKo: 카페
+
+placeNameEn: Train,
+placeNameKo: 기차역
+
+"""
 
 
 

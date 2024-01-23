@@ -38,7 +38,9 @@ def conversation_with_user_format(answer):
 
 def generate_victim_format(answer):
     try:
-        return {i.split(':')[0]: i.split(':')[1] for i in answer.split('\n')}
+        print(answer)
+        # return {i.split(':')[0]: i.split(':')[1] for i in answer.split('\n')}
+        return json.loads(answer.replace('```', '').replace('json', ''))
     except:
         return None
     

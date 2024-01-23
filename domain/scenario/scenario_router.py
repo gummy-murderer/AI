@@ -21,7 +21,7 @@ async def generate_intro(generator_intro_schema: GenerateIntroSchema):
 
     final_response = {
         "answer": answer, 
-        "totalTokens": tokens["Total_Tokens"]
+        "tokens": tokens
     }
     print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response
@@ -39,6 +39,8 @@ async def generate_victim(generate_victim_schema: GenerateVictimSchema):
     
     characters = get_specific_npc_information(generate_victim_schema.livingCharacters)
     criminal_scenario = get_criminal_scenario(generate_victim_schema.murderer)
+    if not criminal_scenario:
+        raise HTTPException(status_code=400, detail=f"{generate_victim_schema.murderer} is not in npc list!")
 
     prompt = f"{characters}\n" \
                 + f"Input\n" \
@@ -52,7 +54,7 @@ async def generate_victim(generate_victim_schema: GenerateVictimSchema):
 
     final_response = {
         "answer": answer, 
-        "totalTokens": tokens["Total_Tokens"]
+        "tokens": tokens
     }
     print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response
@@ -84,7 +86,7 @@ async def generate_intro(generator_final_words_schema: GenerateFinalWordsSchema)
 
     final_response = {
         "answer": answer, 
-        "totalTokens": tokens["Total_Tokens"]
+        "tokens": tokens
     }
     print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response

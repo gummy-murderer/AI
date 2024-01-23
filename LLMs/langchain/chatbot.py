@@ -12,10 +12,10 @@ def execute_conversation(chain_predict, inputs):
 
     with get_openai_callback() as cb:
         response = chain_predict.predict(input=inputs)
-        tokens = {"Total_Tokens": cb.total_tokens, 
-                  "Prompt_Tokens": cb.prompt_tokens, 
-                  "Completion_Tokens": cb.completion_tokens,
-                  "Total_Cost_(USD)": f"${cb.total_cost}"}
+        tokens = {"totalTokens": cb.total_tokens, 
+                  "promptTokens": cb.prompt_tokens, 
+                  "completionTokens": cb.completion_tokens,
+                  "totalCost(USD)": f"${cb.total_cost}"}
 
     end_time = time.time()
     execution_time = round(end_time - start_time, 3)
