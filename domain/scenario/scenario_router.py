@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
-from domain.scenario.scenario_schema import GeneratorSchema, GenerateVictimSchema
-from domain.scenario.scenario_crud import get_all_npc_information, get_criminal_scenario, get_specific_npc_information
+from domain.scenario.scenario_schema import GenerateIntroSchema, GenerateVictimSchema, GenerateFinalWordsSchema
+from domain.scenario.scenario_crud import get_criminal_scenario, get_specific_npc_information
 from LLMs.langchain import chatbot
 
 router = APIRouter(
@@ -9,47 +9,21 @@ router = APIRouter(
 )
 
 
-@router.post("/intro_generator", 
-             description="사용자 입력에 기반하여 소개 또는 시작 대화를 생성해 주는 API입니다.", 
+@router.post("/generate_intro", 
+             description="게임의 intro를 생성해 주는 API입니다.", 
              tags=["scenario"])
-async def intro_generator(generator_schema: GeneratorSchema):
-    print(f"input : {generator_schema.content}")
+async def generate_intro(generator_intro_schema: GenerateIntroSchema):
+    print(f"Characters : {generator_intro_schema.Characters}")
     
-    while True:
-        try:
-            answer = chatbot.intro(
-                generator_schema.content
-            )
-            break
-        except IndexError as e:
-            print("#"*10 + "I got IndexError...Try again!" + "#"*10)
+    prompt = f"\n" \
+    
+    answer, tokens, execution_time = chatbot.generate_intro(prompt)
 
     final_response = {
         "answer": answer, 
+        "totalTokens": tokens["Total_Tokens"]
     }
-    print(f"answer : {answer}")
-    return final_response
-
-
-@router.post("/scenario_generator", 
-             description="사용자 입력을 바탕으로 상세한 대화 시나리오를 생성해 주는 API입니다.", 
-             tags=["scenario"])
-async def scenario_generator(generator_schema: GeneratorSchema):
-    print(f"input : {generator_schema.content}")
-    
-    while True:
-        try:
-            answer = chatbot.scenario(
-                generator_schema.content
-            )
-            break
-        except IndexError as e:
-            print("#"*10 + "I got IndexError...Try again!" + "#"*10)
-
-    final_response = {
-        "answer": answer, 
-    }
-    print(f"answer : {answer}")
+    print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response
 
 
@@ -67,7 +41,7 @@ async def generate_victim(generate_victim_schema: GenerateVictimSchema):
     criminal_scenario = get_criminal_scenario(generate_victim_schema.murderer)
 
     prompt = f"{characters}\n" \
-                f"Input\n" \
+                + f"Input\n" \
                 + f"day: {generate_victim_schema.day}\n" \
                 + f"murderer: {criminal_scenario['npcName']}\n" \
                 + f"motivation: {criminal_scenario['Motivation']}\n" \
@@ -77,8 +51,40 @@ async def generate_victim(generate_victim_schema: GenerateVictimSchema):
     answer, tokens, execution_time = chatbot.generate_victim(prompt)
 
     final_response = {
-        "chatContent": answer, 
+        "answer": answer, 
         "totalTokens": tokens["Total_Tokens"]
     }
-    print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    return final_response
+
+
+@router.post("/generate_final_words", 
+             description="범인의 마지막 한마디를 생성해 주는 API입니다.", 
+             tags=["scenario"])
+async def generate_intro(generator_final_words_schema: GenerateFinalWordsSchema):
+    print(f"result : {generator_final_words_schema.result}")
+    print(f"murderer : {generator_final_words_schema.murderer}")
+    # previousStory 이용 안함
+    
+    criminal_scenario = get_criminal_scenario(generator_final_words_schema.murderer)
+    if not criminal_scenario:
+        raise HTTPException(status_code=400, detail=f"{generator_final_words_schema.murderer} is not in npc list!")
+
+    print(criminal_scenario)
+    prompt = f"game result: {generator_final_words_schema.result}\n" \
+                + f"murderer information\n" \
+                + f"murderer: {criminal_scenario['npcName']}\n" \
+                + f"motivation: {criminal_scenario['Motivation']}\n" \
+                + f"procedure: {criminal_scenario['Procedure']}\n" \
+                + f"{criminal_scenario['npcName']}: \n" \
+    
+    print(prompt)
+    answer, tokens, execution_time = chatbot.generate_final_words(prompt)
+    print(answer)
+
+    final_response = {
+        "answer": answer, 
+        "totalTokens": tokens["Total_Tokens"]
+    }
+    print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response
