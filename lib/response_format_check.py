@@ -1,4 +1,5 @@
 import lib.const as const
+import json
 
 characters = const.CHARACTERS
 
@@ -38,5 +39,19 @@ def conversation_with_user_format(answer):
 def generate_victim_format(answer):
     try:
         return {i.split(':')[0]: i.split(':')[1] for i in answer.split('\n')}
+    except:
+        return None
+    
+
+def generate_intro_format(answer):
+    try:
+        return json.loads(answer.replace('```', '').replace('json', ''))
+    except:
+        return None
+    
+
+def generate_final_words_format(answer):
+    try:
+        return json.loads(answer.replace('```', '').replace('json', ''))
     except:
         return None

@@ -1,24 +1,17 @@
-from langchain.prompts.prompt import PromptTemplate
 
 
 synopsis = """
 시놉시스 :
 AI 와 함께하는 마피아
-
 낮과 밤에 따른 각자의 역할에 따른 시간 분배
-
 직업 : 마피아, 시민, 의사, 경찰
-
 자연스럽고 현실적인 대화가 이루어 질 수 있도록 해야함
-
 대화 흐름에 맞는 각각의 AI 의 판단에 의거한 투표 진행 및 선택
-
 자신의 직업이 무엇인지 숨기고 시민인 척 연기해야하는 AI
 
 게임 제목: "젤리곰 마을의 비밀"
 
 배경
-
 - **장소**: 컬러풀하고 평화로운 '젤리곰 마을'
 - **시간**: 현재 시대, 마법과 기술이 공존하는 세계
 - **사건**: 마을에서 발생한 첫 살인 사건
@@ -49,6 +42,13 @@ characters = """
 8. 김쿵야 : 장난꾸러기, 재미있고 유쾌한 성격으로 주변 사람들을 즐겁게 함, 마술사, 기발한 마술과 재치 있는 퍼포먼스로 사람들을 놀라게 함
 9. 플레이어 : 플레이어는 탐정 역할로 이 마을에 벌어진 살인사건을 조사하는 중임.
 """
+
+
+
+
+
+
+
 
 intro_chain_prefix = """
 1. 해당 시놉시스를 이용해서 마을의 촌장이 탐정에게 처음 상황을 설명하듯이 답변을 반말로 생성해야 함.
@@ -105,21 +105,3 @@ AI Assistant:
 conversation_user_chain_suffix = """
 {input}
 """
-
-intro_template = synopsis + intro_chain_prefix + conversation_chain_suffix
-intro_prompt = PromptTemplate(template=intro_template, input_variables=["input"])
-
-scenario_template = synopsis + characters + scenario_chain_prefix + conversation_chain_suffix
-scenario_prompt = PromptTemplate(template=scenario_template, input_variables=["input"])
-
-conversation_with_user_template = synopsis + conversation_with_user_chain_prefix + conversation_user_chain_suffix
-conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, input_variables=["input"])
-
-conversation_between_npc_template = synopsis + conversation_between_npc_chain_prefix + conversation_user_chain_suffix
-conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, input_variables=["input"])
-
-generate_victim_template = synopsis + generate_victim_prefix + conversation_user_chain_suffix
-generate_victim_prompt = PromptTemplate(template=generate_victim_template, input_variables=["input"])
-
-# template = synopsis + conversation_chain_prefix + conversation_chain_suffix
-# conversation_chain_prompt = PromptTemplate(template=template, input_variables=["input"])
