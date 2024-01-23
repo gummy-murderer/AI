@@ -40,7 +40,7 @@ async def conversation_with_user(conversation_user_schema: ConversationUserSchem
 
     final_response = {
         "chatContent": answer, 
-        "totalTokens": tokens["Total_Tokens"]
+        "tokens": tokens
     }
 
     print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
@@ -71,7 +71,7 @@ async def conversation_between_npc(conversation_npc_schema: ConversationNPCSchem
 
     final_response = {
         "chatContent": answer, 
-        "totalTokens": tokens["Total_Tokens"]
+        "tokens": tokens
     }
 
     print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
