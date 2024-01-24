@@ -1,6 +1,6 @@
 {
     "npcs": {
-        "Leo": {
+        "레오": {
             "npcName": "레오",
             "age": 25,
             "gender": "Male",
@@ -14,7 +14,7 @@
                 "Procedure": "나이 많은 사람부터 살해"
             }
         },
-        "Sophia": {
+        "소피아": {
             "npcName": "소피아",
             "Age": 32,
             "Gender": "Female",
@@ -28,7 +28,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Marco": {
+        "마르코": {
             "npcName": "마르코",
             "Age": 28,
             "Gender": "Male",
@@ -42,7 +42,7 @@
                 "Procedure": "어린 사람부터 살해"
             }
         },
-        "Isabel": {
+        "이사벨": {
             "npcName": "이사벨",
             "Age": 30,
             "Gender": "Female",
@@ -56,7 +56,7 @@
                 "Procedure": "강한 사람부터 살해"
             }
         },
-        "Alex": {
+        "알렉스": {
             "npcName": "알렉스",
             "Age": 26,
             "Gender": "Male",
@@ -70,7 +70,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Nicholas": {
+        "니콜라스": {
             "npcName": "니콜라스",
             "Age": 35,
             "Gender": "Male",
@@ -84,7 +84,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Oliver": {
+        "올리버": {
             "npcName": "올리버",
             "Age": 27,
             "Gender": "Male",
@@ -98,7 +98,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Vivian": {
+        "비비안": {
             "npcName": "비비안",
             "Age": 31,
             "Gender": "Female",
@@ -112,7 +112,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Theo": {
+        "테오": {
             "npcName": "테오",
             "Age": 25,
             "Gender": "Male",
@@ -126,7 +126,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Jasmine": {
+        "자스민": {
             "npcName": "자스민",
             "Age": 30,
             "Gender": "Female",
@@ -140,7 +140,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Milo": {
+        "마일로": {
             "npcName": "마일로",
             "Age": 26,
             "Gender": "Male",
@@ -154,7 +154,7 @@
                 "Procedure": "나이 많은 사람부터 살해"
             }
         },
-        "Lena": {
+        "레나": {
             "npcName": "레나",
             "Age": 38,
             "Gender": "Female",
@@ -168,7 +168,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Ash": {
+        "애쉬": {
             "npcName": "애쉬",
             "Age": 24,
             "Gender": "Male",
@@ -182,7 +182,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "KoongYa": {
+        "김쿵야": {
             "npcName": "김쿵야",
             "Age": 24,
             "Gender": "Female",
@@ -196,7 +196,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Dongsik": {
+        "박동식": {
             "npcName": "박동식",
             "Age": 27,
             "Gender": "Female",
@@ -210,7 +210,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "ZzanZzanYoung": {
+        "짠짠영": {
             "npcName": "짠짠영",
             "Age": 33,
             "Gender": "Female",
@@ -224,7 +224,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "TaegunTV": {
+        "태근티비": {
             "npcName": "태근티비",
             "Age": 27,
             "Gender": "Female",
@@ -238,7 +238,7 @@
                 "Procedure": "무작위로 사람을 살해"
             }
         },
-        "Yoonju": {
+        "박윤주": {
             "npcName": "박윤주",
             "Age": 25,
             "Gender": "Female",

@@ -11,8 +11,8 @@ description = """
 기능 목록:
 
 * **Say Hello** (_completely implemented_).
-* **generator** (_not implemented_).
-* **management** (_not implemented_).
+* **scenario** (_not implemented_).
+* **user** (_not implemented_).
 """
 
 tags_metadata = [
