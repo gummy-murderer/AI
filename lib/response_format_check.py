@@ -4,6 +4,9 @@ import json
 characters = const.CHARACTERS
 
 
+def no_check(answer):
+    return answer
+
 def get_npc_name(npc_name):
     return npc_name, characters['npcs'][npc_name]['npcName']
 

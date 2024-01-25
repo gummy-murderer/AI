@@ -26,3 +26,6 @@ class ConversationNPCSchema(GenerateSchema):
     npcName2: str
     chatDay: int
     previousStory: Optional[str]
+
+class ConversationNPCSchema2(ConversationNPCSchema):
+    previousChatContents: List[PreviousChatContent]
