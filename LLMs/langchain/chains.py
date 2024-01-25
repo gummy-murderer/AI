@@ -45,3 +45,10 @@ conversation_between_npc_chain = LLMChain(
     memory=memory.memory,
     verbose=True,
 )
+
+conversation_between_npc_stepwise_chain = LLMChain(
+    prompt=prompts_user.conversation_between_npc_stepwise_prompt,
+    llm=llm,
+    memory=memory.memory,
+    verbose=True,
+)
