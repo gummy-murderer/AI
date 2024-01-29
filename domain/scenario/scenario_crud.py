@@ -1,49 +1,87 @@
-import lib.const as const
+from pathlib import Path
+import json
+import random
 
-characters = const.CHARACTERS
+import domain.scenario.scenario_schema as scenario_schema
 
+CHARACTERS = json.load((Path(__file__).resolve().parents[2] / "resources/data/npc_4.json").open('r', encoding='utf-8'))
+PLACES = json.load((Path(__file__).resolve().parents[2] / "resources/data/places.json").open('r', encoding='utf-8'))
 
-def get_all_npc_information(info_type='dict'):
-    if info_type=='dict':
-        new_npc_data = {'npcs': {}}
-
-        for npc_name, npc_info in characters['npcs'].items():
-            npc_without_criminal_scenario = npc_info.copy()
-            del npc_without_criminal_scenario['CriminalScenario']
-            new_npc_data[npc_name] = npc_without_criminal_scenario
-        return new_npc_data
-    elif info_type=='str':
-        new_npc_data = '등장인물'
-        for npc_name, npc_info in characters['npcs'].items():
-            for key, content in npc_info.items():
-                if key != 'CriminalScenario':
-                    new_npc_data += f'\n{key}: {content}'
-            new_npc_data += '\n'
-        return new_npc_data
+characters_data = scenario_schema.CharactersSchema(**CHARACTERS)
+place_data = scenario_schema.PlacesSchema(**PLACES)
 
 
-def get_specific_npc_information(living_characters):
-    new_npc_data = '등장인물'
-    for living_character in living_characters:
-        # print(characters['npcs'][living_character])
-        for key, content in characters['npcs'][living_character].items():
-            if key != 'CriminalScenario':
-                new_npc_data += f'\n{key}: {content}'
-        new_npc_data += '\n'
-    return new_npc_data
+def get_character_info(name):
+    for character in characters_data.npcs:
+        if character.name == name:
+            return character
+    return None
 
+def get_character_criminal_scenario(name):
+    for character in characters_data.npcs:
+        if character.name == name:
+            return character.criminalScenario
+    return None
 
-def get_criminal_scenario(name: str):
-    crim_data = {}
-    for npc_name, npc_info in characters['npcs'].items():
-        if npc_name == name:
-            crim_data['npcName'] = npc_info['npcName']
-            crim_data['Motivation'] = npc_info['CriminalScenario']['Motivation']
-            crim_data['Procedure'] = npc_info['CriminalScenario']['Procedure']
-            
-    return crim_data
+def select_crime_scene(place_data):
+    return random.choice(place_data.places)
 
+def select_random_character(candidates: list, excluded_characters: list):
+    filtered_candidates = [character for character in candidates if character not in excluded_characters]
 
-if __name__ == "__main__":
-    result = get_criminal_scenario('Alex')
-    print(result)
+    valid_characters = [get_character_info(character) for character in filtered_candidates if get_character_info(character)]
+
+    if valid_characters:
+        return random.choice(valid_characters)
+    return None
+
+def get_characters_info(names: list):
+    characters_info = []
+    for name in names:
+        character_info = get_character_info(name)
+        if character_info:
+            characters_info.append(character_info)
+    return characters_info
+
+def generate_victim_input(victim_generation_data):
+    muderer_info = get_character_criminal_scenario(victim_generation_data.murderer)
+    if not muderer_info:
+        return None, None
+    
+    for character_name in victim_generation_data.livingCharacters:
+        if not get_character_info(character_name):
+            return None, None
+
+    crime_scene = select_crime_scene(place_data)
+    victim = select_random_character(victim_generation_data.livingCharacters, victim_generation_data.murderer)
+
+    excluded_characters = [victim_generation_data.murderer, victim.name]
+    witness = select_random_character(victim_generation_data.livingCharacters, excluded_characters)
+    
+    living_characters_info = get_characters_info(victim_generation_data.livingCharacters)
+    living_characters_info = [{
+            "name": living_character.name, 
+            "personalityDescription": living_character.personalityDescription,
+            "featureDescription": living_character.featureDescription,
+            } for living_character in living_characters_info]
+    
+    input_data_json = {
+        "information": {
+            "day": victim_generation_data.day,
+            "murderer": {
+                "name": victim_generation_data.murderer,
+                "motivation": muderer_info.motivation,
+                "procedure": muderer_info.procedure,
+                },
+            "crimeScene": crime_scene.placeNameKo,
+            "method": crime_scene.placeNameKo,
+            "victim": victim.name,
+            "witness": witness.name,
+            "livingCharacters": living_characters_info
+        }
+    }
+    pretty_printed = json.dumps(input_data_json, indent=4, ensure_ascii=False)
+    print(pretty_printed)
+    input_data_pydantic = scenario_schema.GameScenarioContainer(**input_data_json)
+
+    return input_data_json, input_data_pydantic

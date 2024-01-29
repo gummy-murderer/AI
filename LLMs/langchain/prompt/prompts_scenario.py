@@ -1,8 +1,8 @@
 from langchain.prompts.prompt import PromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 
-from LLMs.langchain.prompts_data import synopsis, characters, places
-from LLMs.langchain.prompts_schema import finalWordsSchema, introSchema, generateVictimSchema
+from LLMs.langchain.prompt.prompts_data import synopsis, places
+from LLMs.langchain.prompt.prompts_schema import finalWordsSchema, introSchema, generateVictimSchema
 
 
 
@@ -45,8 +45,14 @@ intro_prompt = PromptTemplate(template=intro_template,
                               input_variables=["input"], 
                               partial_variables={"format_instructions": intro_parser.get_format_instructions()})
 
+# generate_victim_parser = PydanticOutputParser(pydantic_object=generateVictimSchema)
+# generate_victim_template = synopsis + places + generate_victim_prefix + conversation_chain_suffix
+# generate_victim_prompt = PromptTemplate(template=generate_victim_template, 
+#                                         input_variables=["input"], 
+#                                         partial_variables={"format_instructions": generate_victim_parser.get_format_instructions()})
+                              
 generate_victim_parser = PydanticOutputParser(pydantic_object=generateVictimSchema)
-generate_victim_template = synopsis + places + generate_victim_prefix + conversation_chain_suffix
+generate_victim_template = synopsis + generate_victim_prefix + conversation_chain_suffix
 generate_victim_prompt = PromptTemplate(template=generate_victim_template, 
                                         input_variables=["input"], 
                                         partial_variables={"format_instructions": generate_victim_parser.get_format_instructions()})

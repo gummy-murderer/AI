@@ -1,17 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
-# router schema
-class GenerateSchema(BaseModel):
-    gameNo: Optional[int]
-    secretKey: Optional[str]
-
-class GenerateVictimSchema(GenerateSchema):
-    day: int
-    murderer: str
-    livingCharacters: List
-    previousStory: Optional[str]
-
 
 # characters information schema
 class CriminalScenarioSchema(BaseModel):
@@ -67,13 +56,10 @@ class CharacterInfo(BaseModel):
     # feature: str
     featureDescription: str
 
-class GameScenario(BaseModel):
+class GameInfo(BaseModel):
     day: int
     murderer: MurdererInfo
     crimeScene: str
     victim: str
     witness: str
     livingCharacters: List[CharacterInfo]
-
-class GameScenarioContainer(BaseModel):
-    information: GameScenario
