@@ -1,5 +1,5 @@
 from langchain.prompts.prompt import PromptTemplate
-from LLMs.langchain.prompts_data import synopsis, characters
+from LLMs.langchain.prompt.prompts_data import synopsis, characters
 
 
 conversation_with_user_chain_prefix = """
