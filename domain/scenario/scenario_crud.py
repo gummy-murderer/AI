@@ -35,7 +35,9 @@ def select_random_character(candidates: list, excluded_characters: list):
         return random.choice(valid_characters)
     return None
 
-def get_characters_info(names: list):
+def get_characters_info(candidates: list, excluded_characters: list):
+    names = [character for character in candidates if character not in excluded_characters]
+
     characters_info = []
     for name in names:
         character_info = get_character_info(name)
@@ -58,7 +60,7 @@ def generate_victim_input(victim_generation_data):
     excluded_characters = [victim_generation_data.murderer, victim.name]
     witness = select_random_character(victim_generation_data.livingCharacters, excluded_characters)
     
-    living_characters_info = get_characters_info(victim_generation_data.livingCharacters)
+    living_characters_info = get_characters_info(victim_generation_data.livingCharacters, excluded_characters)
     living_characters_info = [{
             "name": living_character.name, 
             "personalityDescription": living_character.personalityDescription,
@@ -74,14 +76,29 @@ def generate_victim_input(victim_generation_data):
                 "procedure": muderer_info.procedure,
                 },
             "crimeScene": crime_scene.placeNameKo,
-            "method": crime_scene.placeNameKo,
+            "method": "칼",
             "victim": victim.name,
             "witness": witness.name,
-            "livingCharacters": living_characters_info
+            "livingCharacters": living_characters_info,
+            "previousStory": victim_generation_data.previousStory
         }
     }
-    pretty_printed = json.dumps(input_data_json, indent=4, ensure_ascii=False)
-    print(pretty_printed)
+    # pretty_printed = json.dumps(input_data_json, indent=4, ensure_ascii=False)
     input_data_pydantic = scenario_schema.GameScenarioContainer(**input_data_json)
 
     return input_data_json, input_data_pydantic
+
+def generate_victim_output(answer, input_data):
+    output_data_json = {
+        "victim": input_data.information.victim,
+        "crimeScene": input_data.information.crimeScene,
+        "method": input_data.information.method,
+        "witness": input_data.information.witness,
+        "eyewitnessInformation": answer.eyewitnessInformation,
+        "dailySummary": answer.dailySummary,
+        "alibis": answer.alibis
+    }
+
+    # pretty_printed = json.dumps(output_data_json, indent=4, ensure_ascii=False)
+    # print(pretty_printed)
+    return output_data_json
