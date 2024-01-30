@@ -2,11 +2,12 @@ from langchain_community.callbacks import get_openai_callback
 import time
 
 from LLMs.langchain import chains
-import lib.response_format_check as response_format_check
+from LLMs.langchain.prompt.prompts_schema import GenerateVictimSchema, IntroSchema
+from lib.response_format_check import response_format
 
-MAX_RETRY_LIMIT = 1
+MAX_RETRY_LIMIT = 2
 
-def execute_conversation(chain_function, format_check_function, inputs, **kwargs):
+def execute_conversation(chain_function, format_check_function, schema, inputs, **kwargs):
     retry_attempts = 0
     while True:
         try:
@@ -23,7 +24,7 @@ def execute_conversation(chain_function, format_check_function, inputs, **kwargs
             end_time = time.time()
             execution_time = round(end_time - start_time, 3)
 
-            answer = format_check_function(response)
+            answer = schema(**format_check_function(response))
             if answer:
                 return answer, tokens, execution_time
         except IndexError as e:
@@ -34,12 +35,17 @@ def execute_conversation(chain_function, format_check_function, inputs, **kwargs
                 print("Exceeded maximum attempt limit, terminating response generation.")
                 break
 
+# scenario
 def generate_intro(inputs):
-    return execute_conversation(chains.generate_intro, response_format_check.generate_intro_format, inputs)
+    return execute_conversation(chains.generate_intro, response_format, IntroSchema, inputs)
+
+def generate_victim(inputs):
+    return execute_conversation(chains.generate_victim_chain, response_format, GenerateVictimSchema, inputs)
 
 def generate_final_words(inputs):
-    return execute_conversation(chains.generate_final_words, response_format_check.generate_final_words_format, inputs)
+    return execute_conversation(chains.generate_final_words, response_format, inputs)
 
+# user
 def conversation_with_user(inputs):
     return execute_conversation(chains.conversation_with_user_chain, response_format_check.conversation_with_user_format, inputs)
 
@@ -49,5 +55,3 @@ def conversation_between_npc(inputs, name1, name2):
 def conversation_between_npcs_stepwise(inputs):
     return execute_conversation(chains.conversation_between_npc_stepwise_chain, response_format_check.no_check, inputs)
 
-def generate_victim(inputs):
-    return execute_conversation(chains.generate_victim_chain, response_format_check.generate_victim_format, inputs)

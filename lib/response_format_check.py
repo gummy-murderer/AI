@@ -39,21 +39,7 @@ def conversation_with_user_format(answer):
         return True
     
 
-def generate_victim_format(answer):
-    try:
-        return json.loads(answer.replace('```', '').replace('json', ''))
-    except:
-        return None
-    
-
-def generate_intro_format(answer):
-    try:
-        return json.loads(answer.replace('```', '').replace('json', ''))
-    except:
-        return None
-    
-
-def generate_final_words_format(answer):
+def response_format(answer):
     try:
         return json.loads(answer.replace('```', '').replace('json', ''))
     except:
