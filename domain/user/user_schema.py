@@ -1,31 +1,51 @@
-from typing import Optional, List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
-class GenerateSchema(BaseModel):
+# router schema
+class Tokens(BaseModel):
+    totalTokens: int
+    promptTokens: int
+    completionTokens: int
+
+class GenerateInput(BaseModel):
     gameNo: Optional[int]
     secretKey: Optional[str]
-    
-class PreviousChatContent(BaseModel):
-    sender: str
-    receiver: str
-    chatContent: str
-    chatDay: int
 
-class ConversationUserSchema(GenerateSchema):
-    sender: str
-    receiver: str
-    chatContent: str
-    chatDay: int
-    previousStory: Optional[str] = None
-    previousChatContents: List[PreviousChatContent]
+class GenerateOutput(BaseModel):
+    tokens: Tokens
 
-class ConversationNPCSchema(GenerateSchema):
-    sender: str
-    npcName1: str
-    npcName2: str
-    chatDay: int
-    previousStory: Optional[str]
 
-class ConversationNPCSchema2(ConversationNPCSchema):
-    previousChatContents: List[PreviousChatContent]
+# router input
+
+
+# crud schema
+# characters information schema
+class CriminalScenarioSchema(BaseModel):
+    motivation: str
+    procedure: str
+
+class CharacterSchema(BaseModel):
+    name: str
+    age: int
+    gender: str
+    wealth: str
+    personality: str
+    personalityDescription: str
+    feature: str
+    featureDescription: str
+    criminalScenario: CriminalScenarioSchema
+
+class CharactersSchema(BaseModel):
+    npcs: List[CharacterSchema]
+
+
+# places schema
+class PlaceName(BaseModel):
+    placeNameEn: str
+    placeNameKo: str
+
+class PlacesSchema(BaseModel):
+    places: List[PlaceName]
+
+

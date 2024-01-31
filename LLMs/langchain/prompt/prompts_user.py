@@ -1,13 +1,15 @@
 from langchain.prompts.prompt import PromptTemplate
-from LLMs.langchain.prompt.prompts_data import synopsis, characters
+from langchain.output_parsers import PydanticOutputParser
+
+from LLMs.langchain.prompt.prompts_data import synopsis
+from LLMs.langchain.prompt.prompts_schema import ConversationWithUserSchema
 
 
 conversation_with_user_chain_prefix = """
-1. target_npc_info의 설명을 참고하여 해당 캐릭터를 연기해야 함.
-2. 시놉시스와 시나리오를 참고하여 플래이어에게 대답해야함.
-3. 이모지는 답변에 포함되면 안됨.
-4. 답변의 길이는 2~3 문장 안으로 제한함.
-5. 대화내용이 주어진다면 해당 대화에 맞는 답변을 생성해야 함.
+1. information을 참고하여 character를 연기하여 user의 chatContent에 대답해야 함
+2. 답변의 길이는 2~3 문장 안으로 제한함.
+3. PreviousChatContents가 주어진다면 해당 대화에 맞는 답변을 생성해야 함.
+4. 지난 밤에 무엇을 했는지 물어본다면 alibi 항목을 참고
 """
 
 conversation_between_npc_chain_prefix = """
@@ -34,11 +36,16 @@ conversation_between_npc_stepwise_chain_prefix = """
 """
 
 conversation_chain_suffix = """
+{format_instructions}
 {input}
 """
 
+
+conversation_with_user_parser = PydanticOutputParser(pydantic_object=ConversationWithUserSchema)
 conversation_with_user_template = synopsis + conversation_with_user_chain_prefix + conversation_chain_suffix
-conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, input_variables=["input"])
+conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, 
+                                               input_variables=["input"], 
+                                               partial_variables={"format_instructions": conversation_with_user_parser.get_format_instructions()})
 
 conversation_between_npc_template = synopsis + conversation_between_npc_chain_prefix + conversation_chain_suffix
 conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, input_variables=["input"])

@@ -18,3 +18,6 @@ class GenerateVictimSchema(BaseModel):
 
 class FinalWordsSchema(BaseModel):
     finalWords: str
+
+class ConversationWithUserSchema(BaseModel):
+    chatContent: str

@@ -2,7 +2,7 @@ from langchain_community.callbacks import get_openai_callback
 import time
 
 from LLMs.langchain import chains
-from LLMs.langchain.prompt.prompts_schema import GenerateVictimSchema, IntroSchema
+from LLMs.langchain.prompt import prompts_schema
 from lib.response_format_check import response_format
 
 MAX_RETRY_LIMIT = 2
@@ -37,17 +37,17 @@ def execute_conversation(chain_function, format_check_function, schema, inputs, 
 
 # scenario
 def generate_intro(inputs):
-    return execute_conversation(chains.generate_intro, response_format, IntroSchema, inputs)
+    return execute_conversation(chains.generate_intro, response_format, prompts_schema.IntroSchema, inputs)
 
 def generate_victim(inputs):
-    return execute_conversation(chains.generate_victim_chain, response_format, GenerateVictimSchema, inputs)
+    return execute_conversation(chains.generate_victim_chain, response_format, prompts_schema.GenerateVictimSchema, inputs)
 
 def generate_final_words(inputs):
-    return execute_conversation(chains.generate_final_words, response_format, inputs)
+    return execute_conversation(chains.generate_final_words, response_format, prompts_schema.FinalWordsSchema, inputs)
 
 # user
 def conversation_with_user(inputs):
-    return execute_conversation(chains.conversation_with_user_chain, response_format_check.conversation_with_user_format, inputs)
+    return execute_conversation(chains.conversation_with_user_chain, response_format, prompts_schema.ConversationWithUserSchema, inputs)
 
 def conversation_between_npc(inputs, name1, name2):
     return execute_conversation(chains.conversation_between_npc_chain, response_format_check.conversation_between_npcs_format, inputs, name1=name1, name2=name2)

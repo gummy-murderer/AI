@@ -35,8 +35,8 @@ generate_victim_prefix ="""
 """
 
 final_words_chain_prefix = """
-1. murderer information을 참고하여 해당 인물의 마지막 한마디를 생성해야 함.
-2. 마지막 한마디의 내용은 game result에 따라 달려져야 함. 'victory'라면 살인자의 패배이고 'defeat'면 살인자가 모든 마을 주민을 죽이고 승리한 상황임.
+1. information을 참고하여 살인자의 마지막 한마디를 생성해야 함.
+2. 마지막 한마디의 내용은 gameResult에 따라 달려져야 함. 'victory'라면 살인자의 패배이고 'defeat'면 살인자가 모든 마을 주민을 죽이고 승리한 상황임.
 3. 답변의 길이는 4문장은 넘지 말아야 함.
 """
 

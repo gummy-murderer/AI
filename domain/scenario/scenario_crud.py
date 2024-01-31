@@ -2,13 +2,11 @@ from pathlib import Path
 import json
 import random
 
-import domain.scenario.scenario_schema as scenario_schema
+from domain.scenario.schema import scenario_crud_schema
+from lib import const
 
-CHARACTERS = json.load((Path(__file__).resolve().parents[2] / "resources/data/npc_4.json").open('r', encoding='utf-8'))
-PLACES = json.load((Path(__file__).resolve().parents[2] / "resources/data/places.json").open('r', encoding='utf-8'))
-
-characters_data = scenario_schema.CharactersSchema(**CHARACTERS)
-place_data = scenario_schema.PlacesSchema(**PLACES)
+characters_data = scenario_crud_schema.CharactersSchema(**const.CHARACTERS)
+place_data = scenario_crud_schema.PlacesSchema(**const.PLACES)
 
 
 def get_character_info(name):
@@ -83,9 +81,7 @@ def generate_victim_input(victim_generation_data):
             "previousStory": victim_generation_data.previousStory
         }
     }
-    # pretty_printed = json.dumps(input_data_json, indent=4, ensure_ascii=False)
-    input_data_pydantic = scenario_schema.GameScenarioContainer(**input_data_json)
-
+    input_data_pydantic = scenario_crud_schema.VictimGenerationContainer(**input_data_json)
     return input_data_json, input_data_pydantic
 
 def generate_victim_output(answer, input_data):
@@ -99,6 +95,23 @@ def generate_victim_output(answer, input_data):
         "alibis": answer.alibis
     }
 
-    # pretty_printed = json.dumps(output_data_json, indent=4, ensure_ascii=False)
-    # print(pretty_printed)
     return output_data_json
+
+def generate_final_words_input(final_words_generation_data):
+    muderer_info = get_character_criminal_scenario(final_words_generation_data.murderer)
+    if not muderer_info:
+        return None, None
+    
+    input_data_json = {
+        "information": {
+            "murderer": {
+                "name": final_words_generation_data.murderer,
+                "motivation": muderer_info.motivation,
+                "procedure": muderer_info.procedure,
+                },
+            "gameResult": final_words_generation_data.gameResult,
+            "previousStory": final_words_generation_data.previousStory
+        }
+    }
+    input_data_pydantic = scenario_crud_schema.FinalWordsGenerationContainer(**input_data_json)
+    return input_data_json, input_data_pydantic
