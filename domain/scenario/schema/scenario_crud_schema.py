@@ -31,18 +31,6 @@ class PlacesSchema(BaseModel):
     places: List[PlaceName]
 
 
-# generate_victim input schema
-class BaseGameSchema(BaseModel):
-    gameNo: Optional[int]
-    secretKey: Optional[str]
-
-class VictimGenerationSchema(BaseGameSchema):
-    day: int
-    murderer: str
-    livingCharacters: List
-    previousStory: Optional[str]
-
-
 # prompt input schema
 class MurdererInfo(BaseModel):
     name: str
@@ -56,10 +44,27 @@ class CharacterInfo(BaseModel):
     # feature: str
     featureDescription: str
 
-class GameInfo(BaseModel):
+
+# generate_victim prompt input schema
+class VictimGeneration(BaseModel):
     day: int
     murderer: MurdererInfo
     crimeScene: str
+    method: str
     victim: str
     witness: str
     livingCharacters: List[CharacterInfo]
+    previousStory: Optional[str]
+
+class VictimGenerationContainer(BaseModel):
+    information: VictimGeneration
+
+
+# generate_final_words prompt input schema
+class FinalWordsGeneration(BaseModel):
+    murderer: MurdererInfo
+    gameResult: str
+    previousStory: Optional[str]
+
+class FinalWordsGenerationContainer(BaseModel):
+    information: FinalWordsGeneration

@@ -14,14 +14,9 @@ MODEL = const.MODELS[-1]
 llm = ChatOpenAI(model="gpt-4-1106-preview", openai_api_key=OPENAI_API_KEY)
 
 
+# scenario
 generate_intro = LLMChain(
     prompt=prompts_scenario.intro_prompt,
-    llm=llm,
-    verbose=True,
-)
-
-generate_final_words = LLMChain(
-    prompt=prompts_scenario.final_words_prompt,
     llm=llm,
     verbose=True,
 )
@@ -32,6 +27,13 @@ generate_victim_chain = LLMChain(
     verbose=True,
 )
 
+generate_final_words = LLMChain(
+    prompt=prompts_scenario.final_words_prompt,
+    llm=llm,
+    verbose=True,
+)
+
+# user
 conversation_with_user_chain = LLMChain(
     prompt=prompts_user.conversation_with_user_prompt,
     llm=llm,
