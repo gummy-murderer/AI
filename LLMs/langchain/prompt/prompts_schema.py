@@ -21,3 +21,11 @@ class FinalWordsSchema(BaseModel):
 
 class ConversationWithUserSchema(BaseModel):
     chatContent: str
+
+class ConversationNPC(BaseModel):
+    sender: str
+    receiver: str
+    chatContent: str
+
+class ConversationBetweenNPCSchema(BaseModel):
+    chatContent: List[ConversationNPC]

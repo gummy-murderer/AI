@@ -43,6 +43,7 @@ class CharacterInfo(BaseModel):
     personalityDescription: str
     # feature: str
     featureDescription: str
+    alibi: str
 
 
 # generate_victim prompt input schema
@@ -58,8 +59,16 @@ class ConversationWithUserGeneration(BaseModel):
     previousStory: Optional[str]
     previousChatContents: List[PreviousChatContents]
 
+class ConversationBetweenNPCGeneration(BaseModel):
+    character1: CharacterInfo
+    character2: CharacterInfo
+    previousStory: Optional[str]
+
 class ConversationWithUserContainer(BaseModel):
     information: ConversationWithUserGeneration
+
+class ConversationBetweenNPCContainer(BaseModel):
+    information: ConversationBetweenNPCGeneration
 
 
 # generate_final_words prompt input schema

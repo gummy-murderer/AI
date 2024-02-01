@@ -19,7 +19,7 @@ class GenerateOutput(BaseModel):
 
 
 # router input
-class GenerateIntroInput(BaseModel):
+class GenerateIntroInput(GenerateInput):
     characters: List
 
 class GenerateVictimInput(GenerateInput):
