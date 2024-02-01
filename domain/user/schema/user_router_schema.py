@@ -37,10 +37,28 @@ class ConversationUserInput(GenerateInput):
     previousStory: Optional[str] = None
     previousChatContents: List[PreviousChatContent]
 
+class ConversationNPCInput(GenerateInput):
+    sender: str
+    npcName1: CharacterInfo
+    npcName2: CharacterInfo
+    chatDay: int
+    previousStory: Optional[str] = None
+
 
 # router output
 class ConversationUserAnswer(BaseModel):
     chatContent: str
 
+class ConversationNPC(BaseModel):
+    sender: str
+    receiver: str
+    chatContent: str
+
+class ConversationNPCAnswer(BaseModel):
+    chatContent: List[ConversationNPC]
+
 class ConversationUserOutput(GenerateOutput):
     answer: ConversationUserAnswer
+
+class ConversationNPCOutput(GenerateOutput):
+    answer: ConversationNPCAnswer
