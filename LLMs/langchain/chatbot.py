@@ -52,3 +52,6 @@ def conversation_with_user(inputs):
 def conversation_between_npc(inputs):
     return execute_conversation(chains.conversation_between_npc_chain, response_format, prompts_schema.ConversationBetweenNPCSchema, inputs)
 
+def conversation_between_npcs_each(inputs):
+    return execute_conversation(chains.conversation_between_npc_each_chain, response_format, prompts_schema.ConversationBetweenNPCEachSchema, inputs)
+

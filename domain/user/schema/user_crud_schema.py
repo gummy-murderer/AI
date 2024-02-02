@@ -79,3 +79,13 @@ class FinalWordsGeneration(BaseModel):
 
 class FinalWordsGenerationContainer(BaseModel):
     information: FinalWordsGeneration
+
+
+class ConversationBetweenNPCEachGeneration(BaseModel):
+    character1: CharacterInfo
+    character2: CharacterInfo
+    previousStory: Optional[str]
+    previousChatContents: List[PreviousChatContents]
+
+class ConversationBetweenNPCEachContainer(BaseModel):
+    information: ConversationBetweenNPCEachGeneration

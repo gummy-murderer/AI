@@ -55,3 +55,28 @@ async def conversation_between_npc(conversation_npc_schema: user_router_schema.C
     }
     print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response
+
+
+@router.post("/conversation_between_npcs_each", 
+             description="npc와 npc간의 대화를 하나씩 생성해 주는 API입니다.", 
+             response_model=user_router_schema.ConversationNPCOutput, 
+             tags=["user"])
+async def conversation_between_npcs_each(conversation_npcs_each_schema: user_router_schema.ConversationNPCEachInput):
+    print(conversation_npcs_each_schema.model_dump_json(indent=2))
+    # chatDay, previousStory 이용 안함
+
+    if not user_crud.get_character_info(conversation_npcs_each_schema.npcName1.name):
+        raise HTTPException(status_code=404, detail="npcName1 not found in the character list.")
+    if not user_crud.get_character_info(conversation_npcs_each_schema.npcName2.name):
+        raise HTTPException(status_code=404, detail="npcName2 not found in the character list.")
+    
+    input_data_json, input_data_pydantic = user_crud.conversation_between_npc_each_input(conversation_npcs_each_schema)
+    
+    answer, tokens, execution_time = chatbot.conversation_between_npcs_each(input_data_pydantic)
+
+    final_response = {
+        "answer": answer, 
+        "tokens": tokens
+    }
+    print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    return final_response

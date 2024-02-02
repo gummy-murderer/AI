@@ -2,7 +2,7 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 
 from LLMs.langchain.prompt.prompts_data import synopsis
-from LLMs.langchain.prompt.prompts_schema import ConversationWithUserSchema, ConversationBetweenNPCSchema
+from LLMs.langchain.prompt.prompts_schema import ConversationWithUserSchema, ConversationBetweenNPCSchema, ConversationBetweenNPCEachSchema
 
 
 conversation_with_user_chain_prefix = """
@@ -19,6 +19,14 @@ conversation_between_npc_chain_prefix = """
 3. 시놉시스와 시나리오를 참고하여야함.
 3. 등장인물 설정을 참고하여 힌트를 흘리는데 설정에 따라 가짜 힌트가 될 수도 있고 진짜 힌트가 될 수도 있음.
 4. 대화는 3~4번 정도 주고 받아야 함
+"""
+
+conversation_between_npc_each_chain_prefix = """
+1. 등장인물 설정을 참고하여 character1과 character2 사이의 대화 내용 1개를 만들어야 함.
+2. character1 이 말하거나 character2 가 말하거나 둘 중 하나만 나와야 함.
+3. 시놉시스와 시나리오를 참고하여야함.
+4. 등장인물 설정을 참고하여 힌트를 흘리는데 설정에 따라 가짜 힌트가 될 수도 있고 진짜 힌트가 될 수도 있음.
+5. PreviousChatContents가 주어진다면 마지막 대화에 대해 다른 사람이 대화가 이어지도록 답변을 해야 함.
 """
 
 conversation_chain_suffix = """
@@ -38,3 +46,10 @@ conversation_between_npc_template = synopsis + conversation_between_npc_chain_pr
 conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, 
                                                input_variables=["input"], 
                                                partial_variables={"format_instructions": conversation_between_npc_parser.get_format_instructions()})
+
+conversation_between_npc_each_parser = PydanticOutputParser(pydantic_object=ConversationBetweenNPCEachSchema)
+conversation_between_npc_each_template = synopsis + conversation_between_npc_each_chain_prefix + conversation_chain_suffix
+conversation_between_npc_each_prompt = PromptTemplate(template=conversation_between_npc_each_template, 
+                                               input_variables=["input"], 
+                                               partial_variables={"format_instructions": conversation_between_npc_each_parser.get_format_instructions()})
+

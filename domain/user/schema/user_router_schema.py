@@ -44,6 +44,14 @@ class ConversationNPCInput(GenerateInput):
     chatDay: int
     previousStory: Optional[str] = None
 
+class ConversationNPCEachInput(GenerateInput):
+    sender: str
+    npcName1: CharacterInfo
+    npcName2: CharacterInfo
+    chatDay: int
+    previousChatContents: List[PreviousChatContent]
+    previousStory: Optional[str] = None
+
 
 # router output
 class ConversationUserAnswer(BaseModel):
@@ -57,8 +65,15 @@ class ConversationNPC(BaseModel):
 class ConversationNPCAnswer(BaseModel):
     chatContent: List[ConversationNPC]
 
+class ConversationNPCEachAnswer(BaseModel):
+    chatContent: List[ConversationNPC]
+
 class ConversationUserOutput(GenerateOutput):
     answer: ConversationUserAnswer
 
 class ConversationNPCOutput(GenerateOutput):
     answer: ConversationNPCAnswer
+
+class ConversationNPCEachOutput(GenerateOutput):
+    answer: ConversationNPCEachAnswer
+
