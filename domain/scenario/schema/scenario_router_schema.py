@@ -22,7 +22,7 @@ class GenerateOutput(BaseModel):
 class GenerateIntroInput(GenerateInput):
     characters: List
 
-class GenerateVictimInput(GenerateInput):
+class   GenerateVictimInput(GenerateInput):
     day: int
     murderer: str
     livingCharacters: List
@@ -40,6 +40,11 @@ class Alibis(BaseModel):
     name: str
     alibi: str
 
+class IntroAnswer(BaseModel):
+    greeting: str
+    content: str
+    closing: str
+
 class VictimAnswer(BaseModel):
     victim: str
     crimeScene: str
@@ -49,10 +54,9 @@ class VictimAnswer(BaseModel):
     dailySummary: str
     alibis: List[Alibis]
 
-class IntroAnswer(BaseModel):
-    greeting: str
-    content: str
-    closing: str
+class VictimBackupPlanAnswer(BaseModel):
+    planA: VictimAnswer
+    planB: VictimAnswer
 
 class FinalWordsAnswer(BaseModel):
     finalWords: str
@@ -62,6 +66,9 @@ class GenerateIntroOutput(GenerateOutput):
 
 class GenerateVictimOutput(GenerateOutput):
     answer: VictimAnswer
+
+class GenerateVictimBackupPlanOutput(GenerateOutput):
+    answer: VictimBackupPlanAnswer
 
 class GenerateFinalWordsOutput(GenerateOutput):
     answer: FinalWordsAnswer

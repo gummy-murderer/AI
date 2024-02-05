@@ -54,11 +54,48 @@ async def generate_victim(generate_victim_schema: scenario_router_schema.Generat
     return final_response
 
 
+@router.post("/generate_victim_backup_plan", 
+             description="밤마다 진행되는 피해자 선택과 흰트를 2개 생성해 주는 API입니다.", 
+             response_model=scenario_router_schema.GenerateVictimBackupPlanOutput, 
+             tags=["scenario"])
+async def generate_victim_backup_plan(generate_victim_schema: scenario_router_schema.GenerateVictimInput):
+    print(generate_victim_schema.model_dump_json(indent=2))
+    # previousStory 이용 안함
+
+    # plan A
+    input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
+
+    answer_a, tokens_a, execution_time_a = chatbot.generate_victim(input_data_pydantic)
+
+    result_a = scenario_crud.generate_victim_output(answer_a, input_data_pydantic)
+
+    # plan B
+    generate_victim_schema.livingCharacters.remove(input_data_pydantic.information.victim)
+
+    input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
+
+    answer_b, tokens_b, execution_time_b = chatbot.generate_victim(input_data_pydantic)
+    result_b = scenario_crud.generate_victim_output(answer_b, input_data_pydantic)
+
+    # result
+    tokens = {key: tokens_a.get(key, 0) + tokens_b.get(key, 0) for key in set(tokens_a) | set(tokens_b)}
+
+    final_response = {
+        "answer": {
+            "planA": result_a,
+            "planB": result_b
+        }, 
+        "tokens": tokens
+    }
+    print(f"answer : {answer_a, answer_b}\ntokens : {tokens}\nexecution_time : {execution_time_a + execution_time_b}")
+    return final_response
+
+
 @router.post("/generate_final_words", 
              description="범인의 마지막 한마디를 생성해 주는 API입니다.", 
              response_model=scenario_router_schema.GenerateFinalWordsOutput, 
              tags=["scenario"])
-async def generate_intro(generator_final_words_schema: scenario_router_schema.GenerateFinalWordsInput):
+async def generate_final_words(generator_final_words_schema: scenario_router_schema.GenerateFinalWordsInput):
     print(generator_final_words_schema.model_dump_json(indent=2))
     # previousStory 이용 안함
 

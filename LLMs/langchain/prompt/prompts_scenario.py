@@ -16,7 +16,8 @@ generate_victim_prefix ="""
 2. dailySummary에는 누가 어디서 살해되었는 지 간단히 설명으로 지정해야 함. 'day 0 - '과 같은 식으로 시작해야 함
 3. 지정된 목격자가 플레이어의 추리에 도움이 될 수 있도록 목격정보를 지정해야 함
 4. previousStory를 참고하여 이후의 스토리를 만들어야하며 previousStory의 내용은 들어가면 안됨
-5. 모든 답변은 단답식으로 작성되어야 함
+5. alibi에는 victim과 murderer를 제외한 모든 livingCharacters의 알리바이를 만들어야 함. witness의 알리바이 또한 포함 되어야 함
+6. 모든 답변은 단답식으로 작성되어야 함
 """
 
 final_words_chain_prefix = """
