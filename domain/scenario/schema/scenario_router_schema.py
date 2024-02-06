@@ -19,13 +19,17 @@ class GenerateOutput(BaseModel):
 
 
 # router input
+class LivingCharacters(BaseModel):
+    name: str
+    gameNpcNo: int
+
 class GenerateIntroInput(GenerateInput):
     characters: List
 
 class   GenerateVictimInput(GenerateInput):
     day: int
     murderer: str
-    livingCharacters: List
+    livingCharacters: List[LivingCharacters]
     previousStory: Optional[str]
 
 class GenerateFinalWordsInput(GenerateInput):
@@ -39,6 +43,7 @@ class GenerateFinalWordsInput(GenerateInput):
 class Alibis(BaseModel):
     name: str
     alibi: str
+    gameNpcNo: int
 
 class IntroAnswer(BaseModel):
     greeting: str

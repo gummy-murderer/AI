@@ -1,6 +1,5 @@
-from pathlib import Path
-import json
 import random
+from typing import Dict
 
 from domain.scenario.schema import scenario_crud_schema
 from lib import const
@@ -25,7 +24,7 @@ def select_crime_scene(place_data):
     return random.choice(place_data.places)
 
 def select_random_character(candidates: list, excluded_characters: list):
-    filtered_candidates = [character for character in candidates if character not in excluded_characters]
+    filtered_candidates = [character.name for character in candidates if character.name not in excluded_characters]
 
     valid_characters = [get_character_info(character) for character in filtered_candidates if get_character_info(character)]
 
@@ -34,7 +33,7 @@ def select_random_character(candidates: list, excluded_characters: list):
     return None
 
 def get_characters_info(candidates: list, excluded_characters: list):
-    names = [character for character in candidates if character not in excluded_characters]
+    names = [character.name for character in candidates if character.name not in excluded_characters]
 
     characters_info = []
     for name in names:
@@ -49,7 +48,7 @@ def generate_victim_input(victim_generation_data):
         return None, None
     
     for character_name in victim_generation_data.livingCharacters:
-        if not get_character_info(character_name):
+        if not get_character_info(character_name.name):
             return None, None
 
     crime_scene = select_crime_scene(place_data)
@@ -84,7 +83,16 @@ def generate_victim_input(victim_generation_data):
     input_data_pydantic = scenario_crud_schema.VictimGenerationContainer(**input_data_json)
     return input_data_json, input_data_pydantic
 
-def generate_victim_output(answer, input_data):
+def generate_victim_output(answer, input_data, origin_data):
+
+    game_npc_no_mapping = {character.name : character.gameNpcNo for character in origin_data.livingCharacters}
+
+    alibi_list = [{
+                "name": alibi.name,
+                "alibi": alibi.alibi,
+                "gameNpcNo": game_npc_no_mapping[alibi.name]
+                } for alibi in answer.alibis if alibi.name in game_npc_no_mapping]
+    
     output_data_json = {
         "victim": input_data.information.victim,
         "crimeScene": input_data.information.crimeScene,
@@ -92,7 +100,7 @@ def generate_victim_output(answer, input_data):
         "witness": input_data.information.witness,
         "eyewitnessInformation": answer.eyewitnessInformation,
         "dailySummary": answer.dailySummary,
-        "alibis": answer.alibis
+        "alibis": alibi_list
     }
 
     return output_data_json
