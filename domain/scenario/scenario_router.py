@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+import json
 
 from domain.scenario import scenario_crud
 from domain.scenario.schema import scenario_router_schema
@@ -21,10 +22,10 @@ async def generate_intro(generator_intro_schema: scenario_router_schema.Generate
     answer, tokens, execution_time = chatbot.generate_intro(prompt)
 
     final_response = {
-        "answer": answer, 
+        "answer": answer.dict(), 
         "tokens": tokens
     }
-    print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -50,7 +51,8 @@ async def generate_victim(generate_victim_schema: scenario_router_schema.Generat
         "answer": result, 
         "tokens": tokens
     }
-    print(f"answer : {result}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    # print(f"answer : {result}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 

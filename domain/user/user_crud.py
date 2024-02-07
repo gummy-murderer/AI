@@ -6,12 +6,30 @@ place_data = user_crud_schema.PlacesSchema(**const.PLACES)
 
 
 def get_character_info(name):
+    """
+    Retrieves character information by name from the loaded character data.
+
+    Args:
+        name (str): Name of the character to retrieve information for.
+
+    Returns:
+        Character object if found, otherwise None.
+    """
     for character in characters_data.npcs:
         if character.name == name:
             return character
     return None
 
 def format_previous_chat_contents(conversation_user_schema):
+    """
+    Formats previous chat contents for a given conversation schema, limiting to the most recent entries as defined by MAX_CHAT_CONTENTS.
+
+    Args:
+        conversation_user_schema (object): The conversation schema containing previous chat contents.
+
+    Returns:
+        List of dictionaries with formatted chat content, including sender type, name, and content.
+    """
     formatted_chat_contents = []
     for chat_content in conversation_user_schema.previousChatContents[-const.MAX_CHAT_CONTENTS:]:
         chat_content_dict = {
@@ -23,6 +41,15 @@ def format_previous_chat_contents(conversation_user_schema):
     return formatted_chat_contents
 
 def conversation_with_user_input(conversation_user_schema):
+    """
+    Prepares input data for a conversation with a user, including character details and previous chat content, formatted as JSON and a Pydantic model.
+
+    Args:
+        conversation_user_schema (object): Schema containing conversation information with a user.
+
+    Returns:
+        Tuple (input_data_json, input_data_pydantic): JSON and Pydantic formatted input data for the conversation.
+    """
     character_info = get_character_info(conversation_user_schema.receiver.name)
 
     previous_chat_contents_formatted = format_previous_chat_contents(conversation_user_schema)
@@ -42,10 +69,18 @@ def conversation_with_user_input(conversation_user_schema):
         }
     }
     input_data_pydantic = user_crud_schema.ConversationWithUserContainer(**input_data_json)
-
     return input_data_json, input_data_pydantic
 
 def conversation_between_npc_input(conversation_npc_schema):
+    """
+    Prepares input data for a conversation between two NPCs, formatted as JSON and a Pydantic model.
+
+    Args:
+        conversation_npc_schema (object): Schema containing conversation information between two NPCs.
+
+    Returns:
+        Tuple (input_data_json, input_data_pydantic): JSON and Pydantic formatted input data for the NPC conversation.
+    """
     character_info_1 = get_character_info(conversation_npc_schema.npcName1.name)
     character_info_2 = get_character_info(conversation_npc_schema.npcName2.name)
 
@@ -67,11 +102,18 @@ def conversation_between_npc_input(conversation_npc_schema):
         }
     }
     input_data_pydantic = user_crud_schema.ConversationBetweenNPCContainer(**input_data_json)
-    print(input_data_pydantic.model_dump_json(indent=2))
-
     return input_data_json, input_data_pydantic
 
 def conversation_between_npc_each_input(conversation_npc_schema):
+    """
+    Prepares input data for a conversation between two NPCs, including their individual responses and previous chat content, formatted as JSON and a Pydantic model.
+
+    Args:
+        conversation_npc_schema (object): Schema containing detailed conversation information between two NPCs.
+
+    Returns:
+        Tuple (input_data_json, input_data_pydantic): JSON and Pydantic formatted input data for detailed NPC conversation.
+    """
     character_info_1 = get_character_info(conversation_npc_schema.npcName1.name)
     character_info_2 = get_character_info(conversation_npc_schema.npcName2.name)
 
@@ -96,6 +138,4 @@ def conversation_between_npc_each_input(conversation_npc_schema):
         }
     }
     input_data_pydantic = user_crud_schema.ConversationBetweenNPCEachContainer(**input_data_json)
-    print(input_data_pydantic.model_dump_json(indent=2))
-
     return input_data_json, input_data_pydantic

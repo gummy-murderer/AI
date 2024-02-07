@@ -24,7 +24,7 @@ class LivingCharacters(BaseModel):
     gameNpcNo: int
 
 class GenerateIntroInput(GenerateInput):
-    characters: List
+    characters: Optional[List]
 
 class   GenerateVictimInput(GenerateInput):
     day: int
