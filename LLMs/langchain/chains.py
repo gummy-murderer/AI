@@ -1,54 +1,35 @@
 from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
-from pathlib import Path
-import os, dotenv
 
 from LLMs.langchain.prompt import prompts_scenario, prompts_user
-import lib.const as const
 
-dotenv_file = dotenv.find_dotenv(str(Path("./").absolute().joinpath(".env")))
-dotenv.load_dotenv(dotenv_file)
-OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
-MODEL = const.MODELS[-1]
+MODEL = "gpt-4-1106-preview"
 
-llm = ChatOpenAI(model="gpt-4-1106-preview", openai_api_key=OPENAI_API_KEY)
 
+def define_llm_chain(key, prompt):
+    llm = ChatOpenAI(model=MODEL, openai_api_key=key)
+    return LLMChain(
+        prompt=prompt,
+        llm=llm,
+        verbose=True,
+    )
 
 # scenario
-generate_intro = LLMChain(
-    prompt=prompts_scenario.intro_prompt,
-    llm=llm,
-    verbose=True,
-)
+def define_intro_chain(key):
+    return define_llm_chain(key, prompts_scenario.intro_prompt)
 
-generate_victim_chain = LLMChain(
-    prompt=prompts_scenario.generate_victim_prompt,
-    llm=llm,
-    verbose=True,
-)
+def define_victim_chain(key):
+    return define_llm_chain(key, prompts_scenario.generate_victim_prompt)
 
-generate_final_words = LLMChain(
-    prompt=prompts_scenario.final_words_prompt,
-    llm=llm,
-    verbose=True,
-)
+def define_final_words_chain(key):
+    return define_llm_chain(key, prompts_scenario.final_words_prompt)
 
 # user
-conversation_with_user_chain = LLMChain(
-    prompt=prompts_user.conversation_with_user_prompt,
-    llm=llm,
-    verbose=True,
-)
+def define_conversation_with_user_chain(key):
+    return define_llm_chain(key, prompts_user.conversation_with_user_prompt)
 
-conversation_between_npc_chain = LLMChain(
-    prompt=prompts_user.conversation_between_npc_prompt,
-    llm=llm,
-    verbose=True,
-)
+def define_conversation_between_npc_chain(key):
+    return define_llm_chain(key, prompts_user.conversation_between_npc_prompt)
 
-conversation_between_npc_each_chain = LLMChain(
-    prompt=prompts_user.conversation_between_npc_each_prompt,
-    llm=llm,
-    verbose=True,
-)
-
+def define_conversation_between_npcs_each_chain(key):
+    return define_llm_chain(key, prompts_user.conversation_between_npc_each_prompt)

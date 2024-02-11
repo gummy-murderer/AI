@@ -8,8 +8,8 @@ class Tokens(BaseModel):
     completionTokens: int
 
 class GenerateInput(BaseModel):
-    gameNo: Optional[int]
-    secretKey: Optional[str]
+    gameNo: int
+    secretKey: str
 
 class GenerateOutput(BaseModel):
     tokens: Tokens
