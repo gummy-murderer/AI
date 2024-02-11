@@ -7,14 +7,14 @@ from lib.response_format_check import response_format
 from lib import const
 
 
-def execute_conversation(chain_function, format_check_function, schema, inputs, **kwargs):
+def execute_conversation(chain_function, format_check_function, schema, inputs):
     retry_attempts = 0
     while True:
         try:
             start_time = time.time()
 
             with get_openai_callback() as cb:
-                response = chain_function.predict(input=inputs, **kwargs)
+                response = chain_function.predict(input=inputs)
                 tokens = {"totalTokens": cb.total_tokens, 
                           "promptTokens": cb.prompt_tokens, 
                           "completionTokens": cb.completion_tokens,
@@ -27,31 +27,37 @@ def execute_conversation(chain_function, format_check_function, schema, inputs, 
             answer = schema(**format_check_function(response))
             if answer:
                 return answer, tokens, execution_time
-        except IndexError as e:
-            print("#"*10 + "I got IndexError...Try again!" + "#"*10)
+        except:
+            print("#"*10 + "I got Error...Try again!" + "#"*10)
             retry_attempts += 1
             print("Format is not correct, retrying...")
             if retry_attempts >= const.MAX_RETRY_LIMIT:
                 print("Exceeded maximum attempt limit, terminating response generation.")
-                break
+
 
 # scenario
-def generate_intro(inputs):
-    return execute_conversation(chains.generate_intro, response_format, prompts_schema.IntroSchema, inputs)
+def generate_intro(key: str, inputs: str):
+    intro_chain = chains.define_intro_chain(key)
+    return execute_conversation(intro_chain, response_format, prompts_schema.IntroSchema, inputs)
 
-def generate_victim(inputs):
-    return execute_conversation(chains.generate_victim_chain, response_format, prompts_schema.GenerateVictimSchema, inputs)
+def generate_victim(key: str, inputs: str):
+    victim_chain = chains.define_victim_chain(key)
+    return execute_conversation(victim_chain, response_format, prompts_schema.GenerateVictimSchema, inputs)
 
-def generate_final_words(inputs):
-    return execute_conversation(chains.generate_final_words, response_format, prompts_schema.FinalWordsSchema, inputs)
+def generate_final_words(key: str, inputs: str):
+    final_words_chain = chains.define_final_words_chain(key)
+    return execute_conversation(final_words_chain, response_format, prompts_schema.FinalWordsSchema, inputs)
 
 # user
-def conversation_with_user(inputs):
-    return execute_conversation(chains.conversation_with_user_chain, response_format, prompts_schema.ConversationWithUserSchema, inputs)
+def generate_conversation_with_user(key: str, inputs: str):
+    conversation_with_user_chain = chains.define_conversation_with_user_chain(key)
+    return execute_conversation(conversation_with_user_chain, response_format, prompts_schema.ConversationWithUserSchema, inputs)
 
-def conversation_between_npc(inputs):
-    return execute_conversation(chains.conversation_between_npc_chain, response_format, prompts_schema.ConversationBetweenNPCSchema, inputs)
+def generate_conversation_between_npc(key: str, inputs: str):
+    conversation_between_npc_chain = chains.define_conversation_between_npc_chain(key)
+    return execute_conversation(conversation_between_npc_chain, response_format, prompts_schema.ConversationBetweenNPCSchema, inputs)
 
-def conversation_between_npcs_each(inputs):
-    return execute_conversation(chains.conversation_between_npc_each_chain, response_format, prompts_schema.ConversationBetweenNPCEachSchema, inputs)
+def generate_conversation_between_npcs_each(key: str, inputs: str):
+    conversation_between_npcs_each_chain = chains.define_conversation_between_npcs_each_chain(key)
+    return execute_conversation(conversation_between_npcs_each_chain, response_format, prompts_schema.ConversationBetweenNPCEachSchema, inputs)
 
