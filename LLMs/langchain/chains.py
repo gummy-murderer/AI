@@ -11,7 +11,7 @@ def define_llm_chain(key, prompt):
     return LLMChain(
         prompt=prompt,
         llm=llm,
-        verbose=True,
+        verbose=False,
     )
 
 # scenario

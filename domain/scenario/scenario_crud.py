@@ -90,6 +90,22 @@ def get_characters_info(candidates: list, excluded_characters: list):
             characters_info.append(character_info)
     return characters_info
 
+def validate_living_characters(living_characters):
+    """
+    Validates that all characters in the living characters list exist in the characters data.
+
+    Args:
+        living_characters (list): List of character names to validate.
+
+    Returns:
+        bool: True if all characters exist, False otherwise.
+    """
+    living_characters_names = [character.name for character in living_characters]
+    for character_name in living_characters_names:
+        if not get_character_info(character_name):
+            return False
+    return True
+
 def generate_victim_input(victim_generation_data):
     """
     Generates input data required for victim generation in both JSON format and Pydantic model format.
@@ -102,12 +118,6 @@ def generate_victim_input(victim_generation_data):
         Tuple containing input data in JSON format and Pydantic model format, or (None, None) if validation fails.
     """
     muderer_info = get_character_criminal_scenario(victim_generation_data.murderer)
-    if not muderer_info:
-        return None, None
-    
-    for character_name in victim_generation_data.livingCharacters:
-        if not get_character_info(character_name.name):
-            return None, None
 
     crime_scene = select_crime_scene(place_data.places)
     victim = select_random_character(victim_generation_data.livingCharacters, victim_generation_data.murderer)

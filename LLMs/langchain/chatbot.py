@@ -3,7 +3,7 @@ import time
 
 from LLMs.langchain import chains
 from LLMs.langchain.prompt import prompts_schema
-from lib.response_format_check import response_format
+from lib.validation_check import response_format
 from lib import const
 
 

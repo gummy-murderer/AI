@@ -1,14 +1,30 @@
 from fastapi import APIRouter, HTTPException
+from typing import Optional, List
+import json
 
 from domain.user import user_crud
 from domain.user.schema import user_router_schema
 from LLMs.langchain import chatbot
-from lib.check_api_key import check_openai_api_key
+from lib.validation_check import check_openai_api_key
 
 
 router = APIRouter(
     prefix="/api/user",
 )
+
+
+def validate_request_data(secret_key: str, receiver_name: Optional[str] = None, npc_names: Optional[List[str]] = None):
+    api_key = check_openai_api_key(secret_key)
+    if not api_key:
+        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
+
+    if receiver_name and not user_crud.get_character_info(receiver_name):
+        raise HTTPException(status_code=404, detail="Receiver not found in the character list.")
+    
+    if npc_names and not user_crud.validate_npc_names(npc_names):
+        raise HTTPException(status_code=404, detail="Invalid npcName in the list.")
+    
+    return api_key
 
 
 @router.post("/conversation_with_user", 
@@ -18,22 +34,18 @@ router = APIRouter(
 async def conversation_with_user(conversation_user_schema: user_router_schema.ConversationUserInput):
     print(conversation_user_schema.model_dump_json(indent=2))
 
-    api_key = check_openai_api_key(conversation_user_schema.secretKey)
-    if not api_key:
-        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
-
-    if not user_crud.get_character_info(conversation_user_schema.receiver.name):
-        raise HTTPException(status_code=404, detail="Receiver not found in the character list.")
+    api_key = validate_request_data(conversation_user_schema.secretKey, 
+                                    receiver_name = conversation_user_schema.receiver.name)
     
     input_data_json, input_data_pydantic = user_crud.conversation_with_user_input(conversation_user_schema)
                 
     answer, tokens, execution_time = chatbot.generate_conversation_with_user(api_key, input_data_pydantic)
 
     final_response = {
-        "answer": answer, 
+        "answer": answer.dict(), 
         "tokens": tokens
     }
-    print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -45,24 +57,18 @@ async def conversation_between_npc(conversation_npc_schema: user_router_schema.C
     print(conversation_npc_schema.model_dump_json(indent=2))
     # chatDay, previousStory 이용 안함
 
-    api_key = check_openai_api_key(conversation_npc_schema.secretKey)
-    if not api_key:
-        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
-
-    if not user_crud.get_character_info(conversation_npc_schema.npcName1.name):
-        raise HTTPException(status_code=404, detail="npcName1 not found in the character list.")
-    if not user_crud.get_character_info(conversation_npc_schema.npcName2.name):
-        raise HTTPException(status_code=404, detail="npcName2 not found in the character list.")
+    api_key = validate_request_data(conversation_npc_schema.secretKey, 
+                                    npc_names = [conversation_npc_schema.npcName1.name, conversation_npc_schema.npcName2.name])
     
     input_data_json, input_data_pydantic = user_crud.conversation_between_npc_input(conversation_npc_schema)
     
     answer, tokens, execution_time = chatbot.generate_conversation_between_npc(api_key, input_data_pydantic)
 
     final_response = {
-        "answer": answer, 
+        "answer": answer.dict(), 
         "tokens": tokens
     }
-    print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
+    print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -74,14 +80,8 @@ async def conversation_between_npcs_each(conversation_npcs_each_schema: user_rou
     print(conversation_npcs_each_schema.model_dump_json(indent=2))
     # chatDay, previousStory 이용 안함
 
-    api_key = check_openai_api_key(conversation_npcs_each_schema.secretKey)
-    if not api_key:
-        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
-    
-    if not user_crud.get_character_info(conversation_npcs_each_schema.npcName1.name):
-        raise HTTPException(status_code=404, detail="npcName1 not found in the character list.")
-    if not user_crud.get_character_info(conversation_npcs_each_schema.npcName2.name):
-        raise HTTPException(status_code=404, detail="npcName2 not found in the character list.")
+    api_key = validate_request_data(conversation_npcs_each_schema.secretKey, 
+                                    npc_names = [conversation_npcs_each_schema.npcName1.name, conversation_npcs_each_schema.npcName2.name])
     
     input_data_json, input_data_pydantic = user_crud.conversation_between_npc_each_input(conversation_npcs_each_schema)
     

@@ -40,6 +40,21 @@ def format_previous_chat_contents(conversation_user_schema):
         formatted_chat_contents.append(chat_content_dict)
     return formatted_chat_contents
 
+def validate_npc_names(living_characters):
+    """
+    Validates that all characters in the living characters list exist in the characters data.
+
+    Args:
+        living_characters (list): List of character names to validate.
+
+    Returns:
+        bool: True if all characters exist, False otherwise.
+    """
+    for character_name in living_characters:
+        if not get_character_info(character_name):
+            return False
+    return True
+
 def conversation_with_user_input(conversation_user_schema):
     """
     Prepares input data for a conversation with a user, including character details and previous chat content, formatted as JSON and a Pydantic model.
