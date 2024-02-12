@@ -1,32 +1,29 @@
 from fastapi import APIRouter, HTTPException
+from typing import Optional, List 
 import json
 
 from domain.scenario import scenario_crud
 from domain.scenario.schema import scenario_router_schema
 from LLMs.langchain import chatbot
-from lib.check_api_key import check_openai_api_key
+from lib.validation_check import check_openai_api_key
 
 router = APIRouter(
     prefix="/api/scenario",
 )
 
-# async def execute_scenario_generation(api_key: str, schema_input, generate_func, crud_func):
-#     api_key_validated = check_openai_api_key(api_key)
-#     if not api_key_validated:
-#         raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
+
+def validate_request_data(secret_key: str, murderer_name: Optional[str] = None, living_characters: Optional[List[str]] = None):
+    api_key = check_openai_api_key(secret_key)
+    if not api_key:
+        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
+
+    if murderer_name and not scenario_crud.get_character_info(murderer_name):
+        raise HTTPException(status_code=404, detail="Murderer not found in the character list.")
     
-#     input_data_json, input_data_pydantic = crud_func(schema_input)
-#     if not input_data_json or not input_data_pydantic:
-#         raise HTTPException(status_code=404, detail="Input data processing error.")
+    if living_characters and not scenario_crud.validate_living_characters(living_characters):
+        raise HTTPException(status_code=404, detail="Invalid livingCharacters in the list.")
     
-#     answer, tokens, execution_time = generate_func(api_key_validated, input_data_pydantic)
-#     result = scenario_crud.generate_victim_output(answer, input_data_pydantic, schema_input) if crud_func != scenario_crud.generate_final_words_input else answer
-    
-#     final_response = {
-#         "answer": result if isinstance(result, dict) else result.dict(), 
-#         "tokens": tokens
-#     }
-#     return final_response
+    return api_key
 
 
 @router.post("/generate_intro", 
@@ -35,12 +32,10 @@ router = APIRouter(
              tags=["scenario"])
 async def generate_intro(generator_intro_schema: scenario_router_schema.GenerateIntroInput):
     print(generator_intro_schema.model_dump_json(indent=2))
-    
-    api_key = check_openai_api_key(generator_intro_schema.secretKey)
-    if not api_key:
-        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
 
-    prompt = f"\n" \
+    api_key = validate_request_data(generator_intro_schema.secretKey)
+
+    prompt = f"\n"
     
     answer, tokens, execution_time = chatbot.generate_intro(api_key, prompt)
 
@@ -60,16 +55,11 @@ async def generate_victim(generate_victim_schema: scenario_router_schema.Generat
     print(generate_victim_schema.model_dump_json(indent=2))
     # previousStory 이용 안함
 
-    api_key = check_openai_api_key(generate_victim_schema.secretKey)
-    if not api_key:
-        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
+    api_key = validate_request_data(generate_victim_schema.secretKey, 
+                                    murderer_name = generate_victim_schema.murderer, 
+                                    living_characters = generate_victim_schema.livingCharacters)
 
     input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
-    if not input_data_json or not input_data_pydantic:
-        if not scenario_crud.get_character_info(generate_victim_schema.murderer):
-            raise HTTPException(status_code=404, detail="Murderer not found in the character list.")
-        else:
-            raise HTTPException(status_code=404, detail="Invalid livingCharacters in the list.")
 
     answer, tokens, execution_time = chatbot.generate_victim(api_key, input_data_pydantic)
 
@@ -78,7 +68,6 @@ async def generate_victim(generate_victim_schema: scenario_router_schema.Generat
         "answer": result, 
         "tokens": tokens
     }
-    # print(f"answer : {result}\ntokens : {tokens}\nexecution_time : {execution_time}")
     print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
@@ -91,9 +80,9 @@ async def generate_victim_backup_plan(generate_victim_schema: scenario_router_sc
     print(generate_victim_schema.model_dump_json(indent=2))
     # previousStory 이용 안함
 
-    api_key = check_openai_api_key(generate_victim_schema.secretKey)
-    if not api_key:
-        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
+    api_key = validate_request_data(generate_victim_schema.secretKey, 
+                                    murderer_name = generate_victim_schema.murderer, 
+                                    living_characters = generate_victim_schema.livingCharacters)
 
     # plan A
     input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
@@ -108,6 +97,7 @@ async def generate_victim_backup_plan(generate_victim_schema: scenario_router_sc
     input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
 
     answer_b, tokens_b, execution_time_b = chatbot.generate_victim(api_key, input_data_pydantic)
+
     result_b = scenario_crud.generate_victim_output(answer_b, input_data_pydantic, generate_victim_schema)
 
     # result
@@ -120,7 +110,7 @@ async def generate_victim_backup_plan(generate_victim_schema: scenario_router_sc
         }, 
         "tokens": tokens
     }
-    print(f"answer : {answer_a, answer_b}\ntokens : {tokens}\nexecution_time : {execution_time_a + execution_time_b}")
+    print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -132,9 +122,8 @@ async def generate_final_words(generator_final_words_schema: scenario_router_sch
     print(generator_final_words_schema.model_dump_json(indent=2))
     # previousStory 이용 안함
 
-    api_key = check_openai_api_key(generator_final_words_schema.secretKey)
-    if not api_key:
-        raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
+    api_key = validate_request_data(generator_final_words_schema.secretKey, 
+                                    murderer_name = generator_final_words_schema.murderer)
     
     if not scenario_crud.get_character_info(generator_final_words_schema.murderer):
         raise HTTPException(status_code=404, detail="Murderer not found in the character list.")
