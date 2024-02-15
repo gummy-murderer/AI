@@ -106,6 +106,14 @@ def validate_living_characters(living_characters):
             return False
     return True
 
+def translate_place_name_ko_to_en(place_list, ko_name):
+    for place in place_list:
+        if place.placeNameKo == ko_name:
+            return place.placeNameEn
+    return "Not Found"
+
+
+# IO
 def generate_victim_input(victim_generation_data):
     """
     Generates input data required for victim generation in both JSON format and Pydantic model format.
@@ -171,9 +179,11 @@ def generate_victim_output(answer, input_data, origin_data):
                 "gameNpcNo": game_npc_no_mapping[alibi.name]
                 } for alibi in answer.alibis if alibi.name in game_npc_no_mapping]
     
+    crimeScene_en = translate_place_name_ko_to_en(place_data.places, input_data.information.crimeScene)
+    
     output_data_json = {
         "victim": input_data.information.victim,
-        "crimeScene": input_data.information.crimeScene,
+        "crimeScene": crimeScene_en,
         "method": input_data.information.method,
         "witness": input_data.information.witness,
         "eyewitnessInformation": answer.eyewitnessInformation,

@@ -1,11 +1,11 @@
 {
     "places": [
         {
-            "placeNameEn": "Misk_Shop",
+            "placeNameEn": "MiskShop",
             "placeNameKo": "잡화샵"
         },
         {
-            "placeNameEn": "Pawn_Shop",
+            "placeNameEn": "PawnShop",
             "placeNameKo": "전당포"
         },
         {
@@ -41,7 +41,7 @@
             "placeNameKo": "꽃 가게"
         },
         {
-            "placeNameEn": "Convenience_Store",
+            "placeNameEn": "ConvenienceStore",
             "placeNameKo": "편의점"
         },
         {
@@ -49,7 +49,7 @@
             "placeNameKo": "호텔"
         },
         {
-            "placeNameEn": "Real_Estate_Agancy",
+            "placeNameEn": "RealEstateAgancy",
             "placeNameKo": "부동산"
         },
         {
