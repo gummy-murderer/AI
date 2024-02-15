@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 
+from middleware import CustomMiddleware
 from domain.user import user_router
 from domain.scenario import scenario_router
 
@@ -36,6 +37,8 @@ app = FastAPI(
     },
     openapi_tags=tags_metadata
 )
+
+app.add_middleware(CustomMiddleware)
 
 app.include_router(user_router.router)
 app.include_router(scenario_router.router)

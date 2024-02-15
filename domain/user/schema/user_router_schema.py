@@ -21,7 +21,7 @@ class GenerateOutput(BaseModel):
 # router input
 class CharacterInfo(BaseModel):
     name: str
-    alibi: str
+    alibi: Optional[str]
 
 class PreviousChatContent(BaseModel):
     sender: str
