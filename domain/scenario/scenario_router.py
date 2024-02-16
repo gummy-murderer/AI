@@ -6,6 +6,7 @@ from domain.scenario import scenario_crud
 from domain.scenario.schema import scenario_router_schema
 from LLMs.langchain import chatbot
 from lib.validation_check import check_openai_api_key
+from discord_bot.discord_bot import send_message
 
 router = APIRouter(
     prefix="/api/scenario",
@@ -26,13 +27,28 @@ def validate_request_data(secret_key: str, murderer_name: Optional[str] = None, 
     return api_key
 
 
+@router.post("/my_test")
+async def test_(generator_intro_schema: scenario_router_schema.GenerateIntroInput):
+    final_response = {
+        "tokens": {
+            "totalTokens": 942,
+            "promptTokens": 669,
+            "completionTokens": 273
+        },
+        "answer": {
+            "greeting": "존경하는 탐정님께,",
+            "content": "우리 마을은 전에 없던 끔찍한 살인 사건으로 어둠에 휩싸였습니다. 평화로운 일상이 깨어진 지금, 우리는 당신의 명성을 듣고 도움을 청하고자 합니다. 시간이 촉박한 만큼, 당신의 빠른 도착을 간곡히 부탁드립니다. 밤이면 또 다른 비극이 우리를 찾아올지도 모릅니다. 당신의 지혜와 통찰이 절실히 필요한 때입니다. 마을 사람들과의 대화를 통해 진실을 밝혀주시길 바랍니다.",
+            "closing": "긴급히 부탁드립니다, 마을 촌장 올림."
+        }
+    }
+    
+    return final_response
+             
 @router.post("/generate_intro", 
              description="게임의 intro를 생성해 주는 API입니다.", 
              response_model=scenario_router_schema.GenerateIntroOutput, 
              tags=["scenario"])
 async def generate_intro(generator_intro_schema: scenario_router_schema.GenerateIntroInput):
-    print(generator_intro_schema.model_dump_json(indent=2))
-
     api_key = validate_request_data(generator_intro_schema.secretKey)
 
     prompt = f"\n"
@@ -43,7 +59,7 @@ async def generate_intro(generator_intro_schema: scenario_router_schema.Generate
         "answer": answer.dict(), 
         "tokens": tokens
     }
-    print(json.dumps(final_response, indent=2, ensure_ascii=False))
+    # print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -52,7 +68,6 @@ async def generate_intro(generator_intro_schema: scenario_router_schema.Generate
              response_model=scenario_router_schema.GenerateVictimOutput, 
              tags=["scenario"])
 async def generate_victim(generate_victim_schema: scenario_router_schema.GenerateVictimInput):
-    print(generate_victim_schema.model_dump_json(indent=2))
     # previousStory 이용 안함
 
     api_key = validate_request_data(generate_victim_schema.secretKey, 
@@ -68,7 +83,7 @@ async def generate_victim(generate_victim_schema: scenario_router_schema.Generat
         "answer": result, 
         "tokens": tokens
     }
-    print(json.dumps(final_response, indent=2, ensure_ascii=False))
+    # print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -77,7 +92,6 @@ async def generate_victim(generate_victim_schema: scenario_router_schema.Generat
              response_model=scenario_router_schema.GenerateVictimBackupPlanOutput, 
              tags=["scenario"])
 async def generate_victim_backup_plan(generate_victim_schema: scenario_router_schema.GenerateVictimInput):
-    print(generate_victim_schema.model_dump_json(indent=2))
     # previousStory 이용 안함
 
     api_key = validate_request_data(generate_victim_schema.secretKey, 
@@ -110,7 +124,7 @@ async def generate_victim_backup_plan(generate_victim_schema: scenario_router_sc
         }, 
         "tokens": tokens
     }
-    print(json.dumps(final_response, indent=2, ensure_ascii=False))
+    # print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -119,7 +133,6 @@ async def generate_victim_backup_plan(generate_victim_schema: scenario_router_sc
              response_model=scenario_router_schema.GenerateFinalWordsOutput, 
              tags=["scenario"])
 async def generate_final_words(generator_final_words_schema: scenario_router_schema.GenerateFinalWordsInput):
-    print(generator_final_words_schema.model_dump_json(indent=2))
     # previousStory 이용 안함
 
     api_key = validate_request_data(generator_final_words_schema.secretKey, 
@@ -136,5 +149,4 @@ async def generate_final_words(generator_final_words_schema: scenario_router_sch
         "answer": answer, 
         "tokens": tokens
     }
-    print(f"answer : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response

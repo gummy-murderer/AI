@@ -106,7 +106,16 @@ def validate_living_characters(living_characters):
             return False
     return True
 
-def translate_place_name_ko_to_en(place_list, ko_name):
+def translate_place_name_ko_to_en(place_list: list, ko_name: str):
+    """
+    Checks if all provided characters exist.
+
+    Args:
+        living_characters (object): Characters to validate.
+
+    Returns:
+        bool: True if all exist, False otherwise.
+    """
     for place in place_list:
         if place.placeNameKo == ko_name:
             return place.placeNameEn

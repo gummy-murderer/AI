@@ -1,5 +1,8 @@
 # Security
 .env
 
+# Server log
+*.log
+
 # etc
 __pycache__/

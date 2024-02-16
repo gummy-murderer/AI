@@ -6,6 +6,7 @@ from domain.user import user_crud
 from domain.user.schema import user_router_schema
 from LLMs.langchain import chatbot
 from lib.validation_check import check_openai_api_key
+from discord_bot.discord_bot import send_message
 
 
 router = APIRouter(
@@ -45,7 +46,6 @@ async def conversation_with_user(conversation_user_schema: user_router_schema.Co
         "answer": answer.dict(), 
         "tokens": tokens
     }
-    print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -68,7 +68,6 @@ async def conversation_between_npc(conversation_npc_schema: user_router_schema.C
         "answer": answer.dict(), 
         "tokens": tokens
     }
-    print(json.dumps(final_response, indent=2, ensure_ascii=False))
     return final_response
 
 
@@ -91,5 +90,4 @@ async def conversation_between_npcs_each(conversation_npcs_each_schema: user_rou
         "answer": answer, 
         "tokens": tokens
     }
-    print(f"chatContent : {answer}\ntokens : {tokens}\nexecution_time : {execution_time}")
     return final_response

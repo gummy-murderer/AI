@@ -8,6 +8,19 @@ from lib import const
 
 
 def execute_conversation(chain_function, format_check_function, schema, inputs):
+    """
+    Executes a conversation chain function and formats the response.
+    
+    Args:
+        chain_function (function): The chain function to execute.
+        format_check_function (function): The function to format and validate the response.
+        schema (Pydantic schema): The schema to validate and serialize the response.
+        inputs (str): The input string to the conversation chain.
+        
+    Returns:
+        Tuple containing the validated and serialized response, token counts, and execution time.
+        Returns None if the maximum retry limit is exceeded or formatting fails.
+    """
     retry_attempts = 0
     while True:
         try:
@@ -18,7 +31,7 @@ def execute_conversation(chain_function, format_check_function, schema, inputs):
                 tokens = {"totalTokens": cb.total_tokens, 
                           "promptTokens": cb.prompt_tokens, 
                           "completionTokens": cb.completion_tokens,
-                        #   "totalCost(USD)": f"${cb.total_cost}"
+                        #   "totalCost(USD)": Uncomment to include cost
                           }
 
             end_time = time.time()
@@ -33,6 +46,7 @@ def execute_conversation(chain_function, format_check_function, schema, inputs):
             print("Format is not correct, retrying...")
             if retry_attempts >= const.MAX_RETRY_LIMIT:
                 print("Exceeded maximum attempt limit, terminating response generation.")
+                break  # Ensure function exits after max retries
 
 
 # scenario
