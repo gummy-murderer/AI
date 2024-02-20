@@ -33,12 +33,11 @@ def validate_request_data(secret_key: str, receiver_name: Optional[str] = None, 
              response_model=user_router_schema.ConversationUserOutput, 
              tags=["user"])
 async def conversation_with_user(conversation_user_schema: user_router_schema.ConversationUserInput):
-    print(conversation_user_schema.model_dump_json(indent=2))
-
     api_key = validate_request_data(conversation_user_schema.secretKey, 
                                     receiver_name = conversation_user_schema.receiver.name)
     
     input_data_json, input_data_pydantic = user_crud.conversation_with_user_input(conversation_user_schema)
+    print(json.dumps(input_data_json, indent=2))
                 
     answer, tokens, execution_time = chatbot.generate_conversation_with_user(api_key, input_data_pydantic)
 

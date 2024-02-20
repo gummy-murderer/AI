@@ -25,24 +25,7 @@ def validate_request_data(secret_key: str, murderer_name: Optional[str] = None, 
         raise HTTPException(status_code=404, detail="Invalid livingCharacters in the list.")
     
     return api_key
-
-
-@router.post("/my_test")
-async def test_(generator_intro_schema: scenario_router_schema.GenerateIntroInput):
-    final_response = {
-        "tokens": {
-            "totalTokens": 942,
-            "promptTokens": 669,
-            "completionTokens": 273
-        },
-        "answer": {
-            "greeting": "존경하는 탐정님께,",
-            "content": "우리 마을은 전에 없던 끔찍한 살인 사건으로 어둠에 휩싸였습니다. 평화로운 일상이 깨어진 지금, 우리는 당신의 명성을 듣고 도움을 청하고자 합니다. 시간이 촉박한 만큼, 당신의 빠른 도착을 간곡히 부탁드립니다. 밤이면 또 다른 비극이 우리를 찾아올지도 모릅니다. 당신의 지혜와 통찰이 절실히 필요한 때입니다. 마을 사람들과의 대화를 통해 진실을 밝혀주시길 바랍니다.",
-            "closing": "긴급히 부탁드립니다, 마을 촌장 올림."
-        }
-    }
     
-    return final_response
              
 @router.post("/generate_intro", 
              description="게임의 intro를 생성해 주는 API입니다.", 
