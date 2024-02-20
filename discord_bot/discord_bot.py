@@ -13,7 +13,7 @@ bot = commands.Bot(intents=intents, command_prefix="!")
 dotenv_file = dotenv.find_dotenv(str(Path("./").absolute().joinpath(".env")))
 dotenv.load_dotenv()
 TOKEN = os.environ["DISCORD_BOT_TOKEN"]
-CHANNEL_ID = '1207294301889892416'
+CHANNEL_ID = '1207979046630068234'
 
 @bot.event
 async def on_ready():

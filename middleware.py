@@ -58,7 +58,10 @@ class CustomMiddleware(BaseHTTPMiddleware):
             async for chunk in response.body_iterator:
                 body_bytes += chunk
 
-            body_text = json.dumps(eval(body_bytes.decode('utf-8')), indent=2, ensure_ascii=False)
+            try:
+                body_text = json.dumps(eval(body_bytes.decode('utf-8')), indent=2, ensure_ascii=False)
+            except:
+                body_text = body_bytes.decode('utf-8')
 
             new_response = Response(content=body_bytes, status_code=response.status_code, headers=dict(response.headers), media_type=response.media_type)
 
