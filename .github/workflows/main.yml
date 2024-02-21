@@ -1,14 +1,13 @@
 name: CI/CD Pipeline for FastAPI Application
 
+env:
+  IMAGE_NAME: gummy-muerder-AI # 환경 변수 설정
+
 on:
   push:
     branches: ["main"]
   pull_request:
     branches: ["main"]
-
-permissions:
-  contents: read
-  packages: write
 
 jobs:
   build-and-push:
@@ -32,7 +31,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_REPO }}/your-image-name:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   # deploy-to-server:
   #   needs: build-and-push
@@ -50,10 +49,10 @@ jobs:
   #           sudo docker rm my-container || true
 
   #           # Pull the latest image
-  #           sudo docker pull ${{ secrets.DOCKER_REPO }}/your-image-name:${{ github.sha }}
+  #           sudo docker pull ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   #           # Run the new container
-  #           sudo docker run --name my-container -d -p 8081:8081 ${{ secrets.DOCKER_REPO }}/your-image-name:${{ github.sha }}
+  #           sudo docker run --name my-container -d -p 8081:8081 ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   #           # Clean up unused Docker images
   #           sudo docker image prune -f
