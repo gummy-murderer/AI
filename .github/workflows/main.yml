@@ -1,7 +1,7 @@
 name: CI/CD Pipeline for FastAPI Application
 
 env:
-  IMAGE_NAME: gummy-murderer-ai # 환경 변수 설정
+  IMAGE_NAME: gummy-murderer-ai
 
 on:
   push:
