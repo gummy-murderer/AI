@@ -4,9 +4,15 @@ from pathlib import Path
 import os, dotenv
 
 # Load environment variables from .env file
-dotenv_file = dotenv.find_dotenv(str(Path("./").absolute().joinpath(".env")))
-dotenv.load_dotenv()
-MY_KEY = os.environ["MY_KEY"]
+env_path = Path('.') / '.env'
+if env_path.exists():
+    dotenv.load_dotenv(dotenv_path=env_path)
+
+    MY_KEY = os.getenv("MY_KEY")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+else:
+    MY_KEY = ""
+
 
 def response_format(answer):
     """
@@ -34,12 +40,11 @@ def check_openai_api_key(input_api_key):
     Returns:
         str or None: The valid API key if the key is correct or None if validation fails.
     """
-    MY_KEY = os.getenv("MY_KEY")
-
-    if input_api_key == MY_KEY:
-        api_key = os.getenv("OPENAI_API_KEY")
-    else:
-        api_key = input_api_key
+    if MY_KEY:
+        if input_api_key == MY_KEY:
+            api_key = OPENAI_API_KEY
+        else:
+            api_key = input_api_key
 
     try:
         # Attempt to use the API key to list OpenAI models as a validation step
