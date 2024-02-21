@@ -43,8 +43,8 @@ def check_openai_api_key(input_api_key):
     if MY_KEY:
         if input_api_key == MY_KEY:
             api_key = OPENAI_API_KEY
-        else:
-            api_key = input_api_key
+    else:
+        api_key = input_api_key
 
     try:
         # Attempt to use the API key to list OpenAI models as a validation step
