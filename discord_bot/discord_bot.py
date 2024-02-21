@@ -10,9 +10,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(intents=intents, command_prefix="!")
 
-dotenv_file = dotenv.find_dotenv(str(Path("./").absolute().joinpath(".env")))
-dotenv.load_dotenv()
-TOKEN = os.environ["DISCORD_BOT_TOKEN"]
+TOKEN = "MTIwNzI5NDg4ODA3MzM3MTcwOA.GfUDWt.VVxVP1PkVsb2yr2nv1xWqtIX6bpVFeJlwzoOzk"
 CHANNEL_ID = '1207979046630068234'
 
 @bot.event
