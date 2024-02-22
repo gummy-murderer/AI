@@ -8,23 +8,34 @@ import logging
 
 from discord_bot.discord_bot import send_message
 
+url_list = ["/api/scenario/generate_intro",
+            "/api/scenario/generate_victim",
+            "/api/scenario/generate_victim_backup_plan",
+            "/api/scenario/generate_final_words",
+            "/api/scenario/generate_final_words",
+            "/api/user/conversation_between_npcs",
+            "/api/user/conversation_between_npcs_each"]
+
 class CustomMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        # Before processing the request
-        await self.handle_request(request)
+        if request.url.path in url_list:
+            # Before processing the request
+            await self.handle_request(request)
 
-        # Measure request processing time
-        start_time = time.time()
-        response = await call_next(request)
-        process_time = time.time() - start_time
+            # Measure request processing time
+            start_time = time.time()
+            response = await call_next(request)
+            process_time = time.time() - start_time
 
-        # Log request completion
-        logging.info(f"Request: {request.method} {request.url.path} - Completed in {process_time:.2f}s")
+            # Log request completion
+            logging.info(f"Request: {request.method} {request.url.path} - Completed in {process_time:.2f}s")
 
-        # After processing the request
-        response = await self.handle_response(request, response, process_time)
-        
-        return response
+            # After processing the request
+            response = await self.handle_response(request, response, process_time)
+            
+            return response
+        else:
+            return await call_next(request)
 
     async def handle_request(self, request: Request):
         # Log client IP and request details

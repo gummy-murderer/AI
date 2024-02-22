@@ -56,6 +56,7 @@ jobs:
               -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
               -e MY_KEY=${{ secrets.MY_KEY }} \
               -e DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }} \
+              -e DISCORD_CHANNEL_ID=${{ secrets.DISCORD_CHANNEL_ID }} \
               ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Clean up unused Docker images

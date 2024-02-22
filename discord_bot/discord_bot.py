@@ -16,7 +16,7 @@ if env_path.exists():
     dotenv.load_dotenv(dotenv_path=env_path)
 
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
-CHANNEL_ID = '1210172233063079946'
+DISCORD_CHANNEL_ID = os.getenv("DISCORD_CHANNEL_ID")
 
 @bot.event
 async def on_ready():
@@ -25,9 +25,9 @@ async def on_ready():
     await send_message([message])
 
 async def send_message(messages: list, **kwargs):
-    channel = bot.get_channel(int(CHANNEL_ID))
+    channel = bot.get_channel(int(DISCORD_CHANNEL_ID))
     if channel is None:
-        logging.error(f"Failed to find channel with ID {CHANNEL_ID}")
+        logging.error(f"Failed to find channel with ID {DISCORD_CHANNEL_ID}")
         return
     
     for message in messages:
