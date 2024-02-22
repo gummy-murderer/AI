@@ -59,4 +59,4 @@ jobs:
               ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Clean up unused Docker images
-            sudo docker image prune -f
+            sudo docker image prune -af
