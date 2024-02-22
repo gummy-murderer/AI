@@ -1,17 +1,13 @@
-import json
 import openai
 from pathlib import Path
-import os, dotenv
+import os, json, dotenv
 
-# Load environment variables from .env file
 env_path = Path('.') / '.env'
 if env_path.exists():
     dotenv.load_dotenv(dotenv_path=env_path)
 
-    MY_KEY = os.getenv("MY_KEY")
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-else:
-    MY_KEY = ""
+MY_KEY = os.getenv("MY_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 def response_format(answer):
@@ -29,7 +25,6 @@ def response_format(answer):
     except:
         return None
 
-
 def check_openai_api_key(input_api_key):
     """
     Validates an input API key against the stored API key or attempts to use it with OpenAI.
@@ -40,9 +35,8 @@ def check_openai_api_key(input_api_key):
     Returns:
         str or None: The valid API key if the key is correct or None if validation fails.
     """
-    if MY_KEY:
-        if input_api_key == MY_KEY:
-            api_key = OPENAI_API_KEY
+    if MY_KEY and input_api_key == MY_KEY:
+        api_key = OPENAI_API_KEY
     else:
         api_key = input_api_key
 

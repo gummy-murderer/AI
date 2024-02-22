@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from pathlib import Path
 import os, dotenv
 import logging
 
@@ -9,6 +10,12 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(intents=intents, command_prefix="!")
 
+# Load environment variables from .env file
+env_path = Path('.') / '.env'
+if env_path.exists():
+    dotenv.load_dotenv(dotenv_path=env_path)
+
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 CHANNEL_ID = '1207979046630068234'
 
 @bot.event
@@ -31,8 +38,11 @@ async def send_message(messages: list, **kwargs):
         except Exception as e:
             logging.error(f"Error sending message: {e}")
 
-async def run(token):
-    try:
-        await bot.start(token)
-    except KeyboardInterrupt:
-        await bot.logout()
+async def run():
+    if DISCORD_BOT_TOKEN:
+        try:
+            await bot.start(DISCORD_BOT_TOKEN)
+        except KeyboardInterrupt:
+            await bot.logout()
+    else:
+        logging.error("DISCORD_BOT_TOKEN is not set. Please set the DISCORD_BOT_TOKEN environment variable.")
