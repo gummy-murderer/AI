@@ -16,7 +16,7 @@ if env_path.exists():
     dotenv.load_dotenv(dotenv_path=env_path)
 
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
-CHANNEL_ID = '1207979046630068234'
+CHANNEL_ID = '1210172233063079946'
 
 @bot.event
 async def on_ready():
