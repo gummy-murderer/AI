@@ -52,7 +52,7 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Run the new container
-            sudo docker run --name my-container -d -p 8000:8000 \
+            sudo docker run --name my-container -d -p 80:8000 \
               -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
               -e MY_KEY=${{ secrets.MY_KEY }} \
               -e DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }} \
