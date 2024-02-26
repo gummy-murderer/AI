@@ -12,9 +12,10 @@ url_list = ["/api/scenario/generate_intro",
             "/api/scenario/generate_victim",
             "/api/scenario/generate_victim_backup_plan",
             "/api/scenario/generate_final_words",
-            "/api/scenario/generate_final_words",
+            "/api/user/conversation_with_user",
             "/api/user/conversation_between_npcs",
             "/api/user/conversation_between_npcs_each"]
+
 
 class CustomMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
