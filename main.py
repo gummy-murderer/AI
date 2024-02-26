@@ -5,6 +5,7 @@ import asyncio
 from middleware import CustomMiddleware
 from domain.user import user_router
 from domain.scenario import scenario_router
+from domain.etc import etc_router
 
 from discord_bot.discord_bot import run
 from lib.logging_config import configure_logging
@@ -58,6 +59,7 @@ asyncio.create_task(run())
 # Including API routers
 app.include_router(user_router.router)
 app.include_router(scenario_router.router)
+app.include_router(etc_router.router)
 
 
 if __name__ == "__main__":

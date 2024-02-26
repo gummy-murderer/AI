@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException
 from typing import Optional, List 
-import json
 
 from domain.scenario import scenario_crud
 from domain.scenario.schema import scenario_router_schema
