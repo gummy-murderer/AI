@@ -14,7 +14,8 @@ url_list = ["/api/scenario/generate_intro",
             "/api/scenario/generate_final_words",
             "/api/user/conversation_with_user",
             "/api/user/conversation_between_npcs",
-            "/api/user/conversation_between_npcs_each"]
+            "/api/user/conversation_between_npcs_each",
+            "/api/etc/secret_key_validation"]
 
 
 class CustomMiddleware(BaseHTTPMiddleware):
