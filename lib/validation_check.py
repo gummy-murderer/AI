@@ -1,6 +1,7 @@
 import openai
 from pathlib import Path
 import os, json, dotenv
+import re
 
 env_path = Path('.') / '.env'
 if env_path.exists():
@@ -9,6 +10,23 @@ if env_path.exists():
 MY_KEY = os.getenv("MY_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+
+def remove_zero_width_spaces(text):
+    """
+    Remove all zero width spaces (\u200b) from the given text.
+    
+    Parameters:
+    - text: The input string from which zero width spaces should be removed.
+    
+    Returns:
+    - A string with all zero width spaces removed.
+    """
+    # Define the zero width space Unicode character
+    zero_width_space = '\u200b'
+    # Use regular expression to replace zero width spaces with nothing
+    cleaned_text = re.sub(zero_width_space, '', text)
+    
+    return cleaned_text
 
 def response_format(answer):
     """
@@ -35,6 +53,7 @@ def check_openai_api_key(input_api_key):
     Returns:
         str or None: The valid API key if the key is correct or None if validation fails.
     """
+    input_api_key = remove_zero_width_spaces(input_api_key)
     if MY_KEY and input_api_key == MY_KEY:
         api_key = OPENAI_API_KEY
     else:
