@@ -12,8 +12,8 @@ router = APIRouter(
              description="openAI secret key를 확인하는 API입니다.", 
              tags=["etc"])
 async def secret_key_validation(secret_key_schema: etc_schema.SecretKeyValidation):
-
     api_key = check_openai_api_key(secret_key_schema.secretKey)
+
     if not api_key:
         raise HTTPException(status_code=404, detail="Invalid OpenAI API key.")
     
