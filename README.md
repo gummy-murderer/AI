@@ -1,24 +1,3 @@
-# Gummy murderer readme
----
-
-1. 모델 비교 - gpt, gemini, Llama, mistral
-2. 게임 내용
-    1. 인트로 아웃트로 생성
-    2. 힌트, 알리바이 생성
-    3. user / npc 대화
-    4. npc / npc 대화
-3. 프롬프트 엔지니어링 & 토큰 saving
-    1. input prompt 형태
-        1. 일반
-        2. json
-        3. pydantic
-    2. output 형태 지정하는 법
-        1. prompt 일반
-        2. langchain pydantic 사용
-    3. token saving 기법 적용
-
-
-
 # 🧸 Gummy murderer (AI part)
 
 #### 🎥 시연 영상 보러가기([Click]())
