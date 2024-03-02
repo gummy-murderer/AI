@@ -12,7 +12,7 @@ from lib.logging_config import configure_logging
 
 
 description = """
-#### 두근두근 놀러와요 마피아의 숲! 구미머더러! 지금 플레이하세요(찡긋)
+#### 두근두근 놀러와요 마피아의 숲! 베어머더러! 지금 플레이하세요(찡긋)
 
 기능 목록:
 
