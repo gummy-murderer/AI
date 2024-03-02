@@ -22,7 +22,7 @@
             <td></td>
         </tr>
         <tr>
-            <td><b>김종민</b></td>
+            <td><b>김찬영</b></td>
             <td></td>
         </tr>
     </tbody>
