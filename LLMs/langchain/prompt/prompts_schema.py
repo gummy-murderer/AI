@@ -31,4 +31,6 @@ class ConversationBetweenNPCSchema(BaseModel):
     chatContent: List[ConversationNPC]
 
 class ConversationBetweenNPCEachSchema(BaseModel):
-    chatContent: List[ConversationNPC]
+    sender: str
+    receiver: str
+    chatContent: str

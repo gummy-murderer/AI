@@ -1,8 +1,5 @@
-from langchain.prompts.prompt import PromptTemplate
-from langchain.output_parsers import PydanticOutputParser
-
-from LLMs.langchain.prompt.prompts_data import synopsis
-from LLMs.langchain.prompt.prompts_schema import ConversationWithUserSchema, ConversationBetweenNPCSchema, ConversationBetweenNPCEachSchema
+from LLMs.langchain.prompt.prompts_data import prompt_template
+from LLMs.langchain.prompt import prompts_schema
 
 
 conversation_with_user_chain_prefix = """
@@ -29,27 +26,17 @@ conversation_between_npc_each_chain_prefix = """
 5. PreviousChatContents가 주어진다면 마지막 대화에 대해 다른 사람이 대화가 이어지도록 답변을 해야 함.
 """
 
-conversation_chain_suffix = """
-{format_instructions}
-{input}
+conversation_between_npc_each_last_chain_prefix = """
+1. 등장인물 설정을 참고하여 character1과 character2 사이의 대화 내용 1개를 만들어야 함.
+2. character1 이 말하거나 character2 가 말하거나 둘 중 하나만 나와야 함.
+3. 시놉시스와 시나리오를 참고하여야함.
+5. PreviousChatContents의 내용을 참고하여 해당 대화를 마무리 짓는 마지막 말을 만들어야 함.
 """
 
+conversation_with_user_prompt = prompt_template(prompts_schema.ConversationWithUserSchema, conversation_with_user_chain_prefix)
 
-conversation_with_user_parser = PydanticOutputParser(pydantic_object=ConversationWithUserSchema)
-conversation_with_user_template = synopsis + conversation_with_user_chain_prefix + conversation_chain_suffix
-conversation_with_user_prompt = PromptTemplate(template=conversation_with_user_template, 
-                                               input_variables=["input"], 
-                                               partial_variables={"format_instructions": conversation_with_user_parser.get_format_instructions()})
+conversation_between_npc_prompt = prompt_template(prompts_schema.ConversationBetweenNPCSchema, conversation_between_npc_chain_prefix)
 
-conversation_between_npc_parser = PydanticOutputParser(pydantic_object=ConversationBetweenNPCSchema)
-conversation_between_npc_template = synopsis + conversation_between_npc_chain_prefix + conversation_chain_suffix
-conversation_between_npc_prompt = PromptTemplate(template=conversation_between_npc_template, 
-                                               input_variables=["input"], 
-                                               partial_variables={"format_instructions": conversation_between_npc_parser.get_format_instructions()})
+conversation_between_npc_each_prompt = prompt_template(prompts_schema.ConversationBetweenNPCEachSchema, conversation_between_npc_each_chain_prefix)
 
-conversation_between_npc_each_parser = PydanticOutputParser(pydantic_object=ConversationBetweenNPCEachSchema)
-conversation_between_npc_each_template = synopsis + conversation_between_npc_each_chain_prefix + conversation_chain_suffix
-conversation_between_npc_each_prompt = PromptTemplate(template=conversation_between_npc_each_template, 
-                                               input_variables=["input"], 
-                                               partial_variables={"format_instructions": conversation_between_npc_each_parser.get_format_instructions()})
-
+conversation_between_npc_each_last_prompt = prompt_template(prompts_schema.ConversationBetweenNPCEachSchema, conversation_between_npc_each_last_chain_prefix)

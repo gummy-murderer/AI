@@ -35,7 +35,7 @@ tags_metadata = [
 app = FastAPI(
     title="AI Mafia",
     description=description,
-    version="0.0.3",
+    version="0.1.0",
     license_info={
         "name": "Apache 2.0",
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",

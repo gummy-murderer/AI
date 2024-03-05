@@ -3,9 +3,8 @@ from typing import Optional, List
 
 from domain.scenario import scenario_crud
 from domain.scenario.schema import scenario_router_schema
-from LLMs.langchain import chatbot
+from LLMs.langchain import generator
 from lib.validation_check import check_openai_api_key
-from discord_bot.discord_bot import send_message
 
 router = APIRouter(
     prefix="/api/scenario",
@@ -35,7 +34,7 @@ async def generate_intro(generator_intro_schema: scenario_router_schema.Generate
 
     prompt = f"\n"
     
-    answer, tokens, execution_time = chatbot.generate_intro(api_key, prompt)
+    answer, tokens, execution_time = generator.generate_intro(api_key, prompt)
 
     final_response = {
         "answer": answer.dict(), 
@@ -58,7 +57,7 @@ async def generate_victim(generate_victim_schema: scenario_router_schema.Generat
 
     input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
 
-    answer, tokens, execution_time = chatbot.generate_victim(api_key, input_data_pydantic)
+    answer, tokens, execution_time = generator.generate_victim(api_key, input_data_pydantic)
 
     result = scenario_crud.generate_victim_output(answer, input_data_pydantic, generate_victim_schema)
     final_response = {
@@ -83,7 +82,7 @@ async def generate_victim_backup_plan(generate_victim_schema: scenario_router_sc
     # plan A
     input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
 
-    answer_a, tokens_a, execution_time_a = chatbot.generate_victim(api_key, input_data_pydantic)
+    answer_a, tokens_a, execution_time_a = generator.generate_victim(api_key, input_data_pydantic)
 
     result_a = scenario_crud.generate_victim_output(answer_a, input_data_pydantic, generate_victim_schema)
 
@@ -92,7 +91,7 @@ async def generate_victim_backup_plan(generate_victim_schema: scenario_router_sc
 
     input_data_json, input_data_pydantic = scenario_crud.generate_victim_input(generate_victim_schema)
 
-    answer_b, tokens_b, execution_time_b = chatbot.generate_victim(api_key, input_data_pydantic)
+    answer_b, tokens_b, execution_time_b = generator.generate_victim(api_key, input_data_pydantic)
 
     result_b = scenario_crud.generate_victim_output(answer_b, input_data_pydantic, generate_victim_schema)
 
@@ -125,7 +124,7 @@ async def generate_final_words(generator_final_words_schema: scenario_router_sch
     
     input_data_json, input_data_pydantic = scenario_crud.generate_final_words_input(generator_final_words_schema)
 
-    answer, tokens, execution_time = chatbot.generate_final_words(api_key, input_data_pydantic)
+    answer, tokens, execution_time = generator.generate_final_words(api_key, input_data_pydantic)
 
     final_response = {
         "answer": answer, 

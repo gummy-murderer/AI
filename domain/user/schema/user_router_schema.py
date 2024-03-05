@@ -51,6 +51,7 @@ class ConversationNPCEachInput(GenerateInput):
     chatDay: int
     previousChatContents: List[PreviousChatContent]
     previousStory: Optional[str] = None
+    state: str
 
 
 # router output
@@ -65,9 +66,6 @@ class ConversationNPC(BaseModel):
 class ConversationNPCAnswer(BaseModel):
     chatContent: List[ConversationNPC]
 
-class ConversationNPCEachAnswer(BaseModel):
-    chatContent: List[ConversationNPC]
-
 class ConversationUserOutput(GenerateOutput):
     answer: ConversationUserAnswer
 
@@ -75,5 +73,5 @@ class ConversationNPCOutput(GenerateOutput):
     answer: ConversationNPCAnswer
 
 class ConversationNPCEachOutput(GenerateOutput):
-    answer: ConversationNPCEachAnswer
+    answer: ConversationNPC
 
