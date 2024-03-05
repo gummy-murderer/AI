@@ -1,9 +1,5 @@
-from langchain.prompts.prompt import PromptTemplate
-from langchain.output_parsers import PydanticOutputParser
-
-from LLMs.langchain.prompt.prompts_data import synopsis
-from LLMs.langchain.prompt.prompts_schema import IntroSchema, GenerateVictimSchema, FinalWordsSchema
-
+from LLMs.langchain.prompt.prompts_data import prompt_template
+from LLMs.langchain.prompt import prompts_schema
 
 
 intro_chain_prefix = """
@@ -26,26 +22,8 @@ final_words_chain_prefix = """
 3. 답변의 길이는 4문장은 넘지 말아야 함.
 """
 
-conversation_chain_suffix = """
-{format_instructions}
-{input}
-"""
-
-
-intro_parser = PydanticOutputParser(pydantic_object=IntroSchema)
-intro_template = synopsis + intro_chain_prefix + conversation_chain_suffix
-intro_prompt = PromptTemplate(template=intro_template, 
-                              input_variables=["input"], 
-                              partial_variables={"format_instructions": intro_parser.get_format_instructions()})
+intro_prompt = prompt_template(prompts_schema.IntroSchema, intro_chain_prefix)
                               
-generate_victim_parser = PydanticOutputParser(pydantic_object=GenerateVictimSchema)
-generate_victim_template = synopsis + generate_victim_prefix + conversation_chain_suffix
-generate_victim_prompt = PromptTemplate(template=generate_victim_template, 
-                                        input_variables=["input"], 
-                                        partial_variables={"format_instructions": generate_victim_parser.get_format_instructions()})
-                              
-final_words_parser = PydanticOutputParser(pydantic_object=FinalWordsSchema)
-final_words_template = synopsis + final_words_chain_prefix + conversation_chain_suffix
-final_words_prompt = PromptTemplate(template=final_words_template, 
-                                    input_variables=["input"], 
-                                    partial_variables={"format_instructions": final_words_parser.get_format_instructions()})
+generate_victim_prompt = prompt_template(prompts_schema.GenerateVictimSchema, generate_victim_prefix)
+
+final_words_prompt = prompt_template(prompts_schema.FinalWordsSchema, final_words_chain_prefix)

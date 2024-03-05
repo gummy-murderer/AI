@@ -1,3 +1,6 @@
+from langchain.output_parsers import PydanticOutputParser
+from langchain.prompts.prompt import PromptTemplate
+
 synopsis = """
 주요 캐릭터:
 
@@ -25,3 +28,16 @@ characters = """
 8. 김쿵야 : 장난꾸러기, 재미있고 유쾌한 성격으로 주변 사람들을 즐겁게 함, 마술사, 기발한 마술과 재치 있는 퍼포먼스로 사람들을 놀라게 함
 9. 플레이어 : 플레이어는 탐정 역할로 이 마을에 벌어진 살인사건을 조사하는 중임.
 """
+
+conversation_chain_suffix = """
+{format_instructions}
+{input}
+"""
+
+def prompt_template(schema, chain_prefix):
+    parser = PydanticOutputParser(pydantic_object=schema)
+    template = synopsis + chain_prefix + conversation_chain_suffix
+    prompt = PromptTemplate(template=template, 
+                            input_variables=["input"], 
+                            partial_variables={"format_instructions": parser.get_format_instructions()})
+    return prompt
