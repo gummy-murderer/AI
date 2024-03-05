@@ -1,9 +1,6 @@
 from langchain_community.callbacks import get_openai_callback
 import time
 
-from LLMs.langchain import chains
-from LLMs.langchain.prompt import prompts_schema
-from lib.validation_check import response_format
 from lib import const
 
 
@@ -47,31 +44,3 @@ def execute_conversation(chain_function, format_check_function, schema, inputs):
             if retry_attempts >= const.MAX_RETRY_LIMIT:
                 print("Exceeded maximum attempt limit, terminating response generation.")
                 break  # Ensure function exits after max retries
-
-
-# scenario
-def generate_intro(key: str, inputs: str):
-    intro_chain = chains.define_intro_chain(key)
-    return execute_conversation(intro_chain, response_format, prompts_schema.IntroSchema, inputs)
-
-def generate_victim(key: str, inputs: str):
-    victim_chain = chains.define_victim_chain(key)
-    return execute_conversation(victim_chain, response_format, prompts_schema.GenerateVictimSchema, inputs)
-
-def generate_final_words(key: str, inputs: str):
-    final_words_chain = chains.define_final_words_chain(key)
-    return execute_conversation(final_words_chain, response_format, prompts_schema.FinalWordsSchema, inputs)
-
-# user
-def generate_conversation_with_user(key: str, inputs: str):
-    conversation_with_user_chain = chains.define_conversation_with_user_chain(key)
-    return execute_conversation(conversation_with_user_chain, response_format, prompts_schema.ConversationWithUserSchema, inputs)
-
-def generate_conversation_between_npc(key: str, inputs: str):
-    conversation_between_npc_chain = chains.define_conversation_between_npc_chain(key)
-    return execute_conversation(conversation_between_npc_chain, response_format, prompts_schema.ConversationBetweenNPCSchema, inputs)
-
-def generate_conversation_between_npcs_each(key: str, inputs: str):
-    conversation_between_npcs_each_chain = chains.define_conversation_between_npcs_each_chain(key)
-    return execute_conversation(conversation_between_npcs_each_chain, response_format, prompts_schema.ConversationBetweenNPCEachSchema, inputs)
-

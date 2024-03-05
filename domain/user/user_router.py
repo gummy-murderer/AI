@@ -1,12 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from typing import Optional, List
-import json
 
 from domain.user import user_crud
 from domain.user.schema import user_router_schema
-from LLMs.langchain import chatbot
+from LLMs.langchain import generator
 from lib.validation_check import check_openai_api_key
-from discord_bot.discord_bot import send_message
 
 
 router = APIRouter(
@@ -37,7 +35,7 @@ async def conversation_with_user(conversation_user_schema: user_router_schema.Co
                                     receiver_name = conversation_user_schema.receiver.name)
     
     input_data_json, input_data_pydantic = user_crud.conversation_with_user_input(conversation_user_schema)
-    answer, tokens, execution_time = chatbot.generate_conversation_with_user(api_key, input_data_pydantic)
+    answer, tokens, execution_time = generator.generate_conversation_with_user(api_key, input_data_pydantic)
 
     final_response = {
         "answer": answer.dict(), 
@@ -59,7 +57,7 @@ async def conversation_between_npc(conversation_npc_schema: user_router_schema.C
     
     input_data_json, input_data_pydantic = user_crud.conversation_between_npc_input(conversation_npc_schema)
     
-    answer, tokens, execution_time = chatbot.generate_conversation_between_npc(api_key, input_data_pydantic)
+    answer, tokens, execution_time = generator.generate_conversation_between_npc(api_key, input_data_pydantic)
 
     final_response = {
         "answer": answer.dict(), 
@@ -70,10 +68,9 @@ async def conversation_between_npc(conversation_npc_schema: user_router_schema.C
 
 @router.post("/conversation_between_npcs_each", 
              description="npc와 npc간의 대화를 하나씩 생성해 주는 API입니다.", 
-             response_model=user_router_schema.ConversationNPCOutput, 
+             response_model=user_router_schema.ConversationNPCEachOutput, 
              tags=["user"])
 async def conversation_between_npcs_each(conversation_npcs_each_schema: user_router_schema.ConversationNPCEachInput):
-    print(conversation_npcs_each_schema.model_dump_json(indent=2))
     # chatDay, previousStory 이용 안함
 
     api_key = validate_request_data(conversation_npcs_each_schema.secretKey, 
@@ -81,10 +78,10 @@ async def conversation_between_npcs_each(conversation_npcs_each_schema: user_rou
     
     input_data_json, input_data_pydantic = user_crud.conversation_between_npc_each_input(conversation_npcs_each_schema)
     
-    answer, tokens, execution_time = chatbot.generate_conversation_between_npcs_each(api_key, input_data_pydantic)
+    answer, tokens, execution_time = generator.generate_conversation_between_npcs_each(api_key, input_data_pydantic, conversation_npcs_each_schema.state)
 
     final_response = {
-        "answer": answer, 
+        "answer": answer.dict(), 
         "tokens": tokens
     }
     return final_response
