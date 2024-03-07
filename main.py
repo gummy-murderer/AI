@@ -54,7 +54,7 @@ async def startup_event():
 app.add_middleware(CustomMiddleware)
 
 # Starting Discord bot asynchronously
-asyncio.create_task(run())
+# asyncio.create_task(run())
 
 # Including API routers
 app.include_router(user_router.router)

@@ -16,17 +16,9 @@ synopsis = """
 - 결말: 탐정은 모든 대화를 통해 범인을 추리해야 함. 범인을 정확히 지목하면 게임에서 승리, 실패 시 게임 오버.
 """
 
-characters = """
-등장인물
-1. 촌장 : 거만하고 게으른 성격
-2. 레오 : 용감함, 용기 있게 행동함, 뮤지션, 노래를 부르듯이 대답함
-3. 소피아 : 지혜로움, 깊은 통찰력과 현명한 판단을 가짐, 조용함, 대화보다는 관찰을 선호함
-4. 알렉스 : 모험적임, 새로운 것을 경험하려는 강한 욕구를 가짐, 떠돌이, 여러 마을을 떠돌아 다니는 떠돌이임
-5. 자스민 : 회의적, 주변 사건에 대해 의심을 품으며 진실을 탐구함, 학자, 지식을 추구하고 책과 연구에 몰두함
-6. 애쉬 : 유머러스함, 재치 있고 유머러스한 성격을 지님, 유머러스한 말투, 대화 중에 종종 재치 있는 농담을 섞어 말함
-7. 짠짠영 : 기발함, 독창적이고 창의적인 생각으로 눈길을 끔, 발명가, 새롭고 혁신적인 아이디어로 다양한 발명품을 만듦
-8. 김쿵야 : 장난꾸러기, 재미있고 유쾌한 성격으로 주변 사람들을 즐겁게 함, 마술사, 기발한 마술과 재치 있는 퍼포먼스로 사람들을 놀라게 함
-9. 플레이어 : 플레이어는 탐정 역할로 이 마을에 벌어진 살인사건을 조사하는 중임.
+synopsis2 = """
+주요 캐릭터: 유능한 탐정(플레이어), 지혜로운 촌장, 다양한 주민들. 
+스토리: 플레이어는 살인 사건 해결 의뢰를 받고, 마을을 조사해 범인 추적. 낮에는 힌트 수집, 밤에는 새 살인 발생. 결말은 범인 정확히 지목 시 승리.
 """
 
 conversation_chain_suffix = """
@@ -36,7 +28,7 @@ conversation_chain_suffix = """
 
 def prompt_template(schema, chain_prefix):
     parser = PydanticOutputParser(pydantic_object=schema)
-    template = synopsis + chain_prefix + conversation_chain_suffix
+    template = synopsis2 + chain_prefix + conversation_chain_suffix
     prompt = PromptTemplate(template=template, 
                             input_variables=["input"], 
                             partial_variables={"format_instructions": parser.get_format_instructions()})
