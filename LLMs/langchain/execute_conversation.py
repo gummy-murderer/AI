@@ -1,6 +1,7 @@
 from langchain_community.callbacks import get_openai_callback
 import time
 
+from tts.tts import define_text_to_speech
 from lib import const
 
 
@@ -35,6 +36,16 @@ def execute_conversation(chain_function, format_check_function, schema, inputs):
             execution_time = round(end_time - start_time, 3)
 
             answer = schema(**format_check_function(response))
+            
+            # generate_intro - answer.content 값이 있는지 확인
+            # if hasattr(answer, 'content') and answer.content:
+            #     tts_answer = define_text_to_speech(answer.greeting + answer.content + answer.closing)
+            # conversation_with_user - answer.chatContent 값이 있는지 확인
+            # elif hasattr(answer, 'chatContent') and answer.chatContent:
+            #     tts_answer = define_text_to_speech(answer.chatContent)
+            # else:
+            #     tts_answer = None
+            
             if answer:
                 return answer, tokens, execution_time
         except:
