@@ -4,5 +4,8 @@
 # Server log
 *.log
 
+# Files
+*.wav
+
 # etc
 __pycache__/
