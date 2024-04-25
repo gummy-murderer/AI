@@ -43,8 +43,8 @@ jobs:
           key: ${{ secrets.EC2_PEMKEY }}
           script: |
             # Stop and remove the existing container
-            # sudo docker stop my-container || true
-            # sudo docker rm my-container || true
+            sudo docker stop my-container || true
+            sudo docker rm my-container || true
 
             # Pull the latest image
             sudo docker pull ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
@@ -58,4 +58,4 @@ jobs:
               ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Clean up unused Docker images
-            # sudo docker image prune -af
+            sudo docker image prune -af
