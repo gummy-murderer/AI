@@ -33,8 +33,8 @@ final_words_chain_prefix_2 = """
 gameResult 기반 살인자 마지막 한마디 생성. 'victory': 살인자의 패배, 'defeat': 살인자의 승리. 4문장 이내.
 """
 
-intro_prompt = prompt_template(prompts_schema.IntroSchema, intro_chain_prefix_2)
+intro_prompt = prompt_template(prompts_schema.IntroSchema, intro_chain_prefix)
                               
-generate_victim_prompt = prompt_template(prompts_schema.GenerateVictimSchema, generate_victim_prefix_2)
+generate_victim_prompt = prompt_template(prompts_schema.GenerateVictimSchema, generate_victim_prefix)
 
-final_words_prompt = prompt_template(prompts_schema.FinalWordsSchema, final_words_chain_prefix_2)
+final_words_prompt = prompt_template(prompts_schema.FinalWordsSchema, final_words_chain_prefix)

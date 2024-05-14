@@ -37,7 +37,7 @@ conversation_between_npc_each_last_chain_prefix = """
 5. PreviousChatContents의 내용을 참고하여 해당 대화를 마무리 짓는 마지막 말을 만들어야 함
 """
 
-conversation_with_user_prompt = prompt_template(prompts_schema.ConversationWithUserSchema, conversation_with_user_chain_prefix_2)
+conversation_with_user_prompt = prompt_template(prompts_schema.ConversationWithUserSchema, conversation_with_user_chain_prefix)
 
 conversation_between_npc_prompt = prompt_template(prompts_schema.ConversationBetweenNPCSchema, conversation_between_npc_chain_prefix)
 

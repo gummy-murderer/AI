@@ -28,7 +28,7 @@ conversation_chain_suffix = """
 
 def prompt_template(schema, chain_prefix):
     parser = PydanticOutputParser(pydantic_object=schema)
-    template = synopsis2 + chain_prefix + conversation_chain_suffix
+    template = synopsis + chain_prefix + conversation_chain_suffix
     prompt = PromptTemplate(template=template, 
                             input_variables=["input"], 
                             partial_variables={"format_instructions": parser.get_format_instructions()})
