@@ -1,7 +1,8 @@
 from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
 
-MODEL = "gpt-4-1106-preview"
+MODEL = "gpt-4o"
+# MODEL = "gpt-4-1106-preview"
 
 
 def define_llm_chain(key, prompt):
@@ -9,5 +10,5 @@ def define_llm_chain(key, prompt):
     return LLMChain(
         prompt=prompt,
         llm=llm,
-        verbose=False,
+        verbose=True,
     )

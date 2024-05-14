@@ -35,6 +35,7 @@ def execute_conversation(chain_function, format_check_function, schema, inputs):
             execution_time = round(end_time - start_time, 3)
 
             answer = schema(**format_check_function(response))
+            
             if answer:
                 return answer, tokens, execution_time
         except:
