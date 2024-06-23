@@ -43,16 +43,14 @@ jobs:
           key: ${{ secrets.EC2_PEMKEY }}
           script: |
             # Stop and remove the existing container
-            sudo docker stop my-container || true
-            sudo docker rm my-container || true
-
-            mkdir test
+            docker stop my-container || true
+            docker rm my-container || true
 
             # Pull the latest image
-            sudo docker pull ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker pull ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Run the new container
-            sudo docker run --name my-container -d -p 80:8000 \
+            docker run --name my-container -d -p 80:8000 \
               -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
               -e MY_KEY=${{ secrets.MY_KEY }} \
               -e DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }} \
@@ -60,4 +58,4 @@ jobs:
               ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Clean up unused Docker images
-            sudo docker image prune -af
+            docker image prune -af
