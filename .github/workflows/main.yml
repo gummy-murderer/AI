@@ -46,6 +46,8 @@ jobs:
             sudo docker stop my-container || true
             sudo docker rm my-container || true
 
+            mkdir test
+
             # Pull the latest image
             sudo docker pull ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
