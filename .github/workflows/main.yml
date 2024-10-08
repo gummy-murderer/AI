@@ -55,7 +55,6 @@ jobs:
                 docker run -d \
                   --name ${{ env.CONTAINER_NAME }} \
                   -p 8002:8000 \
-                  -v /home/ubuntu/security/bear-murder-ai/.env:/app/.env \
                   --env OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
                   --env MY_KEY=${{ secrets.MY_KEY }} \
                   ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
