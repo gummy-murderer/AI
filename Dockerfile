@@ -6,8 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir --upgrade pip \
-    && curl -sSL https://install.python-poetry.org | python3 - \
-    && export PATH="$PATH:/root/.local/bin"
+    && pip install poetry
 
 COPY pyproject.toml poetry.lock ./
 
