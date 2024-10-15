@@ -35,6 +35,7 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
+            game_management.times,
             game_management.names
         )
         self.hint_investigations[game_data.gameNo] = HintInvestigation(
@@ -48,6 +49,7 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
+            game_management.times,
             game_management.names
         )
 
@@ -57,6 +59,7 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
+            game_management.times,
             game_management.names
         )
 
@@ -97,10 +100,10 @@ class GameService:
         return self.question_generations[gameNo].generate_questions(npcName, keyWord, keyWordType)
 
     # NPC와 대화를 진행하는 메서드
-    def talk_to_npc(self, gameNo, npcName, questionIndex, keyWord, keyWordType):
+    def talk_to_npc(self, gameNo, npcName, keyWord, keyWordType):
         if gameNo not in self.question_generations:
             raise ValueError(f"Game ID {gameNo} not found in question generations.")
-        return self.question_generations[gameNo].talk_to_npc(npcName, questionIndex, keyWord, keyWordType)
+        return self.question_generations[gameNo].talk_to_npc(npcName, keyWord, keyWordType)
 
     # 범행 장소를 조사하는 메서드
     def investigate_location(self, gameNo, location_name):

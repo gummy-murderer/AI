@@ -36,7 +36,6 @@ async def talk_to_npc(request: Request, answer_data: game_schema.AnswerRequest):
         response = game_service.talk_to_npc(
             answer_data.gameNo, 
             answer_data.npcName, 
-            answer_data.questionIndex, 
             answer_data.keyWord, 
             answer_data.keyWordType
         )

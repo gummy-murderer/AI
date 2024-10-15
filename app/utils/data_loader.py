@@ -20,6 +20,9 @@ def load_places_data():
 def load_weapons_data():
     return load_json_file(os.path.join("resources", "data", "weapons.json"))
 
+def load_times_data():
+    return load_json_file(os.path.join("resources", "data", "times.json"))
+
 def load_names_data():
     return load_json_file(os.path.join("resources", "data", "names.json"))
 

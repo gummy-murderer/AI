@@ -5,6 +5,7 @@ from app.utils.data_loader import (
     load_personalities_data,
     load_places_data,
     load_weapons_data,
+    load_times_data,
     load_names_data,
     load_wealth_data,
     load_scenarios_data
@@ -19,6 +20,7 @@ class GameManagement:
         self.personalities = load_personalities_data()["personalities"]
         self.places = load_places_data()["places"]
         self.weapons = load_weapons_data()["weapons"]
+        self.times = load_times_data()["times"]
         self.names = load_names_data()["names"]
         self.wealth = load_wealth_data()["wealth"]
         self.scenarios = load_scenarios_data()["scenarios"]
