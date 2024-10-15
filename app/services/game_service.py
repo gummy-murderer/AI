@@ -185,9 +185,16 @@ class GameService:
     #========================================================================================
 
     # 취조를 시작하는 메서드(증거 제공)
-    def new_interrogation(self, gameNo, npc_name, weapon):
+    def new_interrogation(self, gameNo, npc_name):
+        if gameNo in self.interrogations.keys():
+            interrogation: Interrogation = self.interrogations[gameNo]
+            interrogation.start_interrogation(npc_name)
+        else:
+            raise ValueError(f"{gameNo}번 게임은 존재하지 않습니다.")
+
+
+    def submit_evidence(self, gameNo, npc_name):
         interrogation: Interrogation = self.interrogations[gameNo]
-        interrogation.start_interrogation(npc_name, weapon)
 
     # 취조 시 자유 대화하는 메서드
     def generation_interrogation_response(self, gameNo, npc_name, content):

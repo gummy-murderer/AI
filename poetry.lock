@@ -776,26 +776,26 @@ files = [
 
 [[package]]
 name = "langchain"
-version = "0.3.3"
+version = "0.2.16"
 description = "Building applications with LLMs through composability"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain-0.3.3-py3-none-any.whl", hash = "sha256:05ac98c674853c2386d043172820e37ceac9b913aaaf1e51217f0fc424112c72"},
-    {file = "langchain-0.3.3.tar.gz", hash = "sha256:6435882996a029a60c61c356bbe51bab4a8f43a54210f5f03e3c4474d19d1842"},
+    {file = "langchain-0.2.16-py3-none-any.whl", hash = "sha256:8f59ee8b45f268df4b924ea3b9c63e49286efa756d16b3f6a9de5c6e502c36e1"},
+    {file = "langchain-0.2.16.tar.gz", hash = "sha256:ffb426a76a703b73ac69abad77cd16eaf03dda76b42cff55572f592d74944166"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.8.3,<4.0.0"
 async-timeout = {version = ">=4.0.0,<5.0.0", markers = "python_version < \"3.11\""}
-langchain-core = ">=0.3.10,<0.4.0"
-langchain-text-splitters = ">=0.3.0,<0.4.0"
+langchain-core = ">=0.2.38,<0.3.0"
+langchain-text-splitters = ">=0.2.0,<0.3.0"
 langsmith = ">=0.1.17,<0.2.0"
 numpy = [
-    {version = ">=1,<2", markers = "python_version < \"3.12\""},
     {version = ">=1.26.0,<2.0.0", markers = "python_version >= \"3.12\""},
+    {version = ">=1,<2", markers = "python_version < \"3.12\""},
 ]
-pydantic = ">=2.7.4,<3.0.0"
+pydantic = ">=1,<3"
 PyYAML = ">=5.3"
 requests = ">=2,<3"
 SQLAlchemy = ">=1.4,<3"
@@ -803,26 +803,25 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<9.0.0"
 
 [[package]]
 name = "langchain-community"
-version = "0.3.2"
+version = "0.2.17"
 description = "Community contributed LangChain integrations."
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain_community-0.3.2-py3-none-any.whl", hash = "sha256:fffcd484c7674e81ceaa72a809962338bfb17ec8f9e0377ce4e9d884e6fe8ca5"},
-    {file = "langchain_community-0.3.2.tar.gz", hash = "sha256:469bf5357a08c915cebc4c506dca4617eec737d82a9b6e340df5f3b814dc89bc"},
+    {file = "langchain_community-0.2.17-py3-none-any.whl", hash = "sha256:d07c31b641e425fb8c3e7148ad6a62e1b54a9adac6e1173021a7dd3148266063"},
+    {file = "langchain_community-0.2.17.tar.gz", hash = "sha256:b0745c1fcf1bd532ed4388f90b47139d6a6c6ba48a87aa68aa32d4d6bb97259d"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.8.3,<4.0.0"
 dataclasses-json = ">=0.5.7,<0.7"
-langchain = ">=0.3.3,<0.4.0"
-langchain-core = ">=0.3.10,<0.4.0"
-langsmith = ">=0.1.125,<0.2.0"
+langchain = ">=0.2.16,<0.3.0"
+langchain-core = ">=0.2.39,<0.3.0"
+langsmith = ">=0.1.112,<0.2.0"
 numpy = [
-    {version = ">=1,<2", markers = "python_version < \"3.12\""},
     {version = ">=1.26.0,<2.0.0", markers = "python_version >= \"3.12\""},
+    {version = ">=1,<2", markers = "python_version < \"3.12\""},
 ]
-pydantic-settings = ">=2.4.0,<3.0.0"
 PyYAML = ">=5.3"
 requests = ">=2,<3"
 SQLAlchemy = ">=1.4,<3"
@@ -830,22 +829,22 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<9.0.0"
 
 [[package]]
 name = "langchain-core"
-version = "0.3.10"
+version = "0.2.41"
 description = "Building applications with LLMs through composability"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain_core-0.3.10-py3-none-any.whl", hash = "sha256:146be6bf2d3dc0d6f4feb46ef082182cf57b056e8163d45278529cd7b7343d2f"},
-    {file = "langchain_core-0.3.10.tar.gz", hash = "sha256:63b9a3d03b52dba29cc248b752c574cdcb5fb04bd0fc5c76097fcbb7aaba5221"},
+    {file = "langchain_core-0.2.41-py3-none-any.whl", hash = "sha256:3278fda5ba9a05defae8bb19f1226032add6aab21917db7b3bc74e750e263e84"},
+    {file = "langchain_core-0.2.41.tar.gz", hash = "sha256:bc12032c5a298d85be754ccb129bc13ea21ccb1d6e22f8d7ba18b8da64315bb5"},
 ]
 
 [package.dependencies]
 jsonpatch = ">=1.33,<2.0"
-langsmith = ">=0.1.125,<0.2.0"
+langsmith = ">=0.1.112,<0.2.0"
 packaging = ">=23.2,<25"
 pydantic = [
-    {version = ">=2.5.2,<3.0.0", markers = "python_full_version < \"3.12.4\""},
     {version = ">=2.7.4,<3.0.0", markers = "python_full_version >= \"3.12.4\""},
+    {version = ">=1,<3", markers = "python_full_version < \"3.12.4\""},
 ]
 PyYAML = ">=5.3"
 tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<9.0.0"
@@ -853,33 +852,33 @@ typing-extensions = ">=4.7"
 
 [[package]]
 name = "langchain-openai"
-version = "0.2.2"
+version = "0.1.25"
 description = "An integration package connecting OpenAI and LangChain"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain_openai-0.2.2-py3-none-any.whl", hash = "sha256:3a203228cb38e4711ebd8c0a3bd51854e447f1d017e8475b6467b07ce7dd3e88"},
-    {file = "langchain_openai-0.2.2.tar.gz", hash = "sha256:9ae8e2ec7d1ca84fd3bfa82186724528d68e1510a1dc9cdf617a7c669b7a7768"},
+    {file = "langchain_openai-0.1.25-py3-none-any.whl", hash = "sha256:f0b34a233d0d9cb8fce6006c903e57085c493c4f0e32862b99063b96eaedb109"},
+    {file = "langchain_openai-0.1.25.tar.gz", hash = "sha256:eb116f744f820247a72f54313fb7c01524fba0927120d4e899e5e4ab41ad3928"},
 ]
 
 [package.dependencies]
-langchain-core = ">=0.3.9,<0.4.0"
+langchain-core = ">=0.2.40,<0.3.0"
 openai = ">=1.40.0,<2.0.0"
 tiktoken = ">=0.7,<1"
 
 [[package]]
 name = "langchain-text-splitters"
-version = "0.3.0"
+version = "0.2.4"
 description = "LangChain text splitting utilities"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain_text_splitters-0.3.0-py3-none-any.whl", hash = "sha256:e84243e45eaff16e5b776cd9c81b6d07c55c010ebcb1965deb3d1792b7358e83"},
-    {file = "langchain_text_splitters-0.3.0.tar.gz", hash = "sha256:f9fe0b4d244db1d6de211e7343d4abc4aa90295aa22e1f0c89e51f33c55cd7ce"},
+    {file = "langchain_text_splitters-0.2.4-py3-none-any.whl", hash = "sha256:2702dee5b7cbdd595ccbe43b8d38d01a34aa8583f4d6a5a68ad2305ae3e7b645"},
+    {file = "langchain_text_splitters-0.2.4.tar.gz", hash = "sha256:f7daa7a3b0aa8309ce248e2e2b6fc8115be01118d336c7f7f7dfacda0e89bf29"},
 ]
 
 [package.dependencies]
-langchain-core = ">=0.3.0,<0.4.0"
+langchain-core = ">=0.2.38,<0.3.0"
 
 [[package]]
 name = "langsmith"
@@ -896,8 +895,8 @@ files = [
 httpx = ">=0.23.0,<1"
 orjson = ">=3.9.14,<4.0.0"
 pydantic = [
-    {version = ">=1,<3", markers = "python_full_version < \"3.12.4\""},
     {version = ">=2.7.4,<3.0.0", markers = "python_full_version >= \"3.12.4\""},
+    {version = ">=1,<3", markers = "python_full_version < \"3.12.4\""},
 ]
 requests = ">=2,<3"
 requests-toolbelt = ">=1.0.0,<2.0.0"
@@ -1304,8 +1303,8 @@ files = [
 annotated-types = ">=0.6.0"
 pydantic-core = "2.23.4"
 typing-extensions = [
-    {version = ">=4.6.1", markers = "python_version < \"3.13\""},
     {version = ">=4.12.2", markers = "python_version >= \"3.13\""},
+    {version = ">=4.6.1", markers = "python_version < \"3.13\""},
 ]
 
 [package.extras]
@@ -1412,26 +1411,6 @@ files = [
 
 [package.dependencies]
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
-
-[[package]]
-name = "pydantic-settings"
-version = "2.5.2"
-description = "Settings management using Pydantic"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pydantic_settings-2.5.2-py3-none-any.whl", hash = "sha256:2c912e55fd5794a59bf8c832b9de832dcfdf4778d79ff79b708744eed499a907"},
-    {file = "pydantic_settings-2.5.2.tar.gz", hash = "sha256:f90b139682bee4d2065273d5185d71d37ea46cfe57e1b5ae184fc6a0b2484ca0"},
-]
-
-[package.dependencies]
-pydantic = ">=2.7.0"
-python-dotenv = ">=0.21.0"
-
-[package.extras]
-azure-key-vault = ["azure-identity (>=1.16.0)", "azure-keyvault-secrets (>=4.8.0)"]
-toml = ["tomli (>=2.0.1)"]
-yaml = ["pyyaml (>=6.0.1)"]
 
 [[package]]
 name = "pyhumps"
@@ -2032,4 +2011,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "00257c7b7fa0d41cc630dd8d18729525eef259f10876c9a7288d78d0e1f4198c"
+content-hash = "d619435570b92d057e35038b5683dee41ec9a7b910b8e9f1c6f0d8ab9aebcb35"
