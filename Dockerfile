@@ -3,13 +3,16 @@ FROM python:3.10-slim-buster AS builder
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir --upgrade pip \
-    && pip install pipenv
+    && curl -sSL https://install.python-poetry.org | python3 - \
+    && export PATH="$PATH:/root/.local/bin"
 
-COPY Pipfile Pipfile.lock ./
+COPY pyproject.toml poetry.lock ./
 
-RUN pipenv install --system --deploy --ignore-pipfile
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi
 
 
 FROM python:3.10-slim-buster
