@@ -1,12 +1,13 @@
-name: CI/CD Pipeline for FastAPI Application
+name: CI/CD Pipeline
 
 env:
-  IMAGE_NAME: gummy-murderer-ai
+  IMAGE_NAME: bear-murderer-ai
+  CONTAINER_NAME: bear-murderer-ai
 
 on:
   push:
     branches: ["main"]
-
+    
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -29,7 +30,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy-to-server:
     needs: build-and-push
@@ -38,24 +39,25 @@ jobs:
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PEMKEY }}
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             # Stop and remove the existing container
-            sudo docker stop my-container || true
-            sudo docker rm my-container || true
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
 
             # Pull the latest image
-            sudo docker pull ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Run the new container
-            sudo docker run --name my-container -d -p 80:8000 \
-              -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-              -e MY_KEY=${{ secrets.MY_KEY }} \
-              -e DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }} \
-              -e DISCORD_CHANNEL_ID=${{ secrets.DISCORD_CHANNEL_ID }} \
-              ${{ secrets.DOCKER_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+                docker run -d \
+                  --name ${{ env.CONTAINER_NAME }} \
+                  -p 8002:8000 \
+                  --env OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+                  --env MY_KEY=${{ secrets.MY_KEY }} \
+                  ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Clean up unused Docker images
-            sudo docker image prune -af
+            docker image prune -af

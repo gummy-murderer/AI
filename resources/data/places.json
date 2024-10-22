@@ -1,72 +1,21 @@
 {
     "places": [
-        {
-            "placeNameEn": "MiskShop",
-            "placeNameKo": "잡화샵"
-        },
-        {
-            "placeNameEn": "PawnShop",
-            "placeNameKo": "전당포"
-        },
-        {
-            "placeNameEn": "Bank",
-            "placeNameKo": "은행"
-        },
-        {
-            "placeNameEn": "Beach",
-            "placeNameKo": "해변"
-        },
-        {
-            "placeNameEn": "UnderPig",
-            "placeNameKo": "돼지 우리"
-        },
-        {
-            "placeNameEn": "UnderBridge",
-            "placeNameKo": "남쪽 다리"
-        },
-        {
-            "placeNameEn": "LeftTree",
-            "placeNameKo": "서쪽 마을 나무 밑"
-        },
-        {
-            "placeNameEn": "LeftSea",
-            "placeNameKo": "서쪽 바다"
-        },
-        {
-            "placeNameEn": "LeftRock",
-            "placeNameKo": "서쪽 바다의 거대한 돌"
-        },
-        {
-            "placeNameEn": "Flower",
-            "placeNameKo": "꽃 가게"
-        },
-        {
-            "placeNameEn": "ConvenienceStore",
-            "placeNameKo": "편의점"
-        },
-        {
-            "placeNameEn": "Hotel",
-            "placeNameKo": "호텔"
-        },
-        {
-            "placeNameEn": "RealEstateAgancy",
-            "placeNameKo": "부동산"
-        },
-        {
-            "placeNameEn": "Salon",
-            "placeNameKo": "미용실"
-        },
-        {
-            "placeNameEn": "Plice",
-            "placeNameKo": "경찰서"
-        },
-        {
-            "placeNameEn": "Cafe",
-            "placeNameKo": "카페"
-        },
-        {
-            "placeNameEn": "Train",
-            "placeNameKo": "기차역"
-        }
+        {"id": "MiskShop", "place": {"en": "MiskShop", "ko": "잡화샵"}},
+        {"id": "PawnShop", "place": {"en": "PawnShop", "ko": "전당포"}},
+        {"id": "Bank", "place": {"en": "Bank", "ko": "은행"}},
+        {"id": "Beach", "place": {"en": "Beach", "ko": "해변"}},
+        {"id": "UnderPig", "place": {"en": "UnderPig", "ko": "돼지 우리"}},
+        {"id": "UnderBridge", "place": {"en": "UnderBridge", "ko": "남쪽 다리"}},
+        {"id": "LeftTree", "place": {"en": "LeftTree", "ko": "서쪽 마을 나무 밑"}},
+        {"id": "LeftSea", "place": {"en": "LeftSea", "ko": "서쪽 바다"}},
+        {"id": "LeftRock", "place": {"en": "LeftRock", "ko": "서쪽 바다의 거대한 돌"}},
+        {"id": "Flower", "place": {"en": "Flower", "ko": "꽃 가게"}},
+        {"id": "ConvenienceStore", "place": {"en": "ConvenienceStore", "ko": "편의점"}},
+        {"id": "Hotel", "place": {"en": "Hotel", "ko": "호텔"}},
+        {"id": "RealEstateAgancy", "place": {"en": "RealEstateAgancy", "ko": "부동산"}},
+        {"id": "Salon", "place": {"en": "Salon", "ko": "미용실"}},
+        {"id": "Police", "place": {"en": "Police", "ko": "경찰서"}},
+        {"id": "Cafe", "place": {"en": "Cafe", "ko": "카페"}},
+        {"id": "Train", "place": {"en": "Train", "ko": "기차역"}}
     ]
 }
