@@ -59,7 +59,6 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
-            game_management.times,
             game_management.names
         )
 
