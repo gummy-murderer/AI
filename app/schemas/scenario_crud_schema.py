@@ -50,6 +50,7 @@ class VictimGeneration(BaseModel):
     day: int
     murderer: MurdererInfo
     crimeScene: str
+    crimeTime: str
     method: str
     victim: str
     witness: str
@@ -68,3 +69,10 @@ class FinalWordsGeneration(BaseModel):
 
 class FinalWordsGenerationContainer(BaseModel):
     information: FinalWordsGeneration
+
+class TimeName(BaseModel):
+    timeNameEn: str
+    timeNameKo: str
+
+class TimesSchema(BaseModel):
+    times: List[TimeName]

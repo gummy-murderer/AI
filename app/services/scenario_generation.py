@@ -8,24 +8,26 @@ from app.utils.game_utils import (
     get_name,
     get_weapon_name,
     get_location_name,
+    get_time_name,
     get_personality_detail,
     get_feature_detail
 )
 
 # 게임 시나리오 생성
 class ScenarioGeneration:
-    def __init__(self, game_state, personalities, features, weapons, places, names):
+    def __init__(self, game_state, personalities, features, weapons, places, times, names):
         self.game_state = game_state
         self.personalities = personalities
         self.features = features
         self.weapons = weapons
         self.places = places
+        self.times = times
         self.names = names
 
     # 초기 게임 시나리오를 생성하는 메서드
     def create_initial_scenario(self):
         lang = self.game_state["language"]
-        context = create_context(self.game_state, self.personalities, self.features, self.weapons, self.places, self.names)
+        context = create_context(self.game_state, self.personalities, self.features, self.weapons, self.places, self.times, self.names)
         
         # 선택된 NPC들로 시나리오를 생성하도록 설정
         selected_npcs = random.sample(self.game_state["npcs"], min(5, len(self.game_state["npcs"])))
@@ -38,7 +40,7 @@ class ScenarioGeneration:
         prompt = (
             f"Create a detailed story in {lang} for a murder mystery game set in the village of Bear Town. "
             f"The story should include only the following characters and their interactions:\n\n{npc_descriptions}\n\n"
-            f"The murder victim is {context['murdered_npc']['name']} who was killed with {context['murder_weapon']} at {context['murder_location']}. "
+            f"The murder victim is {context['murdered_npc']['name']} who was killed with {context['murder_weapon']} at {context['murder_location']} during {context['murder_time']}. "
             f"The story should be intriguing and provide depth to each character's background and potential motives, without revealing the murderer. "
             f"Write the story in {lang}."
         )
@@ -95,7 +97,7 @@ class ScenarioGeneration:
     # 촌장의 편지를 생성하는 메서드
     def generate_chief_letter(self):
         lang = self.game_state["language"]
-        context = create_context(self.game_state, self.personalities, self.features, self.weapons, self.places, self.names)
+        context = create_context(self.game_state, self.personalities, self.features, self.weapons, self.places, self.times, self.names)
 
         if lang == "ko":
             closing_example = "베어 타운 촌장 올림"
@@ -232,8 +234,8 @@ class ScenarioGeneration:
     def update_game_state_with_murder(self):
         lang = self.game_state["language"]
         
-        print("Current npcs:", [get_name(npc['name'], 'ko', self.names) for npc in self.game_state['npcs']])
-        print("Current alive:", {get_name(name, 'ko', self.names): status for name, status in self.game_state['alive'].items()})
+        print("Current NPCs:", [get_name(npc['name'], 'ko', self.names) for npc in self.game_state['npcs']])
+        print("Current Alive:", {get_name(name, 'ko', self.names): status for name, status in self.game_state['alive'].items()})
         
         remaining_npcs = [npc for npc in self.game_state['npcs'] if self.game_state['alive'][npc['name']]]
         print("Remaining NPCs:", [get_name(npc['name'], 'ko', self.names) for npc in remaining_npcs])
@@ -248,18 +250,25 @@ class ScenarioGeneration:
                 break
         self.game_state['murdered_npcs'].append({"name": new_victim['name'], "order": self.game_state['current_day'] + 1})
 
-        # 새로운 범행 도구와 장소를 할당
+        # 새로운 범행 도구, 장소, 시간을 할당
         murderer = self.game_state['murderer']
         new_weapon = random.choice(murderer["preferredWeapons"])
         new_location = random.choice(murderer["preferredLocations"])
+        new_time = random.choice(murderer["preferredTimes"])
         if 'murder_weapons' not in self.game_state:
             self.game_state['murder_weapons'] = [new_weapon]
         else:
             self.game_state['murder_weapons'].append(new_weapon)
+        
         if 'murder_locations' not in self.game_state:
             self.game_state['murder_locations'] = [new_location]
         else:
             self.game_state['murder_locations'].append(new_location)
+        
+        if 'murder_times' not in self.game_state:
+            self.game_state['murder_times'] = [new_time]
+        else:
+            self.game_state['murder_times'].append(new_time)
 
         self.game_state['current_day'] += 1
 
@@ -267,6 +276,7 @@ class ScenarioGeneration:
             "victim": get_name(new_victim['name'], lang, self.names),
             "method": get_weapon_name(new_weapon, self.weapons, lang),
             "crimeScene": get_location_name(new_location, self.places, lang),
+            "crimeTime": get_time_name(new_time, self.times, lang),
             "current_day": self.game_state['current_day']
         }
 
@@ -294,14 +304,16 @@ class ScenarioGeneration:
         victim_name = get_name(self.game_state["murdered_npc"]["name"], lang, self.names)
         crime_scene = self.game_state["murder_location"]  # 영어 ID 반환
         murder_weapon = self.game_state["murder_weapon"]  # 영어 ID 반환
+        murder_time = self.game_state["murder_time"]  # 영어 ID 반환
 
-        daily_summary = f"day {self.game_state['current_day']} - {crime_scene}에서 {victim_name}이(가) {murder_weapon}에 의해 살해됨."
+        daily_summary = f"day {self.game_state['current_day']} - {crime_scene}에서 {murder_time}에 {victim_name}이(가) {murder_weapon}에 의해 살해됨."
 
         result = {
             "answer": {
                 "victim": victim_name,
                 "crimeScene": crime_scene,
                 "method": murder_weapon,
+                "crimeTime": murder_time,
                 "witness": alibis_and_witness["witness"]["name"],
                 "eyewitnessInformation": alibis_and_witness["witness"]["information"],
                 "dailySummary": daily_summary,
@@ -344,6 +356,7 @@ class ScenarioGeneration:
     def select_new_murder_details(self):
         self.game_state['murder_weapon'] = random.choice(self.game_state['murderer']["preferredWeapons"])
         self.game_state['murder_location'] = random.choice(self.game_state['murderer']["preferredLocations"])
+        self.game_state['murder_time'] = random.choice(self.game_state['murderer']["preferredTimes"])
 
     def create_murder_summary(self):
         # 이 메서드는 필요에 따라 구현하세요. 현재는 빈 딕셔너리를 반환합니다.
@@ -355,11 +368,13 @@ class ScenarioGeneration:
         victim_name = get_name(self.game_state['murdered_npc']["name"], lang, self.names)
         crime_scene = self.game_state["murder_location"]  # 영어 ID 반환
         murder_weapon = self.game_state["murder_weapon"]  # 영어 ID 반환
+        murder_time = self.game_state["murder_time"]  # 영어 ID 반환
 
         result = {
             "victim": victim_name,
             "crimeScene": crime_scene,
             "method": murder_weapon,
+            "crimeTime": murder_time,
         }
         return result
 

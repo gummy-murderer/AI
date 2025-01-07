@@ -5,11 +5,12 @@ from app.utils.data_loader import (
     load_personalities_data,
     load_places_data,
     load_weapons_data,
+    load_times_data,
     load_names_data,
     load_wealth_data,
     load_scenarios_data
 )
-from app.utils.game_utils import get_name, get_weapon_name, get_location_name, get_personality_detail, get_feature_detail
+from app.utils.game_utils import get_name, get_weapon_name, get_location_name, get_time_name, get_personality_detail, get_feature_detail
 
 # 개별 게임 상태 관리
 class GameManagement:
@@ -19,6 +20,7 @@ class GameManagement:
         self.personalities = load_personalities_data()["personalities"]
         self.places = load_places_data()["places"]
         self.weapons = load_weapons_data()["weapons"]
+        self.times = load_times_data()["times"]
         self.names = load_names_data()["names"]
         self.wealth = load_wealth_data()["wealth"]
         self.scenarios = load_scenarios_data()["scenarios"]
@@ -61,8 +63,14 @@ class GameManagement:
         for npc in selected_npcs:
             npc["preferredLocations"] = random.sample([place["id"] for place in places], min(3, len(places)))
 
+        # 시간을 랜덤으로 할당
+        times = load_times_data()["times"]
+        for npc in selected_npcs:
+            npc["preferredTimes"] = random.sample([time["id"] for time in times], min(3, len(times)))
+
         murder_weapon = random.choice(murderer_npc["preferredWeapons"])
         murder_location = random.choice(murderer_npc["preferredLocations"])
+        murder_time = random.choice(murderer_npc["preferredTimes"])
 
         self.game_state = {
             "language": language,
@@ -71,6 +79,7 @@ class GameManagement:
             "murdered_npc": murdered_npc,
             "murder_weapon": murder_weapon,
             "murder_location": murder_location,
+            "murder_time": murder_time,
             "conversations_left": 5,
             "npcs": selected_npcs,
             "places": self.places,
@@ -96,6 +105,7 @@ class GameManagement:
                 "feature": get_feature_detail(npc["feature"], self.features, lang),
                 "preferredWeapons": [get_weapon_name(weapon, self.weapons, lang) for weapon in npc["preferredWeapons"]],
                 "preferredLocations": [get_location_name(location, self.places, lang) for location in npc["preferredLocations"]],
+                "preferredTimes": [get_time_name(time, self.times, lang) for time in npc["preferredTimes"]],
                 "alive": self.game_state['alive'][npc['name']],
                 "alibi": self.game_state.get('alibis', {}).get(get_name(npc["name"], lang, self.names), "")
             }
@@ -126,6 +136,7 @@ class GameManagement:
             "murdered_npc": murdered_npc_info,
             "murder_weapon": get_weapon_name(self.game_state["murder_weapon"], self.weapons, lang),
             "murder_location": get_location_name(self.game_state["murder_location"], self.places, lang),
+            "murder_time": get_time_name(self.game_state["murder_time"], self.times, lang),
             "current_day": self.game_state["current_day"],
             "alive": self.game_state["alive"],
             "murdered_npcs": self.game_state["murdered_npcs"],
