@@ -1,16 +1,12 @@
 {
     "times": [
-        { "id": "Rat", "time": { "en": "Rat Hour (11 PM - 1 AM)", "ko": "자시 (23시 - 1시)" } },
-        { "id": "Ox", "time": { "en": "Ox Hour (1 AM - 3 AM)", "ko": "축시 (1시 - 3시)" } },
-        { "id": "Tiger", "time": { "en": "Tiger Hour (3 AM - 5 AM)", "ko": "인시 (3시 - 5시)" } },
-        { "id": "Rabbit", "time": { "en": "Rabbit Hour (5 AM - 7 AM)", "ko": "묘시 (5시 - 7시)" } },
-        { "id": "Dragon", "time": { "en": "Dragon Hour (7 AM - 9 AM)", "ko": "진시 (7시 - 9시)" } },
-        { "id": "Snake", "time": { "en": "Snake Hour (9 AM - 11 AM)", "ko": "사시 (9시 - 11시)" } },
-        { "id": "Horse", "time": { "en": "Horse Hour (11 AM - 1 PM)", "ko": "오시 (11시 - 13시)" } },
-        { "id": "Goat", "time": { "en": "Goat Hour (1 PM - 3 PM)", "ko": "미시 (13시 - 15시)" } },
-        { "id": "Monkey", "time": { "en": "Monkey Hour (3 PM - 5 PM)", "ko": "신시 (15시 - 17시)" } },
-        { "id": "Rooster", "time": { "en": "Rooster Hour (5 PM - 7 PM)", "ko": "유시 (17시 - 19시)" } },
-        { "id": "Dog", "time": { "en": "Dog Hour (7 PM - 9 PM)", "ko": "술시 (19시 - 21시)" } },
-        { "id": "Pig", "time": { "en": "Pig Hour (9 PM - 11 PM)", "ko": "해시 (21시 - 23시)" } }
+        { "id": "Eleven", "time": { "en": "11 PM", "ko": "밤 11시" } },
+        { "id": "Twelve", "time": { "en": "12 AM", "ko": "자정" } },
+        { "id": "One", "time": { "en": "1 AM", "ko": "새벽 1시" } },
+        { "id": "Two", "time": { "en": "2 AM", "ko": "새벽 2시" } },
+        { "id": "Three", "time": { "en": "3 AM", "ko": "새벽 3시" } },
+        { "id": "Four", "time": { "en": "4 AM", "ko": "새벽 4시" } },
+        { "id": "Five", "time": { "en": "5 AM", "ko": "아침 5시" } },
+        { "id": "Six", "time": { "en": "6 AM", "ko": "아침 6시" } }
     ]
 }

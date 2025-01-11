@@ -75,19 +75,15 @@ class QuestionGeneration:
 
         question = self.clean_response(get_gpt_response(question_prompt, max_tokens=80))
 
-        questions = [
-            {"number": 1, "question": question}
-        ]
-
-        self.game_state["current_questions"] = questions
-        return questions
+        self.game_state["current_questions"] = question
+        return question
 
     # NPC와 대화하는 메서드
     def talk_to_npc(self, npc_name, keyword=None, keyword_type=None):
         if "current_questions" not in self.game_state:
             raise ValueError("No questions generated")
 
-        question = self.game_state["current_questions"][0]["question"]
+        question = self.game_state["current_questions"]
         conversation_chain = get_conversation_chain()
 
         lang = self.game_state["language"]

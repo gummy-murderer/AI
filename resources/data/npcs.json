@@ -9,7 +9,7 @@
             "feature": "Musician",
             "preferredWeapons": ["Bat", "Hammer", "Pan"],
             "preferredLocations": ["Cafe", "Beach", "Train"],
-            "preferredTimes": ["Horse", "Monkey", "Dog"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "Revenge"
         },
         {
@@ -21,7 +21,7 @@
             "feature": "Quiet",
             "preferredWeapons": ["Dropper", "Jagged_Glass", "Umbrella"],
             "preferredLocations": ["Bank", "Hotel", "Salon"],
-            "preferredTimes": ["Ox", "Snake", "Pig"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "Abandonment"
         },
         {
@@ -33,7 +33,7 @@
             "feature": "Nocturnal",
             "preferredWeapons": ["Scrap", "Crutch", "Plunger"],
             "preferredLocations": ["UnderBridge", "LeftSea", "ConvenienceStore"],
-            "preferredTimes": ["Rat", "Ox", "Tiger"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "Bullying"
         },
         {
@@ -45,7 +45,7 @@
             "feature": "Catlike",
             "preferredWeapons": ["Lollipop_02", "Broom", "Rolling_Pin"],
             "preferredLocations": ["Cafe", "Salon", "Hotel"],
-            "preferredTimes": ["Tiger", "Rabbit", "Monkey"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "DarkOrganization"
         },
         {
@@ -57,7 +57,7 @@
             "feature": "Wanderer",
             "preferredWeapons": ["Axe", "Mace", "Poleaxe"],
             "preferredLocations": ["Train", "Beach", "LeftRock"],
-            "preferredTimes": ["Dragon", "Horse", "Dog"],
+            "preferredTimes": ["Three", "Four", "Five"],
             "criminalScenario": "HatesHumans"
         },
         {
@@ -69,7 +69,7 @@
             "feature": "OldStyle",
             "preferredWeapons": ["Umbrella", "Cane", "Ham"],
             "preferredLocations": ["Bank", "Hotel", "PawnShop"],
-            "preferredTimes": ["Snake", "Horse", "Goat"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "DemonSacrifice"
         },
         {
@@ -81,7 +81,7 @@
             "feature": "Nocturnal",
             "preferredWeapons": ["Scrap", "Jagged_Glass", "Plunger"],
             "preferredLocations": ["UnderBridge", "LeftSea", "ConvenienceStore"],
-            "preferredTimes": ["Rat", "Ox", "Tiger"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "MonsterFeeding"
         },
         {
@@ -93,7 +93,7 @@
             "feature": "Storyteller",
             "preferredWeapons": ["Pen", "Lollipop_02", "Umbrella"],
             "preferredLocations": ["Cafe", "Beach", "Flower"],
-            "preferredTimes": ["Rabbit", "Snake", "Monkey"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "PleasureKiller"
         },
         {
@@ -105,7 +105,7 @@
             "feature": "Musician",
             "preferredWeapons": ["Hammer", "Pan", "Broom"],
             "preferredLocations": ["Cafe", "Hotel", "Train"],
-            "preferredTimes": ["Horse", "Monkey", "Dog"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "PerformanceArt"
         },
         {
@@ -117,7 +117,7 @@
             "feature": "Quiet",
             "preferredWeapons": ["Dropper", "Jagged_Glass", "Umbrella"],
             "preferredLocations": ["Bank", "RealEstateAgancy", "Police"],
-            "preferredTimes": ["Snake", "Horse", "Dog"],
+            "preferredTimes": ["Three", "Four", "Five"],
             "criminalScenario": "AcademicCuriosity"
         },
         {
@@ -129,7 +129,7 @@
             "feature": "Explorer",
             "preferredWeapons": ["Axe", "PitchFork", "Bone"],
             "preferredLocations": ["Beach", "LeftTree", "UnderPig"],
-            "preferredTimes": ["Dragon", "Horse", "Monkey"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "PreciousRing"
         },
         {
@@ -141,7 +141,7 @@
             "feature": "Naturalist",
             "preferredWeapons": ["Dropper", "Bone", "PitchFork"],
             "preferredLocations": ["LeftTree", "Beach", "Flower"],
-            "preferredTimes": ["Rabbit", "Dragon", "Snake"],
+            "preferredTimes": ["Four", "Five", "Six"],
             "criminalScenario": "EnvironmentalExtremist"
         },
         {
@@ -153,7 +153,7 @@
             "feature": "Humorous speech",
             "preferredWeapons": ["Baby_Hammer", "Pan", "Plunger"],
             "preferredLocations": ["Cafe", "Salon", "Train"],
-            "preferredTimes": ["Horse", "Monkey", "Dog"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "HiddenMadness"
         },
         {
@@ -165,7 +165,7 @@
             "feature": "Magician",
             "preferredWeapons": ["Lollipop_02", "Umbrella", "Dropper"],
             "preferredLocations": ["Cafe", "Hotel", "Train"],
-            "preferredTimes": ["Rabbit", "Horse", "Monkey"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "GlassesKill"
         },
         {
@@ -177,7 +177,7 @@
             "feature": "Attention Seeker",
             "preferredWeapons": ["Hammer", "Jagged_Glass", "Pan"],
             "preferredLocations": ["Cafe", "Salon", "Hotel"],
-            "preferredTimes": ["Horse", "Goat", "Rooster"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "AttentionSeeker"
         },
         {
@@ -189,7 +189,7 @@
             "feature": "Collector",
             "preferredWeapons": ["Poleaxe", "Mace", "Dropper"],
             "preferredLocations": ["PawnShop", "Hotel", "RealEstateAgancy"],
-            "preferredTimes": ["Snake", "Horse", "Dog"],
+            "preferredTimes": ["Three", "Four", "Five"],
             "criminalScenario": "Temptation"
         },
         {
@@ -201,7 +201,7 @@
             "feature": "Quirky",
             "preferredWeapons": ["Baby_Hammer", "Lollipop_02", "Plunger"],
             "preferredLocations": ["Cafe", "Train", "ConvenienceStore"],
-            "preferredTimes": ["Rabbit", "Horse", "Monkey"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "Unknown"
         },
         {
@@ -213,7 +213,7 @@
             "feature": "Painter",
             "preferredWeapons": ["Broom", "Dropper", "Pan"],
             "preferredLocations": ["Flower", "Cafe", "Salon"],
-            "preferredTimes": ["Dragon", "Snake", "Dog"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "Unknown"
         }
     ]
