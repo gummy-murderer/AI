@@ -267,6 +267,7 @@ LLM 모델의 답변으로 특정 형태가 필요한 경우가 있다. 아래�
 ### - 협업 툴
 <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
 
+
 # 🔍 참고자료
 
 <br/>

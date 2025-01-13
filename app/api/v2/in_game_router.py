@@ -10,18 +10,18 @@ router = APIRouter(
 )
 
 # NPC에게 할 질문을 생성하는 라우터
-@router.post("/generate-questions", 
+@router.post("/generate-question", 
             description="NPC에게 할 질문을 생성하는 API 입니다.")
-async def generate_questions(request: Request, question_data: game_schema.QuestionRequest):
+async def generate_question(request: Request, question_data: game_schema.QuestionRequest):
     game_service: GameService = request.app.state.game_service
     try:
-        questions = game_service.generate_npc_questions(
+        question = game_service.generate_npc_questions(
             question_data.gameNo, 
             question_data.npcName, 
             question_data.keyWord, 
             question_data.keyWordType
         )
-        return {"questions": questions}
+        return {"question": question}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -36,7 +36,6 @@ async def talk_to_npc(request: Request, answer_data: game_schema.AnswerRequest):
         response = game_service.talk_to_npc(
             answer_data.gameNo, 
             answer_data.npcName, 
-            answer_data.questionIndex, 
             answer_data.keyWord, 
             answer_data.keyWordType
         )

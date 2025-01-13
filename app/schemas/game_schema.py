@@ -6,6 +6,7 @@ class NPC(BaseModel):
     personality: str
     is_alive: bool = True
     alibi: str = None
+    preferredTimes: List[str] = []
 
 class Location(BaseModel):
     name: str
@@ -27,6 +28,7 @@ class GameState(BaseModel):
     game_over: bool
     current_questions: List[str] = []
     user_language: str = "en"
+    murder_times: List[str] = []
 
 class NPCInfo(BaseModel):
     npcName: str
@@ -86,7 +88,6 @@ class QuestionRequest(BaseModel):
 class AnswerRequest(BaseModel):
     gameNo: int
     npcName: str
-    questionIndex: int
     keyWord: str
     keyWordType: str = "weapon"
 

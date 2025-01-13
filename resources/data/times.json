@@ -1,0 +1,12 @@
+{
+    "times": [
+        { "id": "Eleven", "time": { "en": "11 PM", "ko": "밤 11시" } },
+        { "id": "Twelve", "time": { "en": "12 AM", "ko": "자정" } },
+        { "id": "One", "time": { "en": "1 AM", "ko": "새벽 1시" } },
+        { "id": "Two", "time": { "en": "2 AM", "ko": "새벽 2시" } },
+        { "id": "Three", "time": { "en": "3 AM", "ko": "새벽 3시" } },
+        { "id": "Four", "time": { "en": "4 AM", "ko": "새벽 4시" } },
+        { "id": "Five", "time": { "en": "5 AM", "ko": "아침 5시" } },
+        { "id": "Six", "time": { "en": "6 AM", "ko": "아침 6시" } }
+    ]
+}

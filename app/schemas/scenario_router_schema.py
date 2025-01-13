@@ -53,6 +53,7 @@ class IntroAnswer(BaseModel):
 class VictimAnswer(BaseModel):
     victim: str
     crimeScene: str
+    crimeTime: str
     method: str
     witness: str
     eyewitnessInformation: str

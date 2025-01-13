@@ -14,27 +14,39 @@ router = APIRouter(
     prefix="/api/v2/interrogation",
     tags=["INTERROGATION"]
 )
+from pydantic import BaseModel
+
+class NewInterRequest(BaseModel):
+    gameNo: int
+    npcName: str = "박동식"
+    murderWeapon: str = "뿅망치"
+    murderLocation: str = "잡화샵"
+    murderTime: str = "아침 6시"
+
+class NewInterResponse(BaseModel):
+    message: str
+
+class ConversationRequest(BaseModel):
+    gameNo: int
+    npcName: str = "박동식"
+    content: str
+
+class ConversationResponse(BaseModel):
+    response: str
+    heartRate: int
 
 @router.post("/new", 
              description="새로운 취조를 시작하는 API 입니다.",
              response_model=NewInterResponse
             )
 async def new_interrogation(request: Request, input: NewInterRequest):
-    try:
-        game_service: GameService = request.app.state.game_service
-        game_service.new_interrogation(input.game_no, input.npc_name)
-        return {"message": "New interrogation started"}
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
-@router.post("/submit",
-             description="취조 증거품을 제출하는 API 입니다.\n type: weapon, time_of_death, location",
-            #  response_model=SubmitEvidenceResponse
-             )
-async def submit_evidence(request: Request, input: SubmitEvidenceRequest):
     game_service: GameService = request.app.state.game_service
-    return None
+    data = {
+        "murder_weapon": input.murderWeapon ,
+        "murder_location": input.murderLocation, 
+        "murder_time": input.murderTime
+    }
+    game_service.new_interrogation(input.gameNo, input.npcName, data)
 
 
 @router.post("/conversation", 

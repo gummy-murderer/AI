@@ -35,6 +35,7 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
+            game_management.times,
             game_management.names
         )
         self.hint_investigations[game_data.gameNo] = HintInvestigation(
@@ -48,6 +49,7 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
+            game_management.times,
             game_management.names
         )
 
@@ -57,6 +59,7 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
+            game_management.times,
             game_management.names
         )
 
@@ -97,10 +100,10 @@ class GameService:
         return self.question_generations[gameNo].generate_questions(npcName, keyWord, keyWordType)
 
     # NPC와 대화를 진행하는 메서드
-    def talk_to_npc(self, gameNo, npcName, questionIndex, keyWord, keyWordType):
+    def talk_to_npc(self, gameNo, npcName, keyWord, keyWordType):
         if gameNo not in self.question_generations:
             raise ValueError(f"Game ID {gameNo} not found in question generations.")
-        return self.question_generations[gameNo].talk_to_npc(npcName, questionIndex, keyWord, keyWordType)
+        return self.question_generations[gameNo].talk_to_npc(npcName, keyWord, keyWordType)
 
     # 범행 장소를 조사하는 메서드
     def investigate_location(self, gameNo, location_name):
@@ -185,16 +188,9 @@ class GameService:
     #========================================================================================
 
     # 취조를 시작하는 메서드(증거 제공)
-    def new_interrogation(self, gameNo, npc_name):
-        if gameNo in self.interrogations.keys():
-            interrogation: Interrogation = self.interrogations[gameNo]
-            interrogation.start_interrogation(npc_name)
-        else:
-            raise ValueError(f"{gameNo}번 게임은 존재하지 않습니다.")
-
-
-    def submit_evidence(self, gameNo, npc_name):
+    def new_interrogation(self, gameNo, npc_name, data):
         interrogation: Interrogation = self.interrogations[gameNo]
+        interrogation.start_interrogation(npc_name, data)
 
     # 취조 시 자유 대화하는 메서드
     def generation_interrogation_response(self, gameNo, npc_name, content):

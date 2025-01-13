@@ -7,7 +7,9 @@
             "wealth": "Medium",
             "personality": "Brave",
             "feature": "Musician",
-            "preferredLocations": ["Park", "Alley", "Forest"],
+            "preferredWeapons": ["Bat", "Hammer", "Pan"],
+            "preferredLocations": ["Cafe", "Beach", "Train"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "Revenge"
         },
         {
@@ -17,7 +19,9 @@
             "wealth": "Moderate",
             "personality": "Wise",
             "feature": "Quiet",
-            "preferredLocations": ["House", "Store", "Office"],
+            "preferredWeapons": ["Dropper", "Jagged_Glass", "Umbrella"],
+            "preferredLocations": ["Bank", "Hotel", "Salon"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "Abandonment"
         },
         {
@@ -27,7 +31,9 @@
             "wealth": "Low",
             "personality": "Mysterious",
             "feature": "Nocturnal",
-            "preferredLocations": ["Forest", "Park", "Alley"],
+            "preferredWeapons": ["Scrap", "Crutch", "Plunger"],
+            "preferredLocations": ["UnderBridge", "LeftSea", "ConvenienceStore"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "Bullying"
         },
         {
@@ -37,8 +43,9 @@
             "wealth": "Moderate",
             "personality": "Cheerful",
             "feature": "Catlike",
-            "preferredWeapons": ["Knife", "Poison", "Dagger"],
+            "preferredWeapons": ["Lollipop_02", "Broom", "Rolling_Pin"],
             "preferredLocations": ["Cafe", "Salon", "Hotel"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "DarkOrganization"
         },
         {
@@ -48,8 +55,9 @@
             "wealth": "High",
             "personality": "Adventurous",
             "feature": "Wanderer",
-            "preferredWeapons": ["Gun", "Rope", "Bat"],
-            "preferredLocations": ["Train", "Hotel", "Beach"],
+            "preferredWeapons": ["Axe", "Mace", "Poleaxe"],
+            "preferredLocations": ["Train", "Beach", "LeftRock"],
+            "preferredTimes": ["Three", "Four", "Five"],
             "criminalScenario": "HatesHumans"
         },
         {
@@ -59,7 +67,9 @@
             "wealth": "Moderate",
             "personality": "Reserved",
             "feature": "OldStyle",
-            "preferredLocations": ["Office", "House", "Bank"],
+            "preferredWeapons": ["Umbrella", "Cane", "Ham"],
+            "preferredLocations": ["Bank", "Hotel", "PawnShop"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "DemonSacrifice"
         },
         {
@@ -69,7 +79,9 @@
             "wealth": "Low",
             "personality": "Cunning",
             "feature": "Nocturnal",
-            "preferredLocations": ["Alley", "Forest", "Park"],
+            "preferredWeapons": ["Scrap", "Jagged_Glass", "Plunger"],
+            "preferredLocations": ["UnderBridge", "LeftSea", "ConvenienceStore"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "MonsterFeeding"
         },
         {
@@ -79,7 +91,9 @@
             "wealth": "Moderate",
             "personality": "Curious",
             "feature": "Storyteller",
-            "preferredLocations": ["Cafe", "Beach", "Park"],
+            "preferredWeapons": ["Pen", "Lollipop_02", "Umbrella"],
+            "preferredLocations": ["Cafe", "Beach", "Flower"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "PleasureKiller"
         },
         {
@@ -89,7 +103,9 @@
             "wealth": "Moderate",
             "personality": "Artistic",
             "feature": "Musician",
-            "preferredLocations": ["Cafe", "House", "Park"],
+            "preferredWeapons": ["Hammer", "Pan", "Broom"],
+            "preferredLocations": ["Cafe", "Hotel", "Train"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "PerformanceArt"
         },
         {
@@ -99,7 +115,9 @@
             "wealth": "High",
             "personality": "Skeptical",
             "feature": "Quiet",
-            "preferredLocations": ["Library", "Office", "House"],
+            "preferredWeapons": ["Dropper", "Jagged_Glass", "Umbrella"],
+            "preferredLocations": ["Bank", "RealEstateAgancy", "Police"],
+            "preferredTimes": ["Three", "Four", "Five"],
             "criminalScenario": "AcademicCuriosity"
         },
         {
@@ -109,7 +127,9 @@
             "wealth": "Low",
             "personality": "Optimistic",
             "feature": "Explorer",
-            "preferredLocations": ["Forest", "Beach", "Park"],
+            "preferredWeapons": ["Axe", "PitchFork", "Bone"],
+            "preferredLocations": ["Beach", "LeftTree", "UnderPig"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "PreciousRing"
         },
         {
@@ -119,8 +139,9 @@
             "wealth": "Moderate",
             "personality": "Observant",
             "feature": "Naturalist",
-            "preferredWeapons": ["Poison", "Rope", "Knife"],
-            "preferredLocations": ["Forest", "Park", "LeftTree"],
+            "preferredWeapons": ["Dropper", "Bone", "PitchFork"],
+            "preferredLocations": ["LeftTree", "Beach", "Flower"],
+            "preferredTimes": ["Four", "Five", "Six"],
             "criminalScenario": "EnvironmentalExtremist"
         },
         {
@@ -130,7 +151,9 @@
             "wealth": "High",
             "personality": "Humorous",
             "feature": "Humorous speech",
+            "preferredWeapons": ["Baby_Hammer", "Pan", "Plunger"],
             "preferredLocations": ["Cafe", "Salon", "Train"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "HiddenMadness"
         },
         {
@@ -140,7 +163,9 @@
             "wealth": "High",
             "personality": "Playful",
             "feature": "Magician",
-            "preferredLocations": ["Cafe", "Park", "Hotel"],
+            "preferredWeapons": ["Lollipop_02", "Umbrella", "Dropper"],
+            "preferredLocations": ["Cafe", "Hotel", "Train"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "GlassesKill"
         },
         {
@@ -150,7 +175,9 @@
             "wealth": "High",
             "personality": "Diligent",
             "feature": "Attention Seeker",
+            "preferredWeapons": ["Hammer", "Jagged_Glass", "Pan"],
             "preferredLocations": ["Cafe", "Salon", "Hotel"],
+            "preferredTimes": ["One", "Two", "Three"],
             "criminalScenario": "AttentionSeeker"
         },
         {
@@ -160,7 +187,9 @@
             "wealth": "High",
             "personality": "Creative",
             "feature": "Collector",
-            "preferredLocations": ["Cafe", "Train", "Park"],
+            "preferredWeapons": ["Poleaxe", "Mace", "Dropper"],
+            "preferredLocations": ["PawnShop", "Hotel", "RealEstateAgancy"],
+            "preferredTimes": ["Three", "Four", "Five"],
             "criminalScenario": "Temptation"
         },
         {
@@ -170,7 +199,9 @@
             "wealth": "High",
             "personality": "Creative",
             "feature": "Quirky",
-            "preferredLocations": ["Cafe", "Park", "Train"],
+            "preferredWeapons": ["Baby_Hammer", "Lollipop_02", "Plunger"],
+            "preferredLocations": ["Cafe", "Train", "ConvenienceStore"],
+            "preferredTimes": ["Eleven", "Twelve", "One"],
             "criminalScenario": "Unknown"
         },
         {
@@ -180,7 +211,9 @@
             "wealth": "High",
             "personality": "Meticulous",
             "feature": "Painter",
-            "preferredLocations": ["Park", "Cafe", "Train"],
+            "preferredWeapons": ["Broom", "Dropper", "Pan"],
+            "preferredLocations": ["Flower", "Cafe", "Salon"],
+            "preferredTimes": ["Two", "Three", "Four"],
             "criminalScenario": "Unknown"
         }
     ]
