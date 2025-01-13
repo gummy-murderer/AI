@@ -59,6 +59,7 @@ class GameService:
             game_management.features,
             game_management.weapons,
             game_management.places,
+            game_management.times,
             game_management.names
         )
 
@@ -187,9 +188,9 @@ class GameService:
     #========================================================================================
 
     # 취조를 시작하는 메서드(증거 제공)
-    def new_interrogation(self, gameNo, npc_name, weapon):
+    def new_interrogation(self, gameNo, npc_name, data):
         interrogation: Interrogation = self.interrogations[gameNo]
-        interrogation.start_interrogation(npc_name, weapon)
+        interrogation.start_interrogation(npc_name, data)
 
     # 취조 시 자유 대화하는 메서드
     def generation_interrogation_response(self, gameNo, npc_name, content):

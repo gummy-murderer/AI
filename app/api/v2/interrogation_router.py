@@ -11,7 +11,9 @@ from pydantic import BaseModel
 class NewInterRequest(BaseModel):
     gameNo: int
     npcName: str = "박동식"
-    weapon: str | None = None
+    murderWeapon: str = "뿅망치"
+    murderLocation: str = "잡화샵"
+    murderTime: str = "아침 6시"
 
 class NewInterResponse(BaseModel):
     message: str
@@ -31,7 +33,12 @@ class ConversationResponse(BaseModel):
             )
 async def new_interrogation(request: Request, input: NewInterRequest):
     game_service: GameService = request.app.state.game_service
-    game_service.new_interrogation(input.gameNo, input.npcName, input.weapon)
+    data = {
+        "murder_weapon": input.murderWeapon ,
+        "murder_location": input.murderLocation, 
+        "murder_time": input.murderTime
+    }
+    game_service.new_interrogation(input.gameNo, input.npcName, data)
 
     return {"message": "New interrogation started"}
 
