@@ -10,12 +10,13 @@ from app.utils.game_utils import (
     get_personality_detail,
     get_feature_detail,
     get_weapon_name,
-    get_location_name
+    get_location_name,
+    get_time_name
 )
 from app.core.logger_config import setup_logger
 logger = setup_logger()
 
-class Interrogation:
+class InterrogationService:
     def __init__(self, game_state, personalities, features, weapons, places, times, names):
         self.game_state = game_state
         self.personalities = personalities
@@ -24,6 +25,29 @@ class Interrogation:
         self.places = places
         self.times = times
         self.names = names
+    
+    def interrogation(self, npc_name: str, data: dict) -> dict:
+        lang = self.game_state["language"]
+
+        # 기존의 get_name 함수 활용
+        npc = next((npc for npc in self.game_state["npcs"] 
+                    if get_name(npc["name"], lang, self.names) == npc_name), None)
+        
+        # murdered_npc도 get_name 함수 활용
+        murdered = next((npc for npc in self.game_state["npcs"] 
+                        if npc["name"] == self.game_state["murdered_npc"]["name"]), None)
+        
+        # 기존 유틸리티 함수들 활용
+        weapon_name = get_weapon_name(data['murder_weapon'], self.weapons, lang)
+        location_name = get_location_name(data['murder_location'], self.places, lang)
+        time_name = get_time_name(data['murder_time'], self.times, lang)
+
+        if not self.game_state['interrogation']:
+            print("new game!")
+
+
+        if not self.game_state['interrogation']:
+            print("new game!")
 
     def start_interrogation(self, npc_name: str, data: dict) -> dict:
         """

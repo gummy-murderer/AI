@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 import random
 from typing import List
 from app.schemas import game_schema
@@ -189,12 +190,17 @@ class GameService:
 
     # 취조를 시작하는 메서드(증거 제공)
     def new_interrogation(self, gameNo, npc_name, data):
-        interrogation: Interrogation = self.interrogations[gameNo]
-        interrogation.start_interrogation(npc_name, data)
+        interrogation: Interrogation = self.interrogations.get(gameNo)
+        if not interrogation:
+            raise HTTPException(status_code=404, detail="Interrogation not found")
+
+        return interrogation.start_interrogation(npc_name, data)
 
     # 취조 시 자유 대화하는 메서드
     def generation_interrogation_response(self, gameNo, npc_name, content):
-        interrogation: Interrogation = self.interrogations[gameNo]
+        interrogation: Interrogation = self.interrogations.get(gameNo)
+        if not interrogation:
+            raise HTTPException(status_code=404, detail="Interrogation not found")
 
         response = interrogation.generate_interrogation_response(npc_name, content)
         return response
