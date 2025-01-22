@@ -37,7 +37,7 @@ class ConversationResponse(BaseModel):
 
 @router.post("/new", 
              description="새로운 취조를 시작하는 API 입니다.",
-             response_model=NewInterResponse
+            #  response_model=NewInterResponse
             )
 async def new_interrogation(request: Request, input: NewInterRequest):
     game_service: GameService = request.app.state.game_service
@@ -46,8 +46,10 @@ async def new_interrogation(request: Request, input: NewInterRequest):
         "murder_location": input.murderLocation, 
         "murder_time": input.murderTime
     }
-    game_service.new_interrogation(input.gameNo, input.npcName, data)
+    response = game_service.new_interrogation(input.gameNo, input.npcName, data)
 
+    # return {"message": "New interrogation started"}
+    return response
 
 @router.post("/conversation", 
              description="취조에서 자유대화하는 API 입니다.",
@@ -55,8 +57,8 @@ async def new_interrogation(request: Request, input: NewInterRequest):
             )
 async def interrogation(request: Request, input: ConversationRequest):
     game_service: GameService = request.app.state.game_service
-    try:
-        response = game_service.generation_interrogation_response(input.game_no, input.npc_name, input.content)
-    except TypeError as e:
-        raise HTTPException(status_code=404, detail=f"interrogation not found: {e}")
+    response = game_service.generation_interrogation_response(input.gameNo, input.npcName, input.content)
+    # try:
+    # except TypeError as e:
+    #     raise HTTPException(status_code=404, detail=f"interrogation not found: {e}")
     return response
