@@ -23,84 +23,18 @@ class QuestionGeneration:
         self.times = times
         self.names = names
 
-    # NPC에게 질문을 생성하는 메서드
-    def generate_questions(self, npc_name, keyword=None, keyword_type=None):
+    def talk_to_npc(self, npc_name, keyword=None, keyword_type=None):
         if 'scenario' not in self.game_state:
             self.game_state['scenario'] = {}
-
-        lang = self.game_state["language"]
-        npc = next((npc for npc in self.game_state["npcs"] if get_name(npc["name"], lang, self.names) == npc_name), None)
-        if not npc:
-            raise ValueError("NPC not found")
-
-        personality_key = npc["personality"]
-        feature_key = npc["feature"]
-
-        personality = next((p for p in self.personalities if p["id"] == personality_key), None)
-        feature = next((f for f in self.features if f["id"] == feature_key), None)
-
-        if personality is None or feature is None:
-            raise ValueError("Personality or feature not found in NPC data")
-
-        scenario_description = self.game_state["scenario"].get("description", "")
-
-        question_prompt = ""
-
-        # 무기에 대한 질문 생성
-        if keyword_type == "weapon":
-            weapon_name = get_weapon_name(keyword, self.weapons, lang)
-            question_prompt = (
-                f"Generate a concise question in {lang} for a player to ask an NPC named {npc_name} with the personality '{personality['personality'][lang]}' "
-                f"and feature '{feature['feature'][lang]}'. The NPC is a suspect in the following scenario: {scenario_description}. "
-                f"Ask them about their knowledge or possession of the weapon '{weapon_name}'."
-            )
-        # 장소에 대한 질문 생성
-        elif keyword_type == "place":
-            location_name = get_location_name(keyword, self.places, lang)
-            question_prompt = (
-                f"Generate a concise question in {lang} for a player to ask an NPC named {npc_name} with the personality '{personality['personality'][lang]}' "
-                f"and feature '{feature['feature'][lang]}'. The NPC is a suspect in the following scenario: {scenario_description}. "
-                f"Ask them about their connection to the location '{location_name}'."
-            )
-        # 시간에 대한 질문 생성
-        elif keyword_type == "time":
-            time_name = get_time_name(keyword, self.times, lang)
-            question_prompt = (
-                f"Generate a concise question in {lang} for a player to ask an NPC named {npc_name} with the personality '{personality['personality'][lang]}' "
-                f"and feature '{feature['feature'][lang]}'. The NPC is a suspect in the following scenario: {scenario_description}. "
-                f"Ask about their alibi or activities during the time '{time_name}'."
-            )
-        else:
-            raise ValueError("Invalid keyword_type")
-
-        question = self.clean_response(get_gpt_response(question_prompt, max_tokens=80))
-
-        self.game_state["current_questions"] = question
-        return question
-
-    # NPC와 대화하는 메서드
-    def talk_to_npc(self, npc_name, keyword=None, keyword_type=None):
-        if "current_questions" not in self.game_state:
-            raise ValueError("No questions generated")
-
-        question = self.game_state["current_questions"]
-        conversation_chain = get_conversation_chain()
-
+        
         lang = self.game_state["language"]
         npc = next((npc for npc in self.game_state["npcs"] if get_name(npc["name"], lang, self.names) == npc_name), None)
         if not npc:
             raise ValueError("NPC not found")
 
         is_murderer = npc == self.game_state["murderer"]
-
-        if 'scenario' not in self.game_state:
-            self.game_state['scenario'] = {}
-
         scenario_description = self.game_state["scenario"].get("description", "")
-
         response_prompt = ""
-
-        print("범인 여부 = ", is_murderer)
 
         # 무기에 대한 답변 생성
         if keyword_type == "weapon":
@@ -108,85 +42,99 @@ class QuestionGeneration:
             if keyword in npc["preferredWeapons"]:
                 if is_murderer:
                     response_prompt = (
-                        f"Generate a response in {lang} for the murderer NPC named {npc_name} with the personality '{npc['personality']}' "
-                        f"and feature '{npc['feature']}'. The NPC is asked about the weapon '{weapon_name}' which they actually prefer. "
-                        f"The response should show signs of nervousness, anger, or unusual behavior, subtly indicating their guilt. "
-                        f"Their reaction should be consistent with their personality but noticeably different from their usual demeanor. "
-                        f"However, they should not explicitly confirm their preference for the weapon."
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about the weapon '{weapon_name}'. Start directly with their opinion or experience. "
+                        f"They frequently use and really like this weapon, but should show slight nervousness or defensiveness when talking about it. "
+                        f"Make them either overexplain their legitimate reasons for using it or try to downplay their expertise with it. "
+                        f"Keep their personality traits consistent while showing this subtle unease."
                     )
                 else:
                     response_prompt = (
-                        f"Generate an enthusiastic response in {lang} for an innocent NPC named {npc_name} with the personality '{npc['personality']}' "
-                        f"and feature '{npc['feature']}'. The NPC is asked about the weapon '{weapon_name}' which they genuinely like and use often. "
-                        f"The response should clearly show their preference and excitement about this weapon. They might ask how the player knew about their preference "
-                        f"or share a personal story related to the weapon."
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about the weapon '{weapon_name}'. Start directly with their opinion or experience. "
+                        f"They should enthusiastically express their fondness for this weapon, mentioning either recent use, "
+                        f"how often they use it, or why they prefer it. Their excitement should match their personality."
                     )
             else:
                 response_prompt = (
-                    f"Generate a response in {lang} for an NPC named {npc_name} with the personality '{npc['personality']}' "
-                    f"and feature '{npc['feature']}'. The NPC is asked about the weapon '{weapon_name}' which they dislike or rarely use. "
-                    f"The response should clearly indicate their lack of preference for this weapon without mentioning any specific weapons they do prefer."
+                    f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                    f"and feature '{npc['feature']}' about the weapon '{weapon_name}'. Start directly with their opinion or experience. "
+                    f"They strongly dislike or never use this weapon. Have them explain in detail (2-3 sentences) why they avoid it, "
+                    f"including both their emotional reaction to it and a specific past experience or practical reason. "
+                    f"Their explanation should clearly reflect their personality traits."
                 )
+
         # 장소에 대한 답변 생성
         elif keyword_type == "place":
             location_name = get_location_name(keyword, self.places, lang)
             if keyword in npc["preferredLocations"]:
                 if is_murderer:
                     response_prompt = (
-                        f"Generate a response in {lang} for the murderer NPC named {npc_name} with the personality '{npc['personality']}' "
-                        f"and feature '{npc['feature']}'. The NPC is asked about the location '{location_name}' which they actually prefer. "
-                        f"The response should show signs of defensiveness, attempts to change the subject, or unusual behavior, subtly indicating their guilt. "
-                        f"Their reaction should be consistent with their personality but noticeably different from their usual demeanor. "
-                        f"However, they should not explicitly confirm their preference for the location."
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about the location '{location_name}'. Start directly with their opinion or experience. "
+                        f"They frequently visit and like this place, but should become slightly evasive or contradictory when discussing recent visits. "
+                        f"Make them either change details about when they were last there or become overly specific about unimportant details. "
+                        f"Keep their personality traits consistent while showing this subtle unease."
                     )
                 else:
                     response_prompt = (
-                        f"Generate an excited response in {lang} for an innocent NPC named {npc_name} with the personality '{npc['personality']}' "
-                        f"and feature '{npc['feature']}'. The NPC is asked about the location '{location_name}' which they genuinely like and visit often. "
-                        f"The response should clearly show their fondness for this place. They might ask how the player knew about their preference "
-                        f"or share a memorable experience they had at this location."
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about the location '{location_name}'. Start directly with their opinion or experience. "
+                        f"They should clearly express their attachment to this place, mentioning either a recent visit, "
+                        f"how often they go there, or why they love it. Their enthusiasm should match their personality."
                     )
             else:
                 response_prompt = (
-                    f"Generate a response in {lang} for an NPC named {npc_name} with the personality '{npc['personality']}' "
-                    f"and feature '{npc['feature']}'. The NPC is asked about the location '{location_name}' which they dislike or rarely visit. "
-                    f"The response should clearly indicate their lack of preference for this place without mentioning any specific locations they do prefer."
+                    f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                    f"and feature '{npc['feature']}' about the location '{location_name}'. Start directly with their opinion or experience. "
+                    f"They actively avoid or strongly dislike this place. Have them explain in detail (2-3 sentences) their aversion, "
+                    f"including both their emotional response to the place and a specific memory or practical reason they avoid it. "
+                    f"Their explanation should clearly reflect their personality traits."
                 )
+
         # 시간에 대한 답변 생성
         elif keyword_type == "time":
             time_name = get_time_name(keyword, self.times, lang)
-            if keyword in npc["preferredTimes"]:
+            if keyword in npc["preferredTimes"]:  # 깨어있던 시간
                 if is_murderer:
                     response_prompt = (
-                        f"Generate a response in {lang} for the murderer NPC named {npc_name} with the personality '{npc['personality']}' "
-                        f"and feature '{npc['feature']}'. The NPC is asked about their activities during '{time_name}', which is a time they are often active. "
-                        f"The response should show signs of evasiveness, inconsistency, or unusual behavior, subtly indicating their guilt. "
-                        f"Their reaction should be consistent with their personality but noticeably different from their usual demeanor. "
-                        f"However, they should not explicitly confirm their preference for this time period."
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about their activities during '{time_name}'. Start directly with their opinion or experience. "
+                        f"They were awake at this time. Include one subtle suspicious element: either a small inconsistency "
+                        f"in their story, a slight hesitation, or an unnecessarily defensive tone. "
+                        f"Keep the response natural and matching their personality, with just a hint that something might be off."
                     )
                 else:
                     response_prompt = (
-                        f"Generate a cheerful response in {lang} for an innocent NPC named {npc_name} with the personality '{npc['personality']}' "
-                        f"and feature '{npc['feature']}'. The NPC is asked about their activities during '{time_name}', which is a time they genuinely enjoy. "
-                        f"The response should clearly show their preference for this time period. They might ask how the player knew about their schedule "
-                        f"or share what they typically do during this time."
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about their activities during '{time_name}'. Start directly with their opinion or experience. "
+                        f"They were awake and doing their usual activities. Include one or two specific but mundane details "
+                        f"that match their personality and daily routine."
                     )
-            else:
-                response_prompt = (
-                    f"Generate a response in {lang} for an NPC named {npc_name} with the personality '{npc['personality']}' "
-                    f"and feature '{npc['feature']}'. The NPC is asked about their activities during '{time_name}', which is a time they are usually not active. "
-                    f"The response should indicate their unfamiliarity with this time period without mentioning any specific times they prefer to be active."
-                )
+            else:  # 자고 있던 시간
+                if is_murderer:
+                    response_prompt = (
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about '{time_name}'. Start directly with their opinion or experience. "
+                        f"They claim to have been sleeping, but their response should be detailed (2-3 sentences). Include their usual sleep routine, "
+                        f"a small detail that seems slightly off - like being unusually specific about their sleep time, "
+                        f"and perhaps a comment about why they need their rest at this time. Keep it subtle and natural to their personality."
+                    )
+                else:
+                    response_prompt = (
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"and feature '{npc['feature']}' about '{time_name}'. Start directly with their opinion or experience. "
+                        f"They were sleeping at this time. Have them explain in detail (2-3 sentences) about their sleep habits, "
+                        f"including their usual bedtime routine, why they prefer sleeping at this time, and how it fits with their daily schedule. "
+                        f"Their explanation should naturally reflect their personality."
+                    )
         else:
-            response_prompt = (
-                f"Generate a response in {lang} for an NPC named {npc_name} with the personality '{npc['personality']}' "
-                f"and feature '{npc['feature']}'. The NPC is asked: '{question}'. The response should clearly reflect their personality and feature "
-                f"without revealing any specific preferences for weapons, locations, or times."
-            )
+            raise ValueError("Invalid keyword_type")
 
         response_content = self.clean_response(get_gpt_response(response_prompt, max_tokens=150))
-
-        add_conversation(question, response_content)
+        
+        # 대화 기록 추가 및 남은 대화 횟수 감소
+        add_conversation(f"{keyword_type}: {keyword}", response_content)
         self.game_state["conversations_left"] -= 1
 
         return response_content
