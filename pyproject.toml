@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "bear-murderer-ai"
+version = "0.1.0"
+description = ""
+authors = ["Minkyo <isakin.tyrfing@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi-slim = "^0.115.2"
+uvicorn = "^0.31.1"
+langchain-openai = "^0.1.20"
+langchain = "^0.2.12"
+langchain-community = "^0.2.11"
+python-dotenv = "^1.0.1"
+fastapi-camelcase = "^2.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

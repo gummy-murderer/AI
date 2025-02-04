@@ -8,6 +8,7 @@ from app.services.hint_investigation import HintInvestigation
 from app.services.scenario_generation import ScenarioGeneration
 
 from app.services.interrogation import Interrogation
+from app.services.interrogation_service import InterrogationService
 
 # 여러 게임 상태 관리
 class GameService:
@@ -54,7 +55,7 @@ class GameService:
             game_management.names
         )
 
-        self.interrogations[game_data.gameNo] = Interrogation(
+        self.interrogations[game_data.gameNo] = InterrogationService(
             game_state,
             game_management.personalities,
             game_management.features,
@@ -190,17 +191,37 @@ class GameService:
 
     # 취조를 시작하는 메서드(증거 제공)
     def new_interrogation(self, gameNo, npc_name, data):
-        interrogation: Interrogation = self.interrogations.get(gameNo)
+        interrogation: InterrogationService = self.interrogations.get(gameNo)
         if not interrogation:
-            raise HTTPException(status_code=404, detail="Interrogation not found")
+            raise HTTPException(status_code=404, detail=f"game number not found(ID: {gameNo})")
 
-        return interrogation.start_interrogation(npc_name, data)
+        response = interrogation.interrogation(npc_name=npc_name, start_data=data)
+        return convert_dict_keys(response)
 
     # 취조 시 자유 대화하는 메서드
     def generation_interrogation_response(self, gameNo, npc_name, content):
-        interrogation: Interrogation = self.interrogations.get(gameNo)
+        interrogation: InterrogationService = self.interrogations.get(gameNo)
         if not interrogation:
             raise HTTPException(status_code=404, detail="Interrogation not found")
 
-        response = interrogation.generate_interrogation_response(npc_name, content)
-        return response
+        response = interrogation.interrogation(npc_name=npc_name, content=content)
+        return convert_dict_keys(response)
+    
+
+def snake_to_camel(snake_str):
+    """스네이크 케이스 문자열을 카멜 케이스로 변환합니다."""
+    components = snake_str.split('_')
+    return components[0] + ''.join(x.title() for x in components[1:])
+
+def convert_dict_keys(d):
+    """딕셔너리의 모든 키를 스네이크 케이스에서 카멜 케이스로 변환합니다.
+    중첩된 딕셔너리와 리스트도 처리합니다."""
+    if isinstance(d, list):
+        return [convert_dict_keys(i) if isinstance(i, (dict, list)) else i for i in d]
+    elif isinstance(d, dict):
+        new_dict = {}
+        for key, value in d.items():
+            new_key = snake_to_camel(key)
+            new_dict[new_key] = convert_dict_keys(value) if isinstance(value, (dict, list)) else value
+        return new_dict
+    return d
