@@ -39,7 +39,6 @@ class InterrogationService:
         """
         # 취조 시작 데이터 생성
         if start_data:
-            print("new game!")
             logger.info(f"✨ New interrogation started with npc_name: {npc_name}")
 
             self.new_interrogation(npc_name, start_data)
@@ -113,13 +112,13 @@ class InterrogationService:
         # 대화 내용 저장
         interrogation_data["conversation_history"].append({"role": npc_name, "content": interrogation_data["response"]})
 
-        # print("="*50)
-        # from pprint import pprint
-        # pprint(self.game_state['interrogation'])
-        # print("="*50)
+        print("="*50)
+        from pprint import pprint
+        pprint(self.game_state['interrogation'])
+        print("="*50)
 
         logger.info(f"▶️  Interrogation with npc_name: {npc_name}, status: {interrogation_data['status']}")
-        logger.info(f"▶️  Interrogation response: {interrogation_data['response']}")
+        logger.info(f"▶️  Interrogation with heart_rate: {'??'}, response: {interrogation_data['response']}")
 
         return {
             "npc_name": npc_name,

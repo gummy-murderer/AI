@@ -32,6 +32,7 @@ class InterrogationResponse(BaseModel):
              response_model=InterrogationResponse
             )
 async def new_interrogation(request: Request, input: NewInterRequest):
+    print(input)
     game_service: GameService = request.app.state.game_service
     data = {
         "murder_weapon": input.murderWeapon ,
