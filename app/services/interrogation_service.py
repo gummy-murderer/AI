@@ -112,14 +112,13 @@ class InterrogationService:
         # 대화 내용 저장
         interrogation_data["conversation_history"].append({"role": npc_name, "content": interrogation_data["response"]})
 
-        print("="*50)
-        from pprint import pprint
-        pprint(self.game_state['interrogation'])
-        # pprint(self.game_state)
-        print("="*50)
+        # print("="*50)
+        # from pprint import pprint
+        # pprint(self.game_state['interrogation'])
+        # print("="*50)
 
-        logger.info(f"▶️  Interrogation with npc_name: {npc_name}, status: {interrogation_data['status']}")
-        logger.info(f"▶️  Interrogation with heart_rate: {'??'}, response: {interrogation_data['response']}")
+        logger.info(f"🔎 Interrogation with npc_name: {npc_name}, status: {interrogation_data['status']}")
+        logger.info(f"🔎 Interrogation with heart_rate: {'??'}, response: {interrogation_data['response']}")
 
         return {
             "npc_name": npc_name,
@@ -154,20 +153,12 @@ class InterrogationService:
         # Calculate heart rate
         heart_rate = 60
 
-        print(f"weapon[id]: {weapon['id']}  /  self.game_state[murder_weapon]: {self.game_state['murder_weapon']}")
         if weapon['id'] == self.game_state['murder_weapon']:
             heart_rate += 20
-            print(f"👍 currect weapon, heart_rate: {heart_rate}")
-
-        print(f"place[id]: {place['id']}  /  self.game_state[murder_location]: {self.game_state['murder_location']}")
         if place['id'] == self.game_state['murder_location']:
             heart_rate += 20
-            print(f"👍 currect location, heart_rate: {heart_rate}")
-
-        print(f"time[id]: {time['id']}  /  self.game_state[murder_time]: {self.game_state['murder_time']}")
         if time['id'] == self.game_state['murder_time']:
             heart_rate += 20
-            print(f"👍 currect time, heart_rate: {heart_rate}")
 
         interrogation_data = {
             "lang": lang,
@@ -196,7 +187,7 @@ class InterrogationService:
         }
 
         self.game_state['interrogation'] = interrogation_data
-        logger.info(f"▶️  Interrogation started with npc_name: {npc_name}, status: {interrogation_data['status']}")
+        # logger.info(f"▶️  Interrogation started with npc_name: {npc_name}, status: {interrogation_data['status']}")
         return interrogation_data
 
     def _clean_response(self, response: str) -> str:
