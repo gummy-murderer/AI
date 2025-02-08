@@ -155,10 +155,13 @@ class InterrogationService:
 
         if weapon['id'] == self.game_state['murder_weapon']:
             heart_rate += 20
+            print(f"👍 currect weapon, heart_rate: {heart_rate}")
         if place['id'] == self.game_state['murder_location']:
             heart_rate += 20
+            print(f"👍 currect location, heart_rate: {heart_rate}")
         if time['id'] == self.game_state['murder_time']:
             heart_rate += 20
+            print(f"👍 currect time, heart_rate: {heart_rate}")
 
         interrogation_data = {
             "lang": lang,
