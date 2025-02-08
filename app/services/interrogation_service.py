@@ -115,6 +115,7 @@ class InterrogationService:
         print("="*50)
         from pprint import pprint
         pprint(self.game_state['interrogation'])
+        # pprint(self.game_state)
         print("="*50)
 
         logger.info(f"▶️  Interrogation with npc_name: {npc_name}, status: {interrogation_data['status']}")
@@ -153,12 +154,17 @@ class InterrogationService:
         # Calculate heart rate
         heart_rate = 60
 
+        print(f"weapon[id]: {weapon['id']}  /  self.game_state[murder_weapon]: {self.game_state['murder_weapon']}")
         if weapon['id'] == self.game_state['murder_weapon']:
             heart_rate += 20
             print(f"👍 currect weapon, heart_rate: {heart_rate}")
+
+        print(f"place[id]: {place['id']}  /  self.game_state[murder_location]: {self.game_state['murder_location']}")
         if place['id'] == self.game_state['murder_location']:
             heart_rate += 20
             print(f"👍 currect location, heart_rate: {heart_rate}")
+
+        print(f"time[id]: {time['id']}  /  self.game_state[murder_time]: {self.game_state['murder_time']}")
         if time['id'] == self.game_state['murder_time']:
             heart_rate += 20
             print(f"👍 currect time, heart_rate: {heart_rate}")
@@ -167,6 +173,10 @@ class InterrogationService:
             "lang": lang,
             "status": "CONTINUE",
             "is_murderer": is_murderer,
+            "murder_weapon": self.game_state['murder_weapon'],
+            "murder_location": self.game_state['murder_location'],
+            "murder_time": self.game_state['murder_time'],
+
             "heart_rate": heart_rate,
             "npc_name": get_name(npc["name"], lang, self.names),
             "victim_name": get_name(murdered["name"], lang, self.names),
