@@ -11,8 +11,10 @@ from pydantic import BaseModel
 class NewInterRequest(BaseModel):
     gameNo: int
     npcName: str = "박동식"
-    murderWeapon: str = "Baby_Hammer"
-    murderLocation: str = "UnderPig"
+    murderWeapon: str
+    murderLocation: str
+    # murderWeapon: str = "Baby_Hammer"
+    # murderLocation: str = "UnderPig"
     murderTime: str = "Five"
 
 class ConversationRequest(BaseModel):
