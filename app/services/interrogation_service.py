@@ -119,6 +119,7 @@ class InterrogationService:
         # print("="*50)
 
         logger.info(f"▶️  Interrogation with npc_name: {npc_name}, status: {interrogation_data['status']}")
+        logger.info(f"▶️  Interrogation response: {interrogation_data['response']}")
 
         return {
             "npc_name": npc_name,
