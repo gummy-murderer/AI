@@ -19,35 +19,21 @@ class InvestigationService:
         """
         시체의 상태를 통해 사망 시각을 추리하는 내용을 생성합니다
         """
-        prompt = f"""You are a detective bear examining a murder victim's body to determine time of death.
-The victim {victim_name} was found, and based on initial reports, the estimated time of death is around {time_name}.
+        prompt = f"""You are a detective bear examining a murder victim's body.
+Create a single brief thought about the time of death ({time_name}), focusing on body temperature and rigor mortis.
+Start with {"'흠...', '음...'" if lang == 'ko' else "'Hmm...', 'Well...'"}.
 
-Create a brief monologue where you deduce the time of death by examining:
-- Body temperature
-- Rigor mortis (stiffness)
-- Other physical signs
-
-Start with a thoughtful interjection like {"'흠...', '음...'" if lang == 'ko' else "'Hmm...', 'Well...'"}.
-Keep it to 1-2 natural, conversational sentences focused on confirming the time of death through observation.
-
-Response MUST be in {'Korean' if lang == 'ko' else 'English'} ONLY."""
-        return get_gpt_response(prompt, max_tokens=100)
+Response MUST be in {'Korean' if lang == 'ko' else 'English'} ONLY and MUST be a concise single sentence."""
+        return get_gpt_response(prompt, max_tokens=50)
 
     def _generate_method_analysis(self, victim_name: str, weapon_name: str, lang: str) -> str:
         """시체의 상처를 통해 살해 도구를 추리하는 내용을 생성합니다"""
         prompt = f"""You are a detective bear examining wounds on a murder victim's body.
-The victim is {victim_name}, and through your analysis, you need to deduce that the murder weapon was {weapon_name}.
+Create a single brief thought about the wound patterns that lead you to identify the murder weapon as {weapon_name}.
+Start with {"'음...', '으음...'" if lang == 'ko' else "'Well...', 'Let's see...'"}.
 
-Create a brief monologue where you:
-1. First describe the wound characteristics (shape, depth, pattern, impact force)
-2. Then make a logical deduction about the specific weapon type
-3. Finally confirm it was {weapon_name}
-
-Start with a thoughtful interjection like {"'음...', '으음...'" if lang == 'ko' else "'Well...', 'Let's see...'"}.
-Keep it to 1-2 natural, conversational sentences showing your deductive process.
-
-Response MUST be in {'Korean' if lang == 'ko' else 'English'} ONLY."""
-        return get_gpt_response(prompt, max_tokens=100)
+Response MUST be in {'Korean' if lang == 'ko' else 'English'} ONLY and MUST be a concise single sentence."""
+        return get_gpt_response(prompt, max_tokens=50)
 
     def _generate_scene_analysis(self, victim_name: str, location_name: str, time_name: str, lang: str) -> str:
         """
@@ -66,20 +52,12 @@ Response MUST be in {'Korean' if lang == 'ko' else 'English'} ONLY."""
             num_npcs = min(2, len(alive_npcs))
             npcs_to_question = random.sample(alive_npcs, num_npcs)
 
-        prompt = f"""You are a detective bear analyzing a murder scene in your bear village.
-The victim {victim_name} was found at {location_name}, and the estimated time of death is {time_name}.
+        prompt = f"""You are a detective bear analyzing a murder scene.
+Create a single brief thought questioning the victim's presence at {location_name} and mentioning your plan to talk to {' and '.join(npcs_to_question) if npcs_to_question else 'the surviving bears'}.
+Start with {"'흠...', '그런데...'" if lang == 'ko' else "'Hmm...', 'Now...'"}.
 
-Create a brief monologue where you:
-1. Explicitly mention the specific location ({location_name}) while questioning why the victim was there
-2. Consider who among the surviving villagers might have useful information
-3. Specifically mention you should talk to {' and '.join(npcs_to_question) if npcs_to_question else 'any surviving bears'}
-
-Start with a thoughtful interjection like {"'흠...', '그런데...'" if lang == 'ko' else "'Hmm...', 'Now...'"}.
-Keep it to 1-2 natural, conversational sentences that must include the specific location name.
-Remember this is a bear village - all residents are bears, and modern investigation methods aren't available.
-
-Response MUST be in {'Korean' if lang == 'ko' else 'English'} ONLY."""
-        return get_gpt_response(prompt, max_tokens=100)
+Response MUST be in {'Korean' if lang == 'ko' else 'English'} ONLY and MUST be a concise single sentence."""
+        return get_gpt_response(prompt, max_tokens=50)
 
     def investigate_corpse(self) -> dict:
         """
