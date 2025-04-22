@@ -600,14 +600,17 @@
             button.disabled = true;
             document.querySelector('.typing-indicator').classList.add('visible');
 
+            request_data = JSON.stringify({
+                gameNo: gameNo,
+                npcName: selectedSuspect.name,
+                content: content
+            })
+            console.log('request:', request_data);
+
             const response = await fetch('/api/v2/interrogation/conversation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gameNo: gameNo,
-                    npcName: selectedSuspect.name,
-                    content: content
-                })
+                body: request_data
             });
 
             const data = await response.json();

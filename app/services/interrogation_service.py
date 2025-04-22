@@ -69,7 +69,7 @@ class InterrogationService:
                     })
             else:
                 if heart_rate >= 120:
-                    innocence_claim = self.generate_innocence_claim(interrogation_data, content)
+                    innocence_claim = self.generate_innocence_claim(interrogation_data)
                     interrogation_data.update({
                         "status": "INNOCENT_PROTEST",
                         "response": innocence_claim
@@ -90,7 +90,7 @@ class InterrogationService:
                         "response": confession
                     })
                 else:
-                    initial_response = self.generate_interrogation_response(interrogation_data)
+                    initial_response = self.generate_interrogation_response(interrogation_data, content)
                     interrogation_data.update({
                         "status": "CONTINUE",
                         "response": initial_response
@@ -103,7 +103,7 @@ class InterrogationService:
                         "response": innocence_claim
                     })
                 else:
-                    initial_response = self.generate_interrogation_response(interrogation_data)
+                    initial_response = self.generate_interrogation_response(interrogation_data, content)
                     interrogation_data.update({
                         "status": "CONTINUE",
                         "response": initial_response
@@ -245,11 +245,11 @@ class InterrogationService:
             f"- Murder location: {data['location_name']}\n"
             f"- Murder time: {data['time_name']}\n\n"
             f"Requirements:\n"
-            f"- Write as a single emotional confession spoken directly to the detective\n"
-            f"- Include emotional state but without script-style formatting or dialogue markers\n"
+            f"- Write approximately 8 sentences total\n"
+            f"- Include the suspect's emotional state without dialogue markers\n"
             f"- Reflect the murderer's personality and feature\n"
-            f"- Explain both the motive and how they committed the murder\n"
-            f"- Use natural spoken language showing distress"
+            f"- Explain both the motive and method of murder\n"
+            f"- Use natural spoken language that matches the character's personality"
         )
         confession = get_gpt_response(confession_prompt, max_tokens=200)
         return self._clean_response(confession)
@@ -273,12 +273,12 @@ class InterrogationService:
             f"- Crime location: {data['location_name']}\n"
             f"- Crime time: {data['time_name']}\n\n"
             f"Requirements:\n"
-            f"- Express strong emotional distress and frustration at being falsely accused\n"
-            f"- Provide a believable alibi or explanation for their innocence\n"
+            f"- Write approximately 8 sentences total\n"
+            f"- Write directly as the suspect speaking, without any character name prefixes or dialogue markers\n"
+            f"- Express emotional distress at being falsely accused\n"
+            f"- Provide a brief alibi or explanation for their innocence\n"
             f"- Show appropriate emotional reaction based on their personality and feature\n"
-            f"- Include genuine confusion and hurt about being suspected\n"
-            f"- Maintain a desperate but sincere tone\n"
-            f"- Use natural spoken language as someone pleading their innocence"
+            f"- Use natural spoken language that matches the character's personality"
         )
         innocence_claim = get_gpt_response(innocence_prompt, max_tokens=200)
         return self._clean_response(innocence_claim)
@@ -295,25 +295,44 @@ class InterrogationService:
         formatted_conversation_history = "\n".join([f"{entry['role']}: {entry['content']}" for entry in conversation_history])
 
         current_heart_rate = self.game_state['interrogation']['heart_rate']
+        language = self.game_state['language']
+        murdered_npc = self.game_state["murdered_npc"]
+        murder_weapon = self.game_state["murder_weapon"]
+        murder_location = self.game_state["murder_location"]
+        murder_time = self.game_state["murder_time"]
 
         response_prompt = (
-            f"Based on the conversation history below, generate a response in {self.game_state['language']} "
-            f"for an NPC named {npc_name} who has the personality '{npc['personality']}' and the feature '{npc['feature']}'. "
-            f"The NPC is currently being interrogated, accused of being the murderer in the village. "
-            f"The NPC's current heart rate is {current_heart_rate} bpm. The NPC's heart rate changes depending on the sharpness of the question. "
-            f"Sharp and accusatory questions will increase the heart rate (1), while irrelevant or casual questions will decrease it (-1). "
-            f"If the question is neutral, maintain the current heart rate (0). "
-            f"If the heart rate is below 80, respond in a dismissive and arrogant manner with a short answer. "
-            f"If the heart rate is between 80 and 120, respond normally and cooperatively. "
-            f"If the heart rate is above 120, refuse to answer and show signs of distress. "
-            f"The response should clearly reflect their personality and feature. "
-            f'The murdered person was {self.game_state["murdered_npc"]}, the murder weapon was {self.game_state["murder_weapon"]}, and the murder took place at {self.game_state["murder_location"]}. '
-            f'Provide the response in the format(json): {{"response": str, "heartRateChange": int}}\n\n'
-            f"Note: heartRateChange must be one of these values: -1 (decrease), 0 (maintain), 1 (increase)\n\n"
+            f"Based on the following context and conversation history, generate a response in {language} for an NPC named {npc_name}, "
+            f"who has the personality '{npc['personality']}' and the feature '{npc['feature']}'.\n\n"
+            f"Game Context:\n"
+            f"- A murder occurred in the village.\n"
+            f"- Victim: {murdered_npc}\n"
+            f"- Murder weapon: {murder_weapon}\n"
+            f"- Crime location: {murder_location}\n"
+            f"- Crime time: {murder_time}\n"
+            f"- The NPC being interrogated is a suspect.\n\n"
+            f"Interrogation Context:\n"
+            f"- The NPC's current heart rate is {current_heart_rate} bpm.\n"
+            f"- The heart rate changes based on the intensity of the user's question:\n"
+            f"    - Sharp and accusatory questions → heart rate increases (1)\n"
+            f"    - Irrelevant or casual questions → heart rate decreases (-1)\n"
+            f"    - Neutral questions → heart rate stays the same (0)\n"
+            f"- NPC behavior by heart rate:\n"
+            f"    - < 80 → dismissive, arrogant, and brief answers\n"
+            f"    - 80–120 → normal and cooperative responses\n"
+            f"    - > 120 → distressed, uncooperative, or refuses to answer\n\n"
+            f"Requirements:\n"
+            f"- Reflect the NPC's personality and feature in the way they speak\n"
+            f"- The response should sound natural and emotionally appropriate\n"
+            f"- Responses may include references to the crime or the NPC's own situation if relevant\n"
+            f"- The NPC must answer sincerely to the user's question\n"
+            f'- Return only JSON format: {{"response": str, "heartRateChange": int}}\n\n'
             f"Conversation History:\n{formatted_conversation_history}\n\n"
-            f"The NPC is asked: '{content}'"
+            f'The NPC is asked: "{content}"'
         )
-
+        print("="*50)
+        print(response_prompt)
+        print("="*50)
         response_content = get_gpt_response(response_prompt, max_tokens=150)
     
         # JSON 파싱 시도
@@ -351,11 +370,6 @@ class InterrogationService:
         current_heart_rate += heart_rate_delta
         current_heart_rate = min(max(current_heart_rate, 60), 120)
         self.game_state['interrogation']['heart_rate'] = current_heart_rate
-        self.game_state['interrogation']['heart_rate'] = 120
-
-        # 대화 기록 추가
-        conversation_history.append({"role": "user", "content": content})
-        conversation_history.append({"role": npc_name, "content": response['response']})
 
         logger.info(f"▶️  Bot response sent: npc_name: {npc_name}, heart_rate_delta: {heart_rate_delta}, current_heart_rate: {current_heart_rate}, response: {response['response']}")
         # return {"response": response['response'], "heartRate": current_heart_rate}
