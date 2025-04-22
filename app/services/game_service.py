@@ -9,6 +9,7 @@ from app.services.scenario_generation import ScenarioGeneration
 
 from app.services.interrogation import Interrogation
 from app.services.interrogation_service import InterrogationService
+from app.services.investigation_service import InvestigationService
 
 # 여러 게임 상태 관리
 class GameService:
@@ -20,6 +21,7 @@ class GameService:
         self.game_states: dict[int, dict] = {}
 
         self.interrogations: dict[int, Interrogation] = {}
+        self.investigations: dict[int, InvestigationService] = {}
 
     # 새로운 게임을 시작하고 초기화하는 메서드
     def initialize_new_game(self, game_data: game_schema.GameStartRequest):
@@ -49,6 +51,13 @@ class GameService:
             game_state,
             game_management.personalities,
             game_management.features,
+            game_management.weapons,
+            game_management.places,
+            game_management.times,
+            game_management.names
+        )
+        self.investigations[game_data.gameNo] = InvestigationService(
+            game_state,
             game_management.weapons,
             game_management.places,
             game_management.times,
@@ -207,6 +216,20 @@ class GameService:
         response = interrogation.interrogation(npc_name=npc_name, content=content)
         return convert_dict_keys(response)
     
+    def investigate_victim_corpse(self, gameNo: int) -> dict:
+        """
+        현재 날짜의 피해자 시체를 조사하여 범행 정보를 반환합니다.
+        
+        Args:
+            gameNo (int): 게임 번호
+            
+        Returns:
+            dict: 범행 시간, 장소, 도구 정보와 탐정의 조사 보고를 포함한 딕셔너리
+        """
+        if gameNo not in self.investigations:
+            raise ValueError(f"Game ID {gameNo} not found")
+            
+        return self.investigations[gameNo].investigate_corpse()
 
 def snake_to_camel(snake_str):
     """스네이크 케이스 문자열을 카멜 케이스로 변환합니다."""
