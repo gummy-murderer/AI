@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
+import traceback
 
 from app.schemas import game_schema 
 from app.services.game_service import GameService
@@ -22,6 +23,17 @@ async def start_game(request: Request, game_data: game_schema.GameStartRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        error_detail = {
+                'error_type': type(e).__name__,
+                'error_message': str(e),
+                'traceback': traceback.format_exc()
+            }
+        print(
+                f"❌ Internal server error:\n"
+                f"- Error Type: {error_detail['error_type']}\n"
+                f"- Error Message: {error_detail['error_message']}\n"
+                f"- Traceback:\n{error_detail['traceback']}"
+            )
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 # 시나리오를 생성하는 라우터
