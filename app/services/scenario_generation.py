@@ -298,7 +298,7 @@ class ScenarioGeneration:
 
         # 시나리오 생성 및 알리바이 생성
         murder_summary = self.create_murder_summary()
-        alibis_and_witness = self.generate_alibis_and_witness()
+        # alibis_and_witness = self.generate_alibis_and_witness()  # 알리바이 생성 비활성화
 
         lang = self.game_state["language"]
         victim_name = get_name(self.game_state["murdered_npc"]["name"], lang, self.names)
@@ -308,16 +308,18 @@ class ScenarioGeneration:
 
         daily_summary = f"day {self.game_state['current_day']} - {crime_scene}에서 {murder_time}에 {victim_name}이(가) {murder_weapon}에 의해 살해됨."
 
+        # 알리바이 정보 없이 결과 반환
         result = {
             "answer": {
                 "victim": victim_name,
                 "crimeScene": crime_scene,
                 "method": murder_weapon,
                 "crimeTime": murder_time,
-                "witness": alibis_and_witness["witness"]["name"],
-                "eyewitnessInformation": alibis_and_witness["witness"]["information"],
                 "dailySummary": daily_summary,
-                "alibis": [{"name": name, "alibi": alibi} for name, alibi in alibis_and_witness["alibis"].items()]
+                # 알리바이와 목격자 정보 제거
+                "witness": "",
+                "eyewitnessInformation": "",
+                "alibis": []
             }
         }
 
