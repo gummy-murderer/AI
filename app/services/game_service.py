@@ -27,6 +27,10 @@ class GameService:
     def initialize_new_game(self, game_data: game_schema.GameStartRequest):
         game_management = GameManagement()
         characters = [char.npcName for char in game_data.characters]
+
+        if "Murderer" in [char.npcJob for char in game_data.characters]:
+            raise HTTPException(status_code=400, detail="살인자가 없습니다!")
+        
         murderer = next(char.npcName for char in game_data.characters if char.npcJob == "Murderer")
         
         game_state = game_management.initialize_game(game_data.language, characters, murderer)
