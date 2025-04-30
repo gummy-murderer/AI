@@ -28,7 +28,7 @@ class GameService:
         game_management = GameManagement()
         characters = [char.npcName for char in game_data.characters]
 
-        if "Murderer" in [char.npcJob for char in game_data.characters]:
+        if "Murderer" not in [char.npcJob for char in game_data.characters]:
             raise HTTPException(status_code=400, detail="살인자가 없습니다!")
         
         murderer = next(char.npcName for char in game_data.characters if char.npcJob == "Murderer")
