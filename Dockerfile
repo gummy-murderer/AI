@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster AS builder
+FROM python:3.10 AS builder
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
 
-FROM python:3.10-slim-buster
+FROM python:3.10
 
 WORKDIR /app
 
