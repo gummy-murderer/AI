@@ -28,20 +28,21 @@ class GameManagement:
 
     # 새로운 게임을 초기화하는 메서드
     def initialize_game(self, language, characters, murderer):
-        # NPC 이름 사전 생성 (한글 이름 -> id 매핑)
-        npc_name_dict = {name["name"]["ko"]: name["id"] for name in self.names}
+        # characters와 murderer는 이제 NPC ID(영어)로 받음
+        # 유효한 NPC ID 목록
+        valid_npc_ids = [npc["name"] for npc in self.npcs]
         
         # 유효성 검사
-        invalid_chars = [char for char in characters if char not in npc_name_dict]
+        invalid_chars = [char for char in characters if char not in valid_npc_ids]
         if invalid_chars:
-            raise ValueError(f"Invalid characters: {', '.join(invalid_chars)}")
+            raise ValueError(f"Invalid NPC IDs: {', '.join(invalid_chars)}")
         
         if murderer not in characters:
             raise ValueError(f"Murderer {murderer} is not in the character list")
 
         # 선택된 NPC 목록 생성
-        selected_npcs = [npc for npc in self.npcs if npc["name"] in [npc_name_dict[char] for char in characters]]
-        murderer_npc = next((npc for npc in selected_npcs if npc["name"] == npc_name_dict[murderer]), None)
+        selected_npcs = [npc for npc in self.npcs if npc["name"] in characters]
+        murderer_npc = next((npc for npc in selected_npcs if npc["name"] == murderer), None)
         
         if murderer_npc is None:
             raise ValueError(f"Murderer {murderer} not found in NPC list")
@@ -98,7 +99,8 @@ class GameManagement:
         lang = self.game_state["language"]
         npc_info = [
             {
-                "name": get_name(npc["name"], lang, self.names),
+                "id": npc["name"],  # NPC ID (영어)
+                "name": get_name(npc["name"], lang, self.names),  # 표시 이름 (언어별)
                 "age": npc["age"],
                 "gender": npc["gender"],
                 "personality": get_personality_detail(npc["personality"], self.personalities, lang),
@@ -112,14 +114,16 @@ class GameManagement:
             for npc in self.game_state["npcs"]
         ]
         murderer_info = {
-            "name": get_name(self.game_state["murderer"]["name"], lang, self.names),
+            "id": self.game_state["murderer"]["name"],  # NPC ID (영어)
+            "name": get_name(self.game_state["murderer"]["name"], lang, self.names),  # 표시 이름 (언어별)
             "age": self.game_state["murderer"]["age"],
             "gender": self.game_state["murderer"]["gender"],
             "personality": get_personality_detail(self.game_state["murderer"]["personality"], self.personalities, lang),
             "feature": get_feature_detail(self.game_state["murderer"]["feature"], self.features, lang)
         }
         murdered_npc_info = {
-            "name": get_name(self.game_state["murdered_npc"]["name"], lang, self.names),
+            "id": self.game_state["murdered_npc"]["name"],  # NPC ID (영어)
+            "name": get_name(self.game_state["murdered_npc"]["name"], lang, self.names),  # 표시 이름 (언어별)
             "age": self.game_state["murdered_npc"]["age"],
             "gender": self.game_state["murdered_npc"]["gender"],
             "personality": get_personality_detail(self.game_state["murdered_npc"]["personality"], self.personalities, lang),

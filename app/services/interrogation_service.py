@@ -132,15 +132,15 @@ class InterrogationService:
         """
         취조 생성 시 필요한 데이터를 정리/저장합니다.
         Args:
-            npc_name (str): 취조 대상이 되는 npc 이름
+            npc_name (str): 취조 대상이 되는 npc ID (영어)
             data (dict): user input 값
         Returns:
             dict: 취조 데이터를 가지고 있는 response 데이터
         """
         lang = self.game_state["language"]
 
-        # Get NPC information
-        npc = next((npc for npc in self.game_state["npcs"] if get_name(npc["name"], lang, self.names) == npc_name), None)
+        # Get NPC information - npc_name은 ID 값(영어)으로 받음
+        npc = next((npc for npc in self.game_state["npcs"] if npc["name"] == npc_name), None)
         murdered = next((npc for npc in self.game_state["npcs"] if npc["name"] == self.game_state["murdered_npc"]["name"]), None)
         
         # Get weapon, location, and time details
@@ -160,6 +160,10 @@ class InterrogationService:
         if time['id'] == self.game_state['murder_time']:
             heart_rate += 20
 
+        # 표시용 이름 가져오기
+        npc_display_name = get_name(npc["name"], lang, self.names)
+        victim_display_name = get_name(murdered["name"], lang, self.names)
+        
         interrogation_data = {
             "lang": lang,
             "status": "CONTINUE",
@@ -169,8 +173,8 @@ class InterrogationService:
             "murder_time": self.game_state['murder_time'],
 
             "heart_rate": heart_rate,
-            "npc_name": get_name(npc["name"], lang, self.names),
-            "victim_name": get_name(murdered["name"], lang, self.names),
+            "npc_name": npc_display_name,
+            "victim_name": victim_display_name,
             "weapon_name": weapon["weapon"][lang] if weapon else "",
             "location_name": place["place"][lang] if place else "",
             "time_name": time["time"][lang] if time else "",
@@ -286,10 +290,16 @@ class InterrogationService:
     # =============================================================================================================================
 
     def generate_interrogation_response(self, data: dict, content: str = ""):
-        npc_name = data["npc_name"]
+        npc_name = data["npc_name"]  # 표시 이름
         logger.info(f"▶️  User message received: npc_name: {npc_name}, contents: {content}")
 
-        npc = next((npc for npc in self.game_state["npcs"] if get_name(npc["name"], self.game_state["language"], self.names) == npc_name), None)
+        # npc_name은 표시 이름이므로 역으로 찾아야 함
+        lang = self.game_state["language"]
+        npc = None
+        for n in self.game_state["npcs"]:
+            if get_name(n["name"], lang, self.names) == npc_name:
+                npc = n
+                break
 
         conversation_history = self.game_state['interrogation']['conversation_history']
         formatted_conversation_history = "\n".join([f"{entry['role']}: {entry['content']}" for entry in conversation_history])

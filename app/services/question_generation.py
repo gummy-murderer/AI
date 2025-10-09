@@ -28,13 +28,17 @@ class QuestionGeneration:
             self.game_state['scenario'] = {}
         
         lang = self.game_state["language"]
-        npc = next((npc for npc in self.game_state["npcs"] if get_name(npc["name"], lang, self.names) == npc_name), None)
+        # npc_name은 이제 ID 값(영어)으로 받음
+        npc = next((npc for npc in self.game_state["npcs"] if npc["name"] == npc_name), None)
         if not npc:
-            raise ValueError("NPC not found")
+            raise ValueError(f"NPC not found: {npc_name}")
 
         is_murderer = npc == self.game_state["murderer"]
         scenario_description = self.game_state["scenario"].get("description", "")
         response_prompt = ""
+        
+        # 표시용 이름 가져오기
+        display_name = get_name(npc["name"], lang, self.names)
 
         # 무기에 대한 답변 생성
         if keyword_type == "weapon":
@@ -42,7 +46,7 @@ class QuestionGeneration:
             if keyword in npc["preferredWeapons"]:
                 if is_murderer:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about the weapon '{weapon_name}'. Start directly with their opinion or experience. "
                         f"They frequently use and really like this weapon, but should show slight nervousness or defensiveness when talking about it. "
                         f"Make them either overexplain their legitimate reasons for using it or try to downplay their expertise with it. "
@@ -50,14 +54,14 @@ class QuestionGeneration:
                     )
                 else:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about the weapon '{weapon_name}'. Start directly with their opinion or experience. "
                         f"They should enthusiastically express their fondness for this weapon, mentioning either recent use, "
                         f"how often they use it, or why they prefer it. Their excitement should match their personality."
                     )
             else:
                 response_prompt = (
-                    f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                    f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                     f"and feature '{npc['feature']}' about the weapon '{weapon_name}'. Start directly with their opinion or experience. "
                     f"They strongly dislike or never use this weapon. Have them explain in detail (2-3 sentences) why they avoid it, "
                     f"including both their emotional reaction to it and a specific past experience or practical reason. "
@@ -70,7 +74,7 @@ class QuestionGeneration:
             if keyword in npc["preferredLocations"]:
                 if is_murderer:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about the location '{location_name}'. Start directly with their opinion or experience. "
                         f"They frequently visit and like this place, but should become slightly evasive or contradictory when discussing recent visits. "
                         f"Make them either change details about when they were last there or become overly specific about unimportant details. "
@@ -78,14 +82,14 @@ class QuestionGeneration:
                     )
                 else:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about the location '{location_name}'. Start directly with their opinion or experience. "
                         f"They should clearly express their attachment to this place, mentioning either a recent visit, "
                         f"how often they go there, or why they love it. Their enthusiasm should match their personality."
                     )
             else:
                 response_prompt = (
-                    f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                    f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                     f"and feature '{npc['feature']}' about the location '{location_name}'. Start directly with their opinion or experience. "
                     f"They actively avoid or strongly dislike this place. Have them explain in detail (2-3 sentences) their aversion, "
                     f"including both their emotional response to the place and a specific memory or practical reason they avoid it. "
@@ -98,7 +102,7 @@ class QuestionGeneration:
             if keyword in npc["preferredTimes"]:  # 깨어있던 시간
                 if is_murderer:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about their activities during '{time_name}'. Start directly with their opinion or experience. "
                         f"They were awake at this time. Include one subtle suspicious element: either a small inconsistency "
                         f"in their story, a slight hesitation, or an unnecessarily defensive tone. "
@@ -106,7 +110,7 @@ class QuestionGeneration:
                     )
                 else:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about their activities during '{time_name}'. Start directly with their opinion or experience. "
                         f"They were awake and doing their usual activities. Include one or two specific but mundane details "
                         f"that match their personality and daily routine."
@@ -114,7 +118,7 @@ class QuestionGeneration:
             else:  # 자고 있던 시간
                 if is_murderer:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about '{time_name}'. Start directly with their opinion or experience. "
                         f"They claim to have been sleeping, but their response should be detailed (2-3 sentences). Include their usual sleep routine, "
                         f"a small detail that seems slightly off - like being unusually specific about their sleep time, "
@@ -122,7 +126,7 @@ class QuestionGeneration:
                     )
                 else:
                     response_prompt = (
-                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {npc_name} with the personality '{npc['personality']}' "
+                        f"Generate a brief response in {lang} (without any greeting) for an NPC named {display_name} with the personality '{npc['personality']}' "
                         f"and feature '{npc['feature']}' about '{time_name}'. Start directly with their opinion or experience. "
                         f"They were sleeping at this time. Have them explain in detail (2-3 sentences) about their sleep habits, "
                         f"including their usual bedtime routine, why they prefer sleeping at this time, and how it fits with their daily schedule. "

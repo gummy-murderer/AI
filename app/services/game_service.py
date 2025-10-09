@@ -101,23 +101,31 @@ class GameService:
         return {"message": "Progress saved successfully"}
 
     # 초기 게임 시나리오를 생성하는 메서드
-    def generate_game_scenario(self, gameNo):
+    def generate_game_scenario(self, gameNo, language=None):
+        if language:
+            self.game_states[gameNo]["language"] = language
         return self.scenario_generations[gameNo].create_initial_scenario()
 
     # 촌장의 편지를 생성하는 메서드
-    def generate_chief_letter(self, gameNo):
+    def generate_chief_letter(self, gameNo, language=None):
+        if language:
+            self.game_states[gameNo]["language"] = language
         return self.scenario_generations[gameNo].generate_chief_letter()
 
     # 질문을 생성하는 메서드
-    def generate_npc_questions(self, gameNo, npcName, keyWord, keyWordType):
+    def generate_npc_questions(self, gameNo, npcName, keyWord, keyWordType, language=None):
         if gameNo not in self.question_generations:
             raise ValueError(f"Game ID {gameNo} not found in question generations.")
-        return self.question_generations[gameNo].generate_questions(npcName, keyWord, keyWordType)
+        if language:
+            self.game_states[gameNo]["language"] = language
+        return self.question_generations[gameNo].talk_to_npc(npcName, keyWord, keyWordType)
 
     # NPC와 대화를 진행하는 메서드
-    def talk_to_npc(self, gameNo, npcName, keyWord, keyWordType):
+    def talk_to_npc(self, gameNo, npcName, keyWord, keyWordType, language=None):
         if gameNo not in self.question_generations:
             raise ValueError(f"Game ID {gameNo} not found in question generations.")
+        if language:
+            self.game_states[gameNo]["language"] = language
         return self.question_generations[gameNo].talk_to_npc(npcName, keyWord, keyWordType)
 
     # 범행 장소를 조사하는 메서드
@@ -139,11 +147,13 @@ class GameService:
         return self.hint_investigations[gameNo].filter_suspects(weapon, location)
 
     # 다음 날로 넘어가는 메서드
-    def proceed_to_next_day(self, gameNo: int, livingCharacters: List[game_schema.LivingNPCInfo]):
+    def proceed_to_next_day(self, gameNo: int, livingCharacters: List[game_schema.LivingNPCInfo], language=None):
         if gameNo not in self.game_states:
             raise ValueError("Game ID not found")
 
         game_state = self.game_states[gameNo]
+        if language:
+            game_state["language"] = language
         scenario_generation = self.scenario_generations[gameNo]
 
         # LivingNPCInfo 객체를 딕셔너리로 변환
@@ -170,11 +180,13 @@ class GameService:
         
         return alibis_and_witness
     
-    def end_game(self, gameNo, game_result):
+    def end_game(self, gameNo, game_result, language=None):
         if gameNo not in self.game_states:
             raise ValueError("Game ID not found")
         
         game_state = self.game_states[gameNo]
+        if language:
+            game_state["language"] = language
         scenario_generation = self.scenario_generations[gameNo]
         lang = game_state["language"]
         
@@ -203,35 +215,43 @@ class GameService:
     #========================================================================================
 
     # 취조를 시작하는 메서드(증거 제공)
-    def new_interrogation(self, gameNo, npc_name, data):
+    def new_interrogation(self, gameNo, npc_name, data, language=None):
         interrogation: InterrogationService = self.interrogations.get(gameNo)
         if not interrogation:
             raise HTTPException(status_code=404, detail=f"game number not found(ID: {gameNo})")
 
+        if language:
+            self.game_states[gameNo]["language"] = language
         response = interrogation.interrogation(npc_name=npc_name, start_data=data)
         return convert_dict_keys(response)
 
     # 취조 시 자유 대화하는 메서드
-    def generation_interrogation_response(self, gameNo, npc_name, content):
+    def generation_interrogation_response(self, gameNo, npc_name, content, language=None):
         interrogation: InterrogationService = self.interrogations.get(gameNo)
         if not interrogation:
             raise HTTPException(status_code=404, detail="Interrogation not found")
 
+        if language:
+            self.game_states[gameNo]["language"] = language
         response = interrogation.interrogation(npc_name=npc_name, content=content)
         return convert_dict_keys(response)
     
-    def investigate_victim_corpse(self, gameNo: int) -> dict:
+    def investigate_victim_corpse(self, gameNo: int, language=None) -> dict:
         """
         현재 날짜의 피해자 시체를 조사하여 범행 정보를 반환합니다.
         
         Args:
             gameNo (int): 게임 번호
+            language (str): 언어 설정 (ko 또는 en)
             
         Returns:
             dict: 범행 시간, 장소, 도구 정보와 탐정의 조사 보고를 포함한 딕셔너리
         """
         if gameNo not in self.investigations:
             raise ValueError(f"Game ID {gameNo} not found")
+        
+        if language:
+            self.game_states[gameNo]["language"] = language
             
         return self.investigations[gameNo].investigate_corpse()
 

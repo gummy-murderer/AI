@@ -31,7 +31,7 @@ class GameState(BaseModel):
     murder_times: List[str] = []
 
 class NPCInfo(BaseModel):
-    npcName: str
+    npcName: str  # NPC ID (영어, 예: "KimKoongYa", "Theo", "Sophia")
     npcJob: str
 
 class GameStartRequest(BaseModel):
@@ -39,113 +39,118 @@ class GameStartRequest(BaseModel):
     language: str = "ko"
     characters: List[NPCInfo] = [
     {
-        "npcName": "김쿵야",
+        "npcName": "KimKoongYa",
         "npcJob": "Resident"
     },
     {
-        "npcName": "박동식",
+        "npcName": "ParkDongSik",
         "npcJob": "Resident"
     },
     {
-        "npcName": "짠짠영",
+        "npcName": "ZzanZzanYoung",
         "npcJob": "Murderer"
     },
     {
-        "npcName": "태근티비",
+        "npcName": "TaeGeunTV",
         "npcJob": "Resident"
     },
     {
-        "npcName": "박윤주",
+        "npcName": "ParkYoonJu",
         "npcJob": "Resident"
     },
     {
-        "npcName": "테오",
+        "npcName": "Theo",
         "npcJob": "Resident"
     },
     {
-        "npcName": "소피아",
+        "npcName": "Sophia",
         "npcJob": "Resident"
     },
     {
-        "npcName": "마르코",
+        "npcName": "Marco",
         "npcJob": "Resident"
     },
     {
-        "npcName": "알렉스",
+        "npcName": "Alex",
         "npcJob": "Resident"
     }
 ]
 
 class GameRequest(BaseModel):
     gameNo: int
+    language: str = "ko"
 
 class QuestionRequest(BaseModel):
     gameNo: int
-    npcName: str
+    language: str = "ko"
+    npcName: str  # NPC ID (영어, 예: "KimKoongYa", "Theo", "Sophia")
     keyWord: str
     keyWordType: str = "weapon"
 
 class AnswerRequest(BaseModel):
     gameNo: int
-    npcName: str
+    language: str = "ko"
+    npcName: str  # NPC ID (영어, 예: "KimKoongYa", "Theo", "Sophia")
     keyWord: str
     keyWordType: str = "weapon"
 
 class LivingNPCInfo(BaseModel):
-    name: str
+    name: str  # NPC ID (영어, 예: "KimKoongYa", "Theo", "Sophia")
     job: str
     status: str
 
 class NextDayRequest(BaseModel):
-    gameNo: int
+    gameNo: int = 0
+    language: str = "ko"
     livingCharacters: List[LivingNPCInfo] = [
-    {
-        "name": "김쿵야",
-        "job": "Resident",
-        "status": "ALIVE"
-    },
-    {
-        "name": "박동식",
-        "job": "Resident",
-        "status": "ALIVE"
-    },
-    {
-        "name": "짠짠영",
-        "job": "Murderer",
-        "status": "ALIVE"
-    },
-    {
-        "name": "태근티비",
-        "job": "Resident",
-        "status": "ALIVE"
-    },
-    {
-        "name": "박윤주",
-        "job": "Resident",
-        "status": "ALIVE"
-    },
-    {
-        "name": "테오",
-        "job": "Resident",
-        "status": "DEAD"
-    },
-    {
-        "name": "소피아",
-        "job": "Resident",
-        "status": "DEAD"
-    },
-    {
-        "name": "마르코",
-        "job": "Resident",
-        "status": "DEAD"
-    },
-    {
-        "name": "알렉스",
-        "job": "Resident",
-        "status": "DEAD"
-    }
-]
+        {
+            "name": "KimKoongYa",
+            "job": "Resident",
+            "status": "Alive"
+        },
+        {
+            "name": "ParkDongSik",
+            "job": "Resident",
+            "status": "Alive"
+        },
+        {
+            "name": "ZzanZzanYoung",
+            "job": "Murderer",
+            "status": "Alive"
+        },
+        {
+            "name": "TaeGeunTV",
+            "job": "Resident",
+            "status": "Dead"
+        },
+        {
+            "name": "ParkYoonJu",
+            "job": "Resident",
+            "status": "Alive"
+        },
+        {
+            "name": "Theo",
+            "job": "Resident",
+            "status": "Dead"
+        },
+        {
+            "name": "Sophia",
+            "job": "Resident",
+            "status": "Alive"
+        },
+        {
+            "name": "Marco",
+            "job": "Resident",
+            "status": "Alive"
+        },
+        {
+            "name": "Alex",
+            "job": "Resident",
+            "status": "Alive"
+        }
+    ]
 
 class GameEndRequest(BaseModel):
     gameNo: int
+    language: str = "ko"
     gameResult: str = "WIN"

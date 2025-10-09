@@ -43,8 +43,10 @@ async def start_game(request: Request, game_data: game_schema.GameStartRequest):
             description="해당 게임의 상태에 따라 시나리오를 생성하는 API 입니다.")
 def generate_scenario(request: Request, game_data: game_schema.GameRequest):
     game_service: GameService = request.app.state.game_service
+    if game_data.language not in ["en", "ko"]:
+        raise HTTPException(status_code=400, detail="Invalid language. Choose 'en' or 'ko'.")
     try:
-        scenario = game_service.generate_game_scenario(game_data.gameNo)
+        scenario = game_service.generate_game_scenario(game_data.gameNo, game_data.language)
         return {"scenario": scenario}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -54,8 +56,10 @@ def generate_scenario(request: Request, game_data: game_schema.GameRequest):
             description="해당 게임의 상태에 따라 촌장의 편지를 생성하는 API 입니다.")
 def generate_chief_letter(request: Request, game_data: game_schema.GameRequest):
     game_service: GameService = request.app.state.game_service
+    if game_data.language not in ["en", "ko"]:
+        raise HTTPException(status_code=400, detail="Invalid language. Choose 'en' or 'ko'.")
     try:
-        chief_letter = game_service.generate_chief_letter(game_data.gameNo)
+        chief_letter = game_service.generate_chief_letter(game_data.gameNo, game_data.language)
         return {"answer": chief_letter}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -72,12 +76,31 @@ def get_game_status(request: Request, game_data: game_schema.GameRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 # 게임 진행을 다음 날로 넘기는 라우터
-@router.post("/next_day", 
+@router.post("/next_day",
             description="해당 게임의 상태를 다음 날로 넘기는 API 입니다.")
 def next_day(request: Request, game_data: game_schema.NextDayRequest):
     game_service: GameService = request.app.state.game_service
+    if game_data.language not in ["en", "ko"]:
+        raise HTTPException(status_code=400, detail="Invalid language. Choose 'en' or 'ko'.")
     try:
-        result = game_service.proceed_to_next_day(game_data.gameNo, game_data.livingCharacters)
+        # livingCharacters가 비어있으면 게임 상태에서 자동으로 채움
+        if not game_data.livingCharacters:
+            game_state = game_service.get_game_status(game_data.gameNo)
+            # game_state에서 살아있는 NPC 정보를 생성
+            living_characters = []
+            for npc in game_state['suspects']:
+                if npc['alive']:
+                    # murderer 확인 (ID로 비교)
+                    murderer_id = game_state.get('murderer', {}).get('id')
+                    job = "Murderer" if npc['id'] == murderer_id else "Resident"
+                    living_characters.append({
+                        "name": npc['id'],  # NPC ID (영어) 사용
+                        "job": job,
+                        "status": "ALIVE"
+                    })
+            game_data.livingCharacters = living_characters
+
+        result = game_service.proceed_to_next_day(game_data.gameNo, game_data.livingCharacters, game_data.language)
         return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -114,8 +137,10 @@ async def generate_alibis_and_witness(request: Request, game_data: game_schema.G
             description="게임을 종료하고 결과에 따른 편지를 생성하는 API입니다.")
 async def end_game(request: Request, game_data: game_schema.GameEndRequest):
     game_service: GameService = request.app.state.game_service
+    if game_data.language not in ["en", "ko"]:
+        raise HTTPException(status_code=400, detail="Invalid language. Choose 'en' or 'ko'.")
     try:
-        result = game_service.end_game(game_data.gameNo, game_data.gameResult)
+        result = game_service.end_game(game_data.gameNo, game_data.gameResult, game_data.language)
         return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

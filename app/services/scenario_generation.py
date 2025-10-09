@@ -308,10 +308,13 @@ class ScenarioGeneration:
 
         daily_summary = f"day {self.game_state['current_day']} - {crime_scene}에서 {murder_time}에 {victim_name}이(가) {murder_weapon}에 의해 살해됨."
 
+        # victim은 NPC ID로 반환
+        victim_id = self.game_state["murdered_npc"]["name"]  # NPC ID (영어)
+        
         # 알리바이 정보 없이 결과 반환
         result = {
             "answer": {
-                "victim": victim_name,
+                "victim": victim_id,  # NPC ID로 반환
                 "crimeScene": crime_scene,
                 "method": murder_weapon,
                 "crimeTime": murder_time,
@@ -326,20 +329,22 @@ class ScenarioGeneration:
         return result
 
     def update_game_state(self, living_characters):
+        # living_characters의 name은 NPC ID(영어)로 전달됨
+        lang = self.game_state['language']
+
         for npc in self.game_state['npcs']:
-            npc_korean_name = get_name(npc['name'], self.game_state['language'], self.names)
-            living_npc = next((lc for lc in living_characters if lc['name'] == npc_korean_name), None)
-            
+            # NPC ID로 직접 매칭
+            living_npc = next((lc for lc in living_characters if lc['name'] == npc['name']), None)
+
             if living_npc:
-                npc['alive'] = living_npc['status'] == "ALIVE"
+                # 대소문자 구분 없이 비교 (Alive, alive, ALIVE 모두 허용)
+                npc['alive'] = living_npc['status'].upper() == "ALIVE"
             else:
                 npc['alive'] = False
-            
+
             self.game_state['alive'][npc['name']] = npc['alive']
 
-        # NPC 목록 업데이트
-        self.game_state['alive'][npc['name']] = npc['alive']
-        print("Updated npcs:", [f"{get_name(npc['name'], self.game_state['language'], self.names)} - Alive: {npc['alive']}" for npc in self.game_state['npcs']])
+        print("Updated npcs:", [f"{get_name(npc['name'], lang, self.names)} ({npc['name']}) - Alive: {npc['alive']}" for npc in self.game_state['npcs']])
         print("Updated alive:", self.game_state['alive'])
 
     def select_new_victim(self):
@@ -367,13 +372,13 @@ class ScenarioGeneration:
     # 게임 생성 직후 첫번째 희생자를 반환하는 메서드
     def get_first_blood(self):
         lang = self.game_state["language"]
-        victim_name = get_name(self.game_state['murdered_npc']["name"], lang, self.names)
+        victim_id = self.game_state['murdered_npc']["name"]  # NPC ID (영어)
         crime_scene = self.game_state["murder_location"]  # 영어 ID 반환
         murder_weapon = self.game_state["murder_weapon"]  # 영어 ID 반환
         murder_time = self.game_state["murder_time"]  # 영어 ID 반환
 
         result = {
-            "victim": victim_name,
+            "victim": victim_id,  # NPC ID로 반환
             "crimeScene": crime_scene,
             "method": murder_weapon,
             "crimeTime": murder_time,
