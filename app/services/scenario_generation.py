@@ -573,3 +573,46 @@ class ScenarioGeneration:
         """
 
         return self.generate_letter(prompt, receiver, sender, max_tokens=250)
+
+    # 범인의 최후의 한마디를 생성하는 메서드
+    def generate_final_words(self):
+        lang = self.game_state["language"]
+        murderer = self.game_state["murderer"]
+        murderer_name = get_name(murderer['name'], lang, self.names)
+        personality = get_personality_detail(murderer['personality'], self.personalities, lang)
+        feature = get_feature_detail(murderer['feature'], self.features, lang)
+
+        prompt = f"""
+        Task: Write a powerful final statement from a caught murderer who is being arrested by the detective.
+        Murderer's name: {murderer_name}
+        Murderer's personality: {personality}
+        Murderer's unique feature: {feature}
+        Language: {"Korean" if lang == "ko" else "English"}
+
+        Final words requirements:
+        1. The murderer has been caught and is being arrested
+        2. Express the murderer's emotions at the moment of capture (anger, resignation, defiance, regret, etc.)
+        3. Strongly reflect the murderer's unique personality trait ({personality}) and distinctive feature ({feature})
+        4. Include a memorable statement that reveals their mindset or philosophy
+        5. Can include: denial, confession, threat, mockery, regret, or philosophical reflection
+        6. Be 1-3 sentences long
+        7. Be entirely in {'Korean' if lang == 'ko' else 'English'}
+        8. Make it dramatic and memorable, fitting for the climax of a mystery game
+        9. Do NOT wrap the response in quotation marks or any other punctuation
+
+        The final words should feel authentic to the character and leave a lasting impression on the player.
+        Do not include any explanations or additional text. Write only the final words without quotation marks.
+        """
+
+        final_words = get_gpt_response(prompt, max_tokens=150)
+        
+        # 쌍따옴표 제거
+        final_words = final_words.strip()
+        if final_words.startswith('"') and final_words.endswith('"'):
+            final_words = final_words[1:-1]
+        elif final_words.startswith('\"') and final_words.endswith('\"'):
+            final_words = final_words[2:-2]
+        
+        return {
+            "finalWords": final_words
+        }

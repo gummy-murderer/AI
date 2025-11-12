@@ -154,3 +154,8 @@ class GameEndRequest(BaseModel):
     gameNo: int
     language: str = "ko"
     gameResult: str = "WIN"
+
+class FinalWordsRequest(BaseModel):
+    gameNo: int
+    language: str = "ko"
+    gameResult: str = "WIN"
