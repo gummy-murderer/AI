@@ -54,6 +54,7 @@ jobs:
             # Run the new container
                 docker run -d \
                   --name ${{ env.CONTAINER_NAME }} \
+                  --restart=always \
                   -p 8002:8000 \
                   --env OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
                   --env MY_KEY=${{ secrets.MY_KEY }} \
