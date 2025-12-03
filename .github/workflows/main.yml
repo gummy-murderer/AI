@@ -30,7 +30,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
   deploy-to-server:
     needs: build-and-push
@@ -42,8 +44,12 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # password: ${{ secrets.SSH_PASSWORD }}  # SSH 키 대신 비밀번호 사용 시 이 줄의 주석을 해제하고 위의 key 줄을 주석 처리
           script: |
+            # Docker 로그인 (필요한 경우)
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin || true
+            
             # Stop and remove the existing container
             docker stop ${{ env.CONTAINER_NAME }} || true
             docker rm ${{ env.CONTAINER_NAME }} || true
@@ -52,13 +58,13 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Run the new container
-                docker run -d \
-                  --name ${{ env.CONTAINER_NAME }} \
-                  --restart=always \
-                  -p 8002:8000 \
-                  --env OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-                  --env MY_KEY=${{ secrets.MY_KEY }} \
-                  ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker run -d \
+              --name ${{ env.CONTAINER_NAME }} \
+              --restart=always \
+              -p 8002:8000 \
+              --env OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+              --env MY_KEY="${{ secrets.MY_KEY }}" \
+              ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Clean up unused Docker images
             docker image prune -af

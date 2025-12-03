@@ -117,14 +117,14 @@ class ScenarioGeneration:
         4. Structure the letter in three parts:
         a. Greeting: A formal but urgent salutation to the detective.
         b. Content: The main body explaining the dire situation, the fear gripping the village, and pleading for immediate help. Emphasize the potential for more danger if help doesn't arrive soon.
-        c. Closing: A desperate closing plea, followed by a signature similar to "{closing_example}" but not necessarily identical.
+        c. Closing: ONLY the signature (the village chief's name/title), similar to "{closing_example}" but not necessarily identical. Do NOT include any greeting, farewell message, or closing remarks like "건강을 빌며" or "Sincerely" or "Best regards" in the closing. The closing should contain ONLY the signature (e.g., "베어 타운 촌장 올림" or "Village Chief of Bear Town").
         5. End each sentence with a newline character (\\n).
 
         Return the letter in the following JSON format, without any additional formatting or code blocks:
         {{
             "greeting": "Urgent greeting text here\\n",
             "content": "First sentence of content.\\nSecond sentence of content.\\nThird sentence of content.\\n",
-            "closing": "Final plea.\\nSignature here\\n"
+            "closing": "Signature only (no greeting or farewell)\\n"
         }}
         """
 
