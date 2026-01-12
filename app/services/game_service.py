@@ -192,21 +192,13 @@ class GameService:
         
         if game_result == "WIN":
             chief_letter = scenario_generation.generate_chief_win_letter()
-            murderer_letter = scenario_generation.generate_murderer_win_letter()
-            survivors_letters = scenario_generation.generate_survivors_letter()
             return {
-                "result": "WIN",
-                "chiefLetter": chief_letter,
-                "murdererLetter": murderer_letter,
-                "survivorsLetters": survivors_letters
+                "answer": chief_letter
             }
         elif game_result == "LOSE":
             chief_letter = scenario_generation.generate_chief_lose_letter()
-            murderer_letter = scenario_generation.generate_murderer_lose_letter()
             return {
-                "result": "LOSE",
-                "chiefLetter": chief_letter,
-                "murdererLetter": murderer_letter
+                "answer": chief_letter
             }
         else:
             raise ValueError("Invalid game result")
