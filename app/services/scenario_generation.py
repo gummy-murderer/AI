@@ -108,23 +108,30 @@ class ScenarioGeneration:
 
         prompt = f"""
         {language_instruction}
-        Task: Write a brief, urgent letter from the village chief to a detective, desperately requesting help with solving a recent murder in Bear Town.
+        
+        IMPORTANT CONTEXT:
+        - You are the village chief of Bear Town (베어 타운). 
+        - Your village name is ALWAYS "Bear Town" (베어 타운) - NEVER use any other village name like "Willow Creek" or anything else.
+        - You must maintain this identity consistently throughout the letter.
+        
+        Task: Write a brief, urgent letter from the village chief of Bear Town to a detective, desperately requesting help with solving a recent murder in Bear Town.
         
         Requirements:
         1. The letter must be entirely in {"Korean" if lang == "ko" else "English"}.
         2. It should be concise but convey a sense of fear, urgency, and desperation.
         3. Do not reveal any details about the suspects, the murder weapon, or the location of the murder.
-        4. Structure the letter in three parts:
+        4. When referring to the village, ALWAYS use "Bear Town" (in English) or "베어 타운" (in Korean). DO NOT use any other village name.
+        5. Structure the letter in three parts:
         a. Greeting: A formal but urgent salutation to the detective.
-        b. Content: The main body explaining the dire situation, the fear gripping the village, and pleading for immediate help. Emphasize the potential for more danger if help doesn't arrive soon.
-        c. Closing: ONLY the signature (the village chief's name/title), similar to "{closing_example}" but not necessarily identical. Do NOT include any greeting, farewell message, or closing remarks like "건강을 빌며" or "Sincerely" or "Best regards" in the closing. The closing should contain ONLY the signature (e.g., "베어 타운 촌장 올림" or "Village Chief of Bear Town").
-        5. End each sentence with a newline character (\\n).
+        b. Content: The main body explaining the dire situation in Bear Town, the fear gripping the village, and pleading for immediate help. Emphasize the potential for more danger if help doesn't arrive soon.
+        c. Closing: MUST be EXACTLY "{closing_example}". Do NOT change the village name or create variations. Do NOT include any greeting, farewell message, or closing remarks like "건강을 빌며" or "Sincerely" or "Best regards" in the closing.
+        6. End each sentence with a newline character (\\n).
 
         Return the letter in the following JSON format, without any additional formatting or code blocks:
         {{
             "greeting": "Urgent greeting text here\\n",
             "content": "First sentence of content.\\nSecond sentence of content.\\nThird sentence of content.\\n",
-            "closing": "Signature only (no greeting or farewell)\\n"
+            "closing": "{closing_example}\\n"
         }}
         """
 
@@ -408,47 +415,147 @@ class ScenarioGeneration:
     # 승리 시 촌장의 감사 편지를 생성하는 메서드
     def generate_chief_win_letter(self):
         lang = self.game_state["language"]
-        receiver = "탐정" if lang == "ko" else "Detective"
-        sender = "베어타운 촌장" if lang == "ko" else "Chief of Bear Town"
+
+        if lang == "ko":
+            closing_example = "베어 타운 촌장 올림"
+            language_instruction = "한국어로만 작성하세요. 영어 사용을 절대 금지합니다."
+        else:
+            closing_example = "Sincerely, Village Chief of Bear Town"
+            language_instruction = "Write only in English. Do not use any Korean."
 
         prompt = f"""
-        Write a thank you letter in {lang} from the village chief of Bear Town to the detective who solved the murder case.
-        The letter should:
-        1. Express deep gratitude for solving the case
-        2. Mention the relief and joy of the villagers
-        3. Invite the detective to visit again under better circumstances
-        4. Be entirely in {'Korean' if lang == 'ko' else 'English'}
-        5. Do not include any closing remarks like '올림' or 'Sincerely'
+        {language_instruction}
+        
+        IMPORTANT CONTEXT:
+        - You are the village chief of Bear Town (베어 타운). 
+        - Your village name is ALWAYS "Bear Town" (베어 타운) - NEVER use any other village name like "Willow Creek" or anything else.
+        - You must maintain this identity consistently throughout the letter.
+        
+        Task: Write a thank you letter from the village chief of Bear Town to the detective who solved the murder case.
+        
+        Requirements:
+        1. The letter must be entirely in {"Korean" if lang == "ko" else "English"}.
+        2. Express deep gratitude for solving the case in Bear Town
+        3. Mention the relief and joy of the Bear Town villagers
+        4. Invite the detective to visit Bear Town again under better circumstances
+        5. When referring to the village, ALWAYS use "Bear Town" (in English) or "베어 타운" (in Korean). DO NOT use any other village name.
+        6. Structure the letter in three parts:
+        a. Greeting: A warm and grateful salutation to the detective.
+        b. Content: The main body expressing gratitude, relief, and joy of the Bear Town villagers. Invite the detective to visit again.
+        c. Closing: MUST be EXACTLY "{closing_example}". Do NOT change the village name or create variations. Do NOT include any greeting, farewell message, or closing remarks like "건강을 빌며" or "Sincerely" or "Best regards" in the closing.
+        7. End each sentence with a newline character (\\n).
+
+        Return the letter in the following JSON format, without any additional formatting or code blocks:
+        {{
+            "greeting": "Grateful greeting text here\\n",
+            "content": "First sentence of content.\\nSecond sentence of content.\\nThird sentence of content.\\n",
+            "closing": "{closing_example}\\n"
+        }}
         """
 
-        return self.generate_letter(prompt, receiver, sender)
+        chief_letter = get_gpt_response(prompt, max_tokens=300)
+
+        # Remove any code block formatting
+        chief_letter = re.sub(r'```json\s*|\s*```', '', chief_letter)
+
+        try:
+            letter_parts = json.loads(chief_letter)
+            
+            # Ensure each part ends with a newline
+            for key in letter_parts:
+                if not letter_parts[key].endswith('\n'):
+                    letter_parts[key] += '\n'
+            
+            # For content, ensure each sentence ends with a newline
+            if 'content' in letter_parts:
+                sentences = re.split(r'(?<=[.!?])\s+', letter_parts['content'])
+                letter_parts['content'] = '\n'.join(sentence.strip() for sentence in sentences if sentence.strip()) + '\n'
+            
+        except json.JSONDecodeError:
+            # If parsing fails, we'll use a simple split method as fallback
+            parts = chief_letter.split("\n")
+            letter_parts = {
+                "greeting": parts[0] + '\n' if parts else "",
+                "content": '\n'.join(parts[1:-1]) + '\n' if len(parts) > 2 else "",
+                "closing": parts[-1] + '\n' if len(parts) > 1 else closing_example + '\n'
+            }
+
+        return letter_parts
 
     # 패배 시 촌장의 원망 편지를 생성하는 메서드
     def generate_chief_lose_letter(self):
         lang = self.game_state["language"]
-        receiver = "탐정" if lang == "ko" else "Detective"
-        sender = "베어타운 촌장" if lang == "ko" else "Chief of Bear Town"
+
+        if lang == "ko":
+            closing_example = "베어 타운 촌장 올림"
+            language_instruction = "한국어로만 작성하세요. 영어 사용을 절대 금지합니다."
+        else:
+            closing_example = "Sincerely, Village Chief of Bear Town"
+            language_instruction = "Write only in English. Do not use any Korean."
 
         prompt = f"""
-        Task: Write a disappointed and accusatory letter from the village chief to the detective who failed to solve the murder case.
-        Language: {"Korean" if lang == "ko" else "English"}
-
-        Letter requirements:
-        1. Start with a cold and formal greeting
-        2. Express deep disappointment and frustration about the detective's failure
-        3. Emphasize the consequences of the detective's incompetence (e.g., more victims, widespread fear)
-        4. Directly blame the detective for the continued suffering of the villagers
-        5. Mention how the village trusted and depended on the detective, only to be let down
+        {language_instruction}
+        
+        IMPORTANT CONTEXT:
+        - You are the village chief of Bear Town (베어 타운). 
+        - Your village name is ALWAYS "Bear Town" (베어 타운) - NEVER use any other village name like "Willow Creek" or anything else.
+        - You must maintain this identity consistently throughout the letter.
+        
+        Task: Write a disappointed and accusatory letter from the village chief of Bear Town to the detective who failed to solve the murder case.
+        
+        Requirements:
+        1. The letter must be entirely in {"Korean" if lang == "ko" else "English"}.
+        2. Express deep disappointment and frustration about the detective's failure in Bear Town
+        3. Emphasize the consequences of the detective's incompetence (e.g., more victims in Bear Town, widespread fear in the village)
+        4. Directly blame the detective for the continued suffering of the Bear Town villagers
+        5. Mention how Bear Town trusted and depended on the detective, only to be let down
         6. Suggest that the detective's reputation will be ruined because of this failure
         7. End with a bitter and regretful tone, implying the detective should feel guilty
-        8. Be 2-3 sentences long
-        9. Do not include any closing remarks like '올림' or 'Sincerely'
+        8. When referring to the village, ALWAYS use "Bear Town" (in English) or "베어 타운" (in Korean). DO NOT use any other village name.
+        9. Structure the letter in three parts:
+        a. Greeting: A cold and formal salutation to the detective.
+        b. Content: The main body expressing disappointment, blame, and consequences of the failure.
+        c. Closing: MUST be EXACTLY "{closing_example}". Do NOT change the village name or create variations. Do NOT include any greeting, farewell message, or closing remarks like "건강을 빌며" or "Sincerely" or "Best regards" in the closing.
+        10. End each sentence with a newline character (\\n).
 
-        The letter should make the detective (player) feel responsible and guilty for failing the village.
-        Do not include any explanations or additional text. Write only the letter content.
+        The letter should make the detective (player) feel responsible and guilty for failing Bear Town.
+        
+        Return the letter in the following JSON format, without any additional formatting or code blocks:
+        {{
+            "greeting": "Cold greeting text here\\n",
+            "content": "First sentence of content.\\nSecond sentence of content.\\nThird sentence of content.\\n",
+            "closing": "{closing_example}\\n"
+        }}
         """
 
-        return self.generate_letter(prompt, receiver, sender)
+        chief_letter = get_gpt_response(prompt, max_tokens=300)
+
+        # Remove any code block formatting
+        chief_letter = re.sub(r'```json\s*|\s*```', '', chief_letter)
+
+        try:
+            letter_parts = json.loads(chief_letter)
+            
+            # Ensure each part ends with a newline
+            for key in letter_parts:
+                if not letter_parts[key].endswith('\n'):
+                    letter_parts[key] += '\n'
+            
+            # For content, ensure each sentence ends with a newline
+            if 'content' in letter_parts:
+                sentences = re.split(r'(?<=[.!?])\s+', letter_parts['content'])
+                letter_parts['content'] = '\n'.join(sentence.strip() for sentence in sentences if sentence.strip()) + '\n'
+            
+        except json.JSONDecodeError:
+            # If parsing fails, we'll use a simple split method as fallback
+            parts = chief_letter.split("\n")
+            letter_parts = {
+                "greeting": parts[0] + '\n' if parts else "",
+                "content": '\n'.join(parts[1:-1]) + '\n' if len(parts) > 2 else "",
+                "closing": parts[-1] + '\n' if len(parts) > 1 else closing_example + '\n'
+            }
+
+        return letter_parts
 
     # 승리 시 생존자들의 감사 편지를 생성하는 메서드
     def generate_survivors_letter(self):
