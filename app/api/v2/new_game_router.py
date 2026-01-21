@@ -149,13 +149,13 @@ async def end_game(request: Request, game_data: game_schema.GameEndRequest):
 
 # 범인의 최후의 한마디를 생성하는 라우터
 @router.post("/final-words", 
-            description="플레이어가 승리하여 범인을 검거했을 때 범인의 최후의 한마디를 생성하는 API입니다.")
+            description="게임 결과에 따라 범인의 최후의 한마디를 생성하는 API입니다.")
 async def generate_final_words(request: Request, game_data: game_schema.FinalWordsRequest):
     game_service: GameService = request.app.state.game_service
     if game_data.language not in ["en", "ko"]:
         raise HTTPException(status_code=400, detail="Invalid language. Choose 'en' or 'ko'.")
     try:
-        final_words = game_service.generate_murderer_final_words(game_data.gameNo, game_data.language)
+        final_words = game_service.generate_murderer_final_words(game_data.gameNo, game_data.gameResult, game_data.language)
         return {"answer": final_words}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
