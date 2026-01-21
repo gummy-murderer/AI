@@ -682,36 +682,77 @@ class ScenarioGeneration:
         return self.generate_letter(prompt, receiver, sender, max_tokens=250)
 
     # 범인의 최후의 한마디를 생성하는 메서드
-    def generate_final_words(self):
+    def generate_final_words(self, game_result="WIN"):
         lang = self.game_state["language"]
         murderer = self.game_state["murderer"]
         murderer_name = get_name(murderer['name'], lang, self.names)
         personality = get_personality_detail(murderer['personality'], self.personalities, lang)
         feature = get_feature_detail(murderer['feature'], self.features, lang)
 
+        if game_result == "WIN":
+            # 플레이어 승리 - 범인이 잡힌 상황: 처절하고 탐정을 악담하는 느낌
+            situation = "has been caught and is being arrested" if lang == "en" else "체포되어 끌려가는 상황"
+            tone_instruction = """
+            TONE: The murderer is DESPERATE, ANGRY, and BITTER about being caught.
+            - Express extreme frustration and resentment toward the detective
+            - Include harsh words, curses, or accusations against the detective
+            - Show the murderer's desperation and anger at their defeat
+            - Make it feel visceral and emotional - the murderer is lashing out
+            - Can include threats, insults, or bitter accusations
+            """ if lang == "en" else """
+            톤: 범인은 절망적이고 분노하며 체포된 것에 대해 극도로 비통해합니다.
+            - 탐정에 대한 극심한 좌절감과 원망을 표현
+            - 거친 말, 저주, 또는 탐정에 대한 비난을 포함
+            - 범인의 절망과 패배에 대한 분노를 보여줌
+            - 격렬하고 감정적으로 느껴져야 함 - 범인이 악을 쓰는 느낌
+            - 협박, 모욕, 또는 비통한 비난 포함 가능
+            """
+        else:
+            # 플레이어 패배 - 범인이 안 잡힌 상황: 탐정을 놀리는 느낌
+            situation = "has escaped and is mocking the detective who failed to catch them" if lang == "en" else "도망치는데 성공하여 탐정을 조롱하는 상황"
+            tone_instruction = """
+            TONE: The murderer is TRIUMPHANT, MOCKING, and PLAYFUL about escaping.
+            - Taunt and ridicule the detective for their failure
+            - Express smug satisfaction and superiority
+            - Make fun of the detective's incompetence
+            - Show the murderer's arrogance and confidence
+            - Include sarcastic remarks or cruel jokes at the detective's expense
+            """ if lang == "en" else """
+            톤: 범인은 승리감에 차 있고, 조롱하며, 장난스럽게 탐정을 비웃습니다.
+            - 실패한 탐정을 조롱하고 비웃음
+            - 우쭐하고 우월감을 드러냄
+            - 탐정의 무능함을 비웃음
+            - 범인의 오만함과 자신감을 보여줌
+            - 탐정을 깎아내리는 비꼬는 말이나 잔인한 농담 포함
+            """
+
         prompt = f"""
-        Task: Write a powerful final statement from a caught murderer who is being arrested by the detective.
+        Task: Write ONE SHORT and powerful final sentence from a murderer who {situation}.
         Murderer's name: {murderer_name}
         Murderer's personality: {personality}
         Murderer's unique feature: {feature}
         Language: {"Korean" if lang == "ko" else "English"}
+        Game Result: {"Player WON - Murderer CAUGHT" if game_result == "WIN" else "Player LOST - Murderer ESCAPED"}
+
+        {tone_instruction}
 
         Final words requirements:
-        1. The murderer has been caught and is being arrested
-        2. Express the murderer's emotions at the moment of capture (anger, resignation, defiance, regret, etc.)
+        1. Situation: {situation}
+        2. Express emotions appropriate to the situation (see TONE above)
         3. Strongly reflect the murderer's unique personality trait ({personality}) and distinctive feature ({feature})
-        4. Include a memorable statement that reveals their mindset or philosophy
-        5. Can include: denial, confession, threat, mockery, regret, or philosophical reflection
-        6. Be 1-3 sentences long
+        4. Include a memorable statement directed at the detective
+        5. MUST be EXACTLY ONE SENTENCE ONLY - DO NOT write multiple sentences
+        6. Keep it SHORT and impactful - one powerful line is enough
         7. Be entirely in {'Korean' if lang == 'ko' else 'English'}
         8. Make it dramatic and memorable, fitting for the climax of a mystery game
         9. Do NOT wrap the response in quotation marks or any other punctuation
 
+        CRITICAL: Write ONLY ONE SENTENCE. Not two, not three. Just ONE powerful sentence that matches the tone.
         The final words should feel authentic to the character and leave a lasting impression on the player.
         Do not include any explanations or additional text. Write only the final words without quotation marks.
         """
 
-        final_words = get_gpt_response(prompt, max_tokens=150)
+        final_words = get_gpt_response(prompt, max_tokens=80)
         
         # 쌍따옴표 제거
         final_words = final_words.strip()

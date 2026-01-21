@@ -203,7 +203,7 @@ class GameService:
         else:
             raise ValueError("Invalid game result")
     
-    def generate_murderer_final_words(self, gameNo, language=None):
+    def generate_murderer_final_words(self, gameNo, game_result, language=None):
         if gameNo not in self.game_states:
             raise ValueError("Game ID not found")
         
@@ -212,7 +212,7 @@ class GameService:
             game_state["language"] = language
         scenario_generation = self.scenario_generations[gameNo]
         
-        final_words = scenario_generation.generate_final_words()
+        final_words = scenario_generation.generate_final_words(game_result)
         return final_words
     
 
