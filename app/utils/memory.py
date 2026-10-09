@@ -11,7 +11,8 @@ OPENAI_API_KEY=os.environ.get('OPENAI_API_KEY')
 memory = ConversationBufferMemory()
 
 def get_conversation_chain():
-    llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model="gpt-4o-mini")
+    llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model="gpt-6-luna",
+                     model_kwargs={"reasoning_effort": "none"})
     conversation = ConversationChain(
         llm=llm,
         memory=memory
